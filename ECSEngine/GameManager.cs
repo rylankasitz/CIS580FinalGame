@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ECSEngine.Systems;
 
 namespace Engine
 {
@@ -61,10 +62,11 @@ namespace Engine
             graphics.PreferredBackBufferHeight = WindowHeight;
             graphics.ApplyChanges();
 
-            WindowWidth = gameLayout.WindowWidth;
-            WindowHeight = gameLayout.WindowHeight;
+            WindowWidth = WindowManager.Width;
+            WindowHeight = WindowManager.Width;
 
             Camera.Intitialize(GraphicsDevice.Viewport, WindowWidth, WindowHeight);
+            MapManager.Content = Content;
 
             gameLayout.AddScenes();
 
@@ -128,7 +130,7 @@ namespace Engine
 
             parallaxHandler.Draw(spriteBatch, this);
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront, null, null, null, null, null, Camera.GetTransformation());
+            spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, Camera.GetTransformation());
 
             renderer.Draw(spriteBatch);
 

@@ -1,4 +1,6 @@
-﻿using Engine;
+﻿using ECSEngine.Systems;
+using Engine;
+using Engine.Systems;
 using Microsoft.Xna.Framework;
 using MonoGameWindowsStarter.Scenes;
 using System;
@@ -23,6 +25,9 @@ namespace MonoGameWindowsStarter
         public override void Initialize()
         {
             SceneManager.LoadScene("Main Scene");
+
+            Camera.Position.X = WindowManager.Width / 2;
+            Camera.Position.Y = WindowManager.Height / 2;
         }
 
         public override void Update(GameTime gameTime)

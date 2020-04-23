@@ -14,6 +14,7 @@ namespace PlatformLibrary
         public Rectangle Source { get; set; }
         public Rectangle BoxCollider { get; set; }
         public Texture2D Texture { get; set; }
+        public TilesetAnimation Animation { get; set; }
         public Dictionary<string, string> Properties { get; set; }
 
         public int Width => Source.Width;
@@ -23,92 +24,34 @@ namespace PlatformLibrary
 
         #region Initialization
 
-        public Tile(Rectangle source, Rectangle boxCollider, Dictionary<string, string> properties, Texture2D texture)
+        public Tile(Rectangle source, Rectangle boxCollider, Dictionary<string, string> properties, Texture2D texture, TilesetAnimation animation)
         {
             Texture = texture;
             Source = source;
             BoxCollider = boxCollider;
             Properties = properties;
+            Animation = animation;
         }
 
         #endregion
+    
+    }
+    
+    public class TilesetAnimation
+    {
+        public string Name { get; set; }
+        public List<TilesetFrame> Frames { get; set; }     
+    }
 
-        /*#region Drawing
+    public class TilesetFrame
+    {
+        public float Duration { get; set; }
+        public Rectangle Source { get; set; }
 
-        /// <summary>
-        /// Draws the tile using the provided SpriteBatch 
-        /// This method should should be called between 
-        /// SpriteBatch.Begin() and SpriteBatch.End()
-        /// </summary>
-        /// <param name="SpriteBatch">The SpriteBatch</param>
-        /// <param name="destinationRectangle">The rectangle to draw the tile into</param>
-        /// <param name="color">The color</param>
-        /// <param name="rotation">Rotation about the origin (in radians)</param>
-        /// <param name="origin">A vector2 to the origin</param>
-        /// <param name="effects">The SpriteEffects</param>
-        /// <param name="layerDepth">The sorting layer of the tile</param>
-        public void Draw(SpriteBatch SpriteBatch, Rectangle destinationRectangle, Color color, float rotation, Vector2 origin, SpriteEffects effects, float layerDepth)
+        public TilesetFrame(Rectangle source, float duration)
         {
-            if(texture != null)
-            {
-                SpriteBatch.Draw(texture, destinationRectangle, source, color, rotation, origin, effects, layerDepth);
-            }
-            
+            Source = source;
+            Duration = duration;
         }
-
-        /// <summary>
-        /// Draws the tile using the provided SpriteBatch 
-        /// This method should should be called between 
-        /// SpriteBatch.Begin() and SpriteBatch.End()
-        /// </summary>
-        /// <param name="SpriteBatch">The SpriteBatch</param>
-        /// <param name="destinationRectangle">The rectangle to draw the tile into</param>
-        /// <param name="color">The color</param>
-        public void Draw(SpriteBatch SpriteBatch, Rectangle destinationRectangle, Color color)
-        {
-            if (texture != null)
-            {
-                SpriteBatch.Draw(texture, destinationRectangle, source, color);
-            }
-        }
-
-        /// <summary>
-        /// Draws the tile using the provided SpriteBatch 
-        /// This method should should be called between 
-        /// SpriteBatch.Begin() and SpriteBatch.End()
-        /// </summary>
-        /// <param name="SpriteBatch">The SpriteBatch</param>
-        /// <param name="position">A Vector2 for position</param>
-        /// <param name="color">The color</param>
-        public void Draw(SpriteBatch SpriteBatch, Vector2 position, Color color)
-        {
-            if (texture != null)
-            {
-                SpriteBatch.Draw(texture, position, source, color);
-            }
-        }
-
-        /// <summary>
-        /// Draws the tile using the provided SpriteBatch 
-        /// This method should should be called between 
-        /// SpriteBatch.Begin() and SpriteBatch.End()
-        /// </summary>
-        /// <param name="SpriteBatch">The SpriteBatch</param>
-        /// <param name="position">A Vector2 for position</param>
-        /// <param name="color">The color</param>
-        /// <param name="rotation">Rotation about the origin (in radians)</param>
-        /// <param name="origin">A vector2 to the origin</param>
-        /// <param name="scale">The scale of the tile centered on the origin</param>
-        /// <param name="effects">The SpriteEffects</param>
-        /// <param name="layerDepth">The sorting layer of the tile</param>
-        public void Draw(SpriteBatch SpriteBatch, Vector2 position, Color color, float rotation, Vector2 origin, float scale, SpriteEffects effects, float layerDepth)
-        {
-            if (texture != null)
-            {
-                SpriteBatch.Draw(texture, position, source, color, rotation, origin, scale, effects, layerDepth);
-            }
-        }
-
-        #endregion*/
     }
 }

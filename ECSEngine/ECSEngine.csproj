@@ -65,6 +65,7 @@
     <Compile Include="Systems\Global\Camera.cs" />
     <Compile Include="Systems\Global\InputManager.cs" />
     <Compile Include="Systems\Global\MapManager.cs" />
+    <Compile Include="Systems\Global\WindowManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework, Version=3.7.1.189, Culture=neutral, processorArchitecture=MSIL" />
@@ -79,11 +80,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FinalGame\PlatformerContentExtension\PlatformerContentExtension.csproj">
+    <ProjectReference Include="..\PlatformerContentExtension\PlatformerContentExtension.csproj">
       <Project>{c8ae826d-308d-475c-93ea-18a2cdc8c5d6}</Project>
       <Name>PlatformerContentExtension</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\FinalGame\PlatformLibrary\PlatformLibrary.csproj">
+    <ProjectReference Include="..\PlatformLibrary\PlatformLibrary.csproj">
       <Project>{75fe1376-9e4f-4809-8c2d-6a0e39af0b4c}</Project>
       <Name>PlatformLibrary</Name>
     </ProjectReference>

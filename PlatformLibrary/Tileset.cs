@@ -13,7 +13,7 @@ namespace PlatformLibrary
     /// </summary>
     public class Tileset
     {
-        Tile[] tiles;
+        public Tile[] tiles;
 
         /// <summary>
         /// Constructs a new instance of Tileset

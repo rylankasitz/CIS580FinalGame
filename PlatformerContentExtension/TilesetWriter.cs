@@ -55,6 +55,16 @@ namespace PlatformerContentExtension
                 output.Write(tile.BoxCollision.Y);
                 output.Write(tile.BoxCollision.Width);
                 output.Write(tile.BoxCollision.Height);
+                output.Write(tile.Animation.Name);
+                output.Write(tile.Animation.Frames.Count);
+                foreach(Frame frame in tile.Animation.Frames)
+                {
+                    output.Write(frame.Source.X);
+                    output.Write(frame.Source.Y);
+                    output.Write(frame.Source.Width);
+                    output.Write(frame.Source.Height);
+                    output.Write(frame.Duration);
+                }
                 output.Write(tile.Properties.Count);
                 foreach(KeyValuePair<string, string> prop in tile.Properties)
                 {

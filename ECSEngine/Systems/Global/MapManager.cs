@@ -18,19 +18,20 @@ namespace Engine.Systems
     {
         private static List<Entity> mapObjects = new List<Entity>();
         private static Tilemap tilemap;
+        public static ContentManager Content;
 
-        public static void LoadMap (ContentManager content, string name, Scene scene)
+        public static void LoadMap (string name, Scene scene, float scale)
         {
-            tilemap = content.Load<Tilemap>("Maps\\" + name);
+            tilemap = Content.Load<Tilemap>("Maps\\" + name);
 
             removeMapObjects();
-            createMapObjects(scene);
+            createMapObjects(scene, scale);
             Debug.WriteLine($"Loaded Map: {name}");
         }
 
         #region Private Methods
 
-        private static void createMapObjects(Scene scene)
+        private static void createMapObjects(Scene scene, float mapScale)
         {
             float layernum = 1;
             foreach (var layer in tilemap.Layers)
@@ -43,20 +44,20 @@ namespace Engine.Systems
                         uint tileIndex = layer.Data[dataIndex];
                         if (tileIndex != 0 && tileIndex < tilemap.Tiles.Length)
                         {
-                            Vector position = new Vector(x * (tilemap.TileWidth-1), y * (tilemap.TileHeight-1));
-                            Vector scale = new Vector(tilemap.Tiles[tileIndex].Width, tilemap.Tiles[tileIndex].Height);
+                            Vector position = new Vector(x * (tilemap.TileWidth), y * (tilemap.TileHeight)) * mapScale;
+                            Vector scale = new Vector(tilemap.Tiles[tileIndex].Width, tilemap.Tiles[tileIndex].Height) * mapScale;
 
                             Tile tile = tilemap.Tiles[tileIndex];
                             if (tile.BoxCollider == Rectangle.Empty)
                             {
                                 MapObject mapObject = scene.CreateEntity<MapObject>();
-                                setObjectPosition(mapObject, position, scale, tile, layernum, "spritesheet");
+                                setObjectPosition(mapObject, position, scale, tile, layernum, "MapTileSet"); // Change to not manual string
                                 mapObjects.Add(mapObject);
                             }
                             else
                             {
                                 MapObjectCollision mapObject = scene.CreateEntity<MapObjectCollision>();
-                                setObjectPosition(mapObject, position, scale, tile, layernum, "spritesheet");
+                                setObjectPosition(mapObject, position, scale, tile, layernum, "MapTileSet"); // Change to not manual string
                                 setCollision(mapObject, tile.BoxCollider, tile);
                                 mapObjects.Add(mapObject);
                             }

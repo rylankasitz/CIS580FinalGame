@@ -29,7 +29,7 @@ namespace PlatformerContentExtension
             for(int i =0; i < input.Tilesets.Count; i++)
             {
                 var tileset = input.Tilesets[i];
-                ExternalReference<TilesetContent> externalRef = new ExternalReference<TilesetContent>("Maps\\" + tileset.Source);
+                ExternalReference<TilesetContent> externalRef = new ExternalReference<TilesetContent>("Tilesets\\" + tileset.Source);
                 tileset.Reference = context.BuildAsset<TilesetContent, TilesetContent>(externalRef, "TilesetProcessor");
             }
 

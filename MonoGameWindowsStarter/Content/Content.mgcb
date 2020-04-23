@@ -10,6 +10,7 @@
 
 #-------------------------------- References --------------------------------#
 
+/reference:..\..\PlatformerContentExtension\bin\Debug\PlatformerContentExtension.dll
 
 #---------------------------------- Content ---------------------------------#
 
@@ -26,14 +27,12 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/BasicFont.spritefont
 
-#begin Maps/File.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Maps/File.spritefont
+#begin Maps/Room1.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room1.tmx
 
-#begin Sprites/pistol2.png
+#begin Sprites/MapTileSet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -43,5 +42,10 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/pistol2.png
+/build:Sprites/MapTileSet.png
+
+#begin Tilesets/DungeonTileSet.tsx
+/importer:TilesetImporter
+/processor:TilesetProcessor
+/build:Tilesets/DungeonTileSet.tsx
 

@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Engine.Componets;
 using Engine.ECSCore;
-using TiledSharp;
+using PlatformLibrary;
 
 namespace Engine.Systems
 {
@@ -17,7 +17,6 @@ namespace Engine.Systems
     {
         private Dictionary<string, AnimationTracker> animationData = new Dictionary<string, AnimationTracker>();
         private ContentManager content;
-        private List<TmxTileset> tilesets;
 
         #region ECS Methods
 
@@ -35,20 +34,13 @@ namespace Engine.Systems
 
         public override void Initialize()
         {
-            tilesets = new List<TmxTileset>();
-
-            string[] files = Directory.GetFiles(content.RootDirectory + "\\Maps", "*.tmx", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(content.RootDirectory + "\\Tilesets", "*.xnb", SearchOption.AllDirectories);
 
             foreach (string file in files)
             {
-                TmxMap map = new TmxMap(file);
-                foreach (TmxTileset tileset in map.Tilesets)
-                {
-                    tilesets.Add(tileset);
-                }
+                loadFromTileSet(content.Load<Tileset>("Tilesets\\" + Path.GetFileNameWithoutExtension(file)));
+                Debug.WriteLine($"Loaded {Path.GetFileName(file)} tileset");  
             }
-
-            loadFromTileSet();
 
             foreach(Entity entity in Entities)
             {
@@ -110,36 +102,26 @@ namespace Engine.Systems
             return null;
         }
 
-        private void loadFromTileSet()
+        private void loadFromTileSet(Tileset tileset)
         {    
-            foreach (TmxTileset tileset in tilesets)
+            for(int i = 0; i < tileset.Count; i++)
             {
                 SpriteSheetAnimations spriteSheetAnimation = new SpriteSheetAnimations();
-                spriteSheetAnimation.Width = tileset.TileWidth;
-                spriteSheetAnimation.Height = tileset.TileHeight;
-                spriteSheetAnimation.Margin = tileset.Margin;
-                spriteSheetAnimation.Spacing = tileset.Spacing;
+                spriteSheetAnimation.Width = tileset[i].Width;
+                spriteSheetAnimation.Height = tileset[i].Width;
+                spriteSheetAnimation.Margin = 0; // change
+                spriteSheetAnimation.Spacing = 0; // change
 
-                foreach (KeyValuePair<int, TmxTilesetTile> tile in tileset.Tiles)
+                AnimationTracker animationTracker = new AnimationTracker(spriteSheetAnimation);
+
+                string name = tileset[i].Animation.Name;
+
+                foreach (TilesetFrame frame in tileset[i].Animation.Frames)
                 {
-                    if (tile.Value.AnimationFrames.Count > 0)
-                    {
-                        AnimationTracker animationTracker = new AnimationTracker(spriteSheetAnimation);
-
-                        string name = "Unamed " + tile.Key;
-                        if (tile.Value.Properties.ContainsKey("Animation"))
-                            name = tile.Value.Properties["Animation"];
-
-                        foreach (TmxAnimationFrame animationFrame in tile.Value.AnimationFrames)
-                        {
-                            int x = (int)(animationFrame.Id % tileset.Columns);
-                            int y = (int)Math.Floor(animationFrame.Id / (float) tileset.Columns);
-                            animationTracker.AddFrame(animationFrame.Duration / (float) 1000, x, y);
-                        }
-
-                        animationData[name] = animationTracker;
-                    }
+                    animationTracker.AddFrame(frame.Duration, frame.Source.X, frame.Source.Y);
                 }
+
+                animationData[name] = animationTracker;
             }     
         }
 

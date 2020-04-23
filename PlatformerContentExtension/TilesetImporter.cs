@@ -37,8 +37,8 @@ namespace PlatformerContentExtension
             string name = tileset.Attributes["name"].Value;
             int tileWidth = int.Parse(tileset.Attributes["tilewidth"].Value);
             int tileHeight = int.Parse(tileset.Attributes["tileheight"].Value);
-            int spacing = int.Parse(tileset.Attributes["spacing"].Value);
-            int margin = int.Parse(tileset.Attributes["margin"].Value);
+            int spacing = tileset.Attributes["spacing"] == null ? 0 : int.Parse(tileset.Attributes["spacing"].Value);
+            int margin = tileset.Attributes["margin"] == null ? 0 : int.Parse(tileset.Attributes["margin"].Value);
             int tileCount = int.Parse(tileset.Attributes["tilecount"].Value);
             int columns = int.Parse(tileset.Attributes["columns"].Value);
 
@@ -55,6 +55,8 @@ namespace PlatformerContentExtension
                 int id = int.Parse(node.Attributes["id"].Value);
        
                 tileContent[id] = new TileContent();
+
+                bool animation = false;
                 
                 // Get properties
                 XmlNodeList children = node.ChildNodes;
@@ -78,8 +80,21 @@ namespace PlatformerContentExtension
                         float height = float.Parse(collision.Attributes["height"].Value);
                         tileContent[id].BoxCollision = new Rectangle((int)x, (int)y, (int)width, (int)height);
                     }
+                    if (child.Name == "animation")
+                    {
+                        foreach (XmlNode a in child.ChildNodes)
+                        {
+                            int tileid = int.Parse(a.Attributes["tileid"].Value);
+                            int duration = int.Parse(a.Attributes["duration"].Value);
+                            Rectangle source = new Rectangle((int)(tileid % columns), 
+                                (int)Math.Floor(tileid / (float) columns), tileWidth, tileHeight);
+                            tileContent[id].Animation.Frames.Add(new Frame(source, duration / (double)1000));
+                            animation = true;
+                        }
+                    }
                 }
-
+                if (animation) tileContent[id].Animation.Name = tileContent[id].Properties["Animation"] == null
+                        ? "Unamed" : tileContent[id].Properties["Animation"];
             }
 
             // Create and return the TileContent

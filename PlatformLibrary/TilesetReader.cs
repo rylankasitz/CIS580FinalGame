@@ -49,6 +49,18 @@ namespace PlatformLibrary
                     input.ReadInt32(),
                     input.ReadInt32());
 
+                TilesetAnimation animation = new TilesetAnimation();
+                animation.Frames = new List<TilesetFrame>();
+                animation.Name = input.ReadString();
+                int frameCount = input.ReadInt32();            
+
+                for(int j = 0; j < frameCount; j++)
+                {
+                    animation.Frames.Add(new TilesetFrame(
+                        new Rectangle(input.ReadInt32(), input.ReadInt32(), 
+                        input.ReadInt32(),input.ReadInt32()), (float)input.ReadDouble()));
+                }
+
                 int propLength = input.ReadInt32();
                 Dictionary<string, string> properties = new Dictionary<string, string>();
 
@@ -58,7 +70,7 @@ namespace PlatformLibrary
                 }
 
                 // Create the tile
-                tiles[i] = new Tile(source, boxCollision, properties, texture);
+                tiles[i] = new Tile(source, boxCollision, properties, texture, animation);
             }
 
             // Construct and return the tileset

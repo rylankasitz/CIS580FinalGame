@@ -10,8 +10,6 @@ namespace Engine
 {
     public abstract class GameLayout
     {
-        public int WindowWidth { get; set; }
-        public int WindowHeight { get; set; }
         public abstract void AddScenes();
         public abstract void Initialize();
         public abstract void Update(GameTime gameTime);

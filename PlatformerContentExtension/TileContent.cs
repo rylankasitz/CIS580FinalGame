@@ -16,11 +16,32 @@ namespace PlatformerContentExtension
         public Rectangle Source { get; set; }
         public bool Solid { get; set; }
         public Rectangle BoxCollision { get; set; } = Rectangle.Empty;
+        public Animation Animation { get; set; }
         public Dictionary<string, string> Properties { get; set; }
 
         public TileContent()
         {
             Properties = new Dictionary<string, string>();
+            Animation = new Animation();
+            Animation.Frames = new List<Frame>();
+        }
+    }
+
+    public class Animation
+    {
+        public string Name { get; set; } = "None";
+        public List<Frame> Frames { get; set; }
+    }
+
+    public class Frame
+    {
+        public Rectangle Source { get; set; }
+        public double Duration { get; set; }
+
+        public Frame(Rectangle source, double duration)
+        {
+            Source = source;
+            Duration = duration;
         }
     }
 }

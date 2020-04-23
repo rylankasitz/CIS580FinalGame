@@ -35,25 +35,27 @@ namespace Engine.ECSCore
         // https://stackoverflow.com/questions/5411694/get-all-inherited-classes-of-an-abstract-class/6944605
         private void GetEnumerableOfType<T>() where T : Entity
         {
-            foreach (Type type in
-                Assembly.GetAssembly(typeof(T)).GetTypes()
-                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
             {
-                T obj = (T)Activator.CreateInstance(type, new object[0]);
-
-                EntityTempData data = new EntityTempData();
-                data.EntityType = obj.GetType();
-
-
-                Component[] componentAttribute = (Component[]) Attribute.GetCustomAttributes(data.EntityType, typeof(Component));
-                data.ComponentTypes = new string[componentAttribute.Length];
-
-                for (int i = 0; i < componentAttribute.Length; i++)
+                foreach (Type type in a.GetTypes()
+                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
                 {
-                    data.ComponentTypes[i] = componentAttribute[i].GetType().Name;
-                }
+                    T obj = (T)Activator.CreateInstance(type, new object[0]);
 
-                entityTemplates[type.Name] = data;
+                    EntityTempData data = new EntityTempData();
+                    data.EntityType = obj.GetType();
+
+
+                    Component[] componentAttribute = (Component[])Attribute.GetCustomAttributes(data.EntityType, typeof(Component));
+                    data.ComponentTypes = new string[componentAttribute.Length];
+
+                    for (int i = 0; i < componentAttribute.Length; i++)
+                    {
+                        data.ComponentTypes[i] = componentAttribute[i].GetType().Name;
+                    }
+
+                    entityTemplates[type.Name] = data;
+                }
             }
         }
     }
