@@ -104,6 +104,7 @@ namespace Engine
         protected override void Update(GameTime gameTime)
         {
             InputManager.NewKeyboardState = Keyboard.GetState();
+            InputManager.NewMouseState = Mouse.GetState();
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -118,6 +119,7 @@ namespace Engine
             SceneManager.UpdateScene(gameTime);
 
             InputManager.OldKeyboardState = InputManager.NewKeyboardState;
+            InputManager.OldMouseState = InputManager.NewMouseState;
 
             gameLayout.Update(gameTime);
 

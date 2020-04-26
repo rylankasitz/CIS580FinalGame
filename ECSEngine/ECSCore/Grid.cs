@@ -29,37 +29,26 @@ namespace Engine.ECSCore
             }
         }
 
-        public void Remove(Entity entity)
+        public void Remove(Entity current)
         {
-            Transform transform = entity.GetComponent<Transform>();
+            Transform transform = current.GetComponent<Transform>();
 
             int cellX = (int)(transform.Position.X / CELL_SIZE);
             int cellY = (int)(transform.Position.Y / CELL_SIZE);
 
-            Entity current = cells[cellX][cellY];
-            Entity prev = null;
-
-            int index = 0;
-            while (index < 0 && current != null)
+            if (cells[cellX][cellY] == current)
             {
-                prev = current;
-                current = current.Next;
-                index++;
+                cells[cellX][cellY] = current.Next;
             }
 
-            if (current != null)
+            if (current.Next != null)
             {
-                if (prev == null)
-                {
-                    cells[cellX][cellY] = current.Next;
-                }
-                else
-                {
-                    prev.Next = current.Next;
-                    current = null;
-                }
+                current.Next.Prev = current.Prev;
+            }
 
-                current = null;
+            if (current.Prev != null)
+            {
+                current.Prev.Next = current.Next;
             }
         }
 

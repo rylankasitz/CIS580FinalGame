@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Engine.ECSCore;
 using Engine.Systems;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Engine.Componets
 {
@@ -13,14 +14,16 @@ namespace Engine.Componets
         public Color Color { get; set; } = Color.White;
         public float Layer { get; set; }
         public SpriteEffects SpriteEffects { get; set; }
+        public float Fill { get; set; }
         public Sprite() { }
-        public Sprite(string ContentName, int SpriteX = 0, int SpriteY = 0, int SpriteWidth = 0, int SpriteHeight = 0, float Layer = 1f, 
-            SpriteEffects SpriteEffects = SpriteEffects.None)
+        public Sprite(string ContentName, int SpriteX = 0, int SpriteY = 0, int SpriteWidth = 0, int SpriteHeight = 0, float Layer = 1f,
+            SpriteEffects SpriteEffects = SpriteEffects.None, float Fill = 1)
         {
             this.ContentName = ContentName;
             this.Layer = Layer;
             this.SpriteEffects = SpriteEffects;
             SpriteLocation = new Rectangle(SpriteX, SpriteY, SpriteWidth, SpriteHeight);
+            this.Fill = Fill;
         }
     }
 

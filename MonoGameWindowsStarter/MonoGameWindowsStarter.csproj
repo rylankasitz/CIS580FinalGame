@@ -41,12 +41,20 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Characters\BlackGhoul.cs" />
+    <Compile Include="Characters\DefaultCharacter.cs" />
+    <Compile Include="Entities\CharacterPickup.cs" />
+    <Compile Include="Entities\Enemy.cs" />
     <Compile Include="Entities\Player.cs" />
+    <Compile Include="Entities\Projectile.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GlobalValues\PlayerStats.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scenes\MainScene.cs" />
-    <Compile Include="Utils\PlayerAnimationStates.cs" />
+    <Compile Include="Characters\Character.cs" />
+    <Compile Include="Characters\Helpers\ProjectileSpawner.cs" />
+    <Compile Include="UI\SliderBar.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -68,6 +76,7 @@
       <Name>ECSEngine</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Content;
 using Engine.Componets;
 using Engine.ECSCore;
 using System.IO;
+using System.Diagnostics;
 
 namespace Engine.Systems
 {
@@ -60,10 +61,16 @@ namespace Engine.Systems
                     if (sprite.SpriteLocation == Rectangle.Empty)
                         sprite.SpriteLocation = new Rectangle(0, 0, textures[sprite.ContentName].Width, textures[sprite.ContentName].Height);
 
-                    spriteBatch.Draw(textures[sprite.ContentName],
-                        new Rectangle((int)transform.Position.X, (int)transform.Position.Y, (int)transform.Scale.X, (int)transform.Scale.Y),
-                        sprite.SpriteLocation, sprite.Color, transform.Rotation, new Vector2(0, 0),
-                        sprite.SpriteEffects, sprite.Layer);
+                    Rectangle spriteLocation = new Rectangle(sprite.SpriteLocation.X, sprite.SpriteLocation.Y,
+                        (int)(sprite.SpriteLocation.Width * sprite.Fill), sprite.SpriteLocation.Height);
+
+                    if (textures.ContainsKey(sprite.ContentName))
+                        spriteBatch.Draw(textures[sprite.ContentName],
+                            new Rectangle((int)transform.Position.X, (int)transform.Position.Y, (int)(transform.Scale.X * sprite.Fill), (int)transform.Scale.Y),
+                            spriteLocation, sprite.Color, transform.Rotation, new Vector2(0, 0),
+                            sprite.SpriteEffects, sprite.Layer);
+                    else
+                        Debug.WriteLine($"Content '{sprite.ContentName}' does not exist");
                 }
 
                 if (entity.HasComponent<TextDraw>())

@@ -13,6 +13,8 @@ namespace Engine.Systems
     {
         public static KeyboardState OldKeyboardState { get; set; }
         public static KeyboardState NewKeyboardState { get; set; }
+        public static MouseState OldMouseState { get; set; }
+        public static MouseState NewMouseState { get; set; }
 
         public static bool KeyDown(Keys key)
         {
@@ -33,6 +35,12 @@ namespace Engine.Systems
         public static bool LeftMousePressed()
         {
             return Mouse.GetState().LeftButton == ButtonState.Pressed; 
+        }
+
+        public static bool LeftMouseDown()
+        {
+            return OldMouseState.LeftButton == ButtonState.Released && 
+                   NewMouseState.LeftButton == ButtonState.Pressed;
         }
 
         public static Vector GetMousePosition()

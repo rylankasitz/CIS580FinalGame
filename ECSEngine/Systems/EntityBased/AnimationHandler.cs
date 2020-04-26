@@ -60,6 +60,7 @@ namespace Engine.Systems
             foreach (Entity entity in Entities)
             {
                 AnimationTracker current = getAnimation(entity);
+                Animation animation = entity.GetComponent<Animation>();
 
                 if (current != null)
                 {
@@ -68,7 +69,9 @@ namespace Engine.Systems
                     current.TimeIntoAnimation += gameTime.ElapsedGameTime.TotalSeconds;
 
                     if (current.TimeIntoAnimation > current.TotalDuration)
+                    {
                         current.TimeIntoAnimation = 0;
+                    }
 
                     current.FrameNumber = (int)Math.Floor(current.TimeIntoAnimation / current.FrameDuration);
 

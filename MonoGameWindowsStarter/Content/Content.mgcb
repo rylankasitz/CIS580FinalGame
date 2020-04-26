@@ -32,6 +32,18 @@
 /processor:TilemapProcessor
 /build:Maps/Room1.tmx
 
+#begin Sprites/HealthBar DARK.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/HealthBar DARK.png;Sprites/HealthBars.png
+
 #begin Sprites/MapTileSet.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -43,6 +55,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/MapTileSet.png
+
+#begin Sprites/projectiles.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/projectiles.png;Sprites/Projectiles.png
 
 #begin Tilesets/DungeonTileSet.tsx
 /importer:TilesetImporter

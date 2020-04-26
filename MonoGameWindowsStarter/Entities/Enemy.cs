@@ -1,18 +1,15 @@
-﻿using Engine.ECSCore;
+﻿using Engine;
 using Engine.Componets;
+using Engine.ECSCore;
+using Engine.Systems;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGameWindowsStarter.Characters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Engine.Systems;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Graphics;
-using MonoGameWindowsStarter.Characters;
-using MonoGameWindowsStarter.GlobalValues;
-using MonoGameWindowsStarter.UI;
-using ECSEngine.Systems;
 
 namespace MonoGameWindowsStarter.Entities
 {
@@ -21,7 +18,7 @@ namespace MonoGameWindowsStarter.Entities
     [Transform(X: 100, Y: 100, Width: 32, Height: 32)]
     [Physics(VelocityX: 0, VelocityY: 0)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1)]
-    public class Player : Entity
+    public class Enemy : Entity
     {
         public Character Character;
         public float TotalHealth;
@@ -32,19 +29,19 @@ namespace MonoGameWindowsStarter.Entities
         private Transform transform;
         private BoxCollision boxCollision;
         private Physics physics;
-        private SliderBar healthBar;
 
         private float hitTime = .15f;
 
         private float elapsedTintTime;
+        private bool attack;
 
         public override void Initialize()
         {
-            Name = "Player";
+            Name = "Enemy";
             Character = new DefaultCharacter();
-            Character.Holder = "Player";
             TotalHealth = Character.MaxHealth;
             CurrentHealth = TotalHealth;
+            attack = false;
             elapsedTintTime = hitTime;
 
             sprite = GetComponent<Sprite>();
@@ -53,58 +50,22 @@ namespace MonoGameWindowsStarter.Entities
             boxCollision = GetComponent<BoxCollision>();
             physics = GetComponent<Physics>();
 
+            boxCollision.Layer = "Enemy";
             boxCollision.HandleCollision = handleCollision;
-            boxCollision.Layer = "Player";
 
             animation.CurrentAnimation = Character.IdleAnimation;
-
-            healthBar = new SliderBar("HealthBars", "HealthBars",
-                                       new Vector(WindowManager.Width * .03f, WindowManager.Height * .03f),
-                                       new Vector(WindowManager.Width * .15f, WindowManager.Height * .05f),
-                                       new Rectangle(18, 40, 64, 9),
-                                       new Rectangle(18, 29, 64, 9));
         }
 
         public override void Update(GameTime gameTime)
         {
             elapsedTintTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            hitTint();
-            move();
+            attack = Character.AILogic(physics);
             animate();
-            attack(gameTime);
-        }
+            hitTint();
 
-        private void move()
-        {
-            physics.Velocity = new Vector(0, 0);
-
-            float speed = Character.MoveSpeed * PlayerStats.SpeedMod;
-
-            if(InputManager.KeyPressed(Keys.W))
-            {
-                physics.Velocity.Y = -speed;
-            }
-            else if (InputManager.KeyPressed(Keys.S))
-            {
-                physics.Velocity.Y = speed;
-            }
-
-            if (InputManager.KeyPressed(Keys.D))
-            {
-                physics.Velocity.X = speed;
-            }
-            else if (InputManager.KeyPressed(Keys.A))
-            {
-                physics.Velocity.X = -speed;
-            }
-
-            if (physics.Velocity != Vector2.Zero) 
-            {
-                Vector2 normalized = new Vector2(physics.Velocity.X, physics.Velocity.Y);
-                normalized.Normalize();
-                physics.Velocity = new Vector(normalized.X, normalized.Y) * speed;
-            }
+            if (CurrentHealth <= 0)
+                onDeath();
         }
 
         private void animate()
@@ -127,23 +88,19 @@ namespace MonoGameWindowsStarter.Entities
                 animation.CurrentAnimation = Character.IdleAnimation;
             }
 
-            if (InputManager.LeftMouseDown())
+            if (attack)
             {
                 animation.CurrentAnimation = Character.AttackAnimation;
             }
         }
 
-        private void attack(GameTime gameTime)
+        private void onDeath()
         {
-            if (InputManager.LeftMousePressed() || InputManager.LeftMouseDown())
-            {
-                Vector position = InputManager.GetMousePosition();
-                Vector2 direction = new Vector2(position.X - transform.Position.X,
-                                                position.Y - transform.Position.Y);
-                direction.Normalize();
-                Character.Attack(gameTime, transform.Position + (transform.Scale/2), new Vector(direction.X, direction.Y), 
-                    InputManager.LeftMouseDown());
-            }       
+            CharacterPickup characterPickup = SceneManager.GetCurrentScene().CreateEntity<CharacterPickup>();
+            characterPickup.Transform.Position = new Vector(transform.Position.X, transform.Position.Y);
+            characterPickup.Character = Character;
+
+            SceneManager.GetCurrentScene().RemoveEntity(this);
         }
 
         private void hitTint()
