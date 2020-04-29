@@ -61,8 +61,24 @@ namespace PlatformLibrary
                 }
             }
 
+            // Read Object layers
+            Dictionary<string, List<TileMapObject>> objectlayers = new Dictionary<string, List<TileMapObject>>();
+            var objectLayerCount = input.ReadInt32();
+            for(var i = 0; i < objectLayerCount; i++)
+            {
+                var objectLayerName = input.ReadString();
+                objectlayers[objectLayerName] = new List<TileMapObject>();
+                var objectCount = input.ReadInt32();
+                for(var j = 0; j < objectCount; j++)
+                {
+                    objectlayers[objectLayerName].Add(new TileMapObject(new Vector2(input.ReadInt32(), input.ReadInt32()), 
+                                                                        new Vector2(input.ReadInt32(), input.ReadInt32())));
+                }
+            }
+
+
             // Construct and return the tilemap
-            return new Tilemap(mapWidth, mapHeight, tileWidth, tileHeight, layers, tiles.ToArray());
+            return new Tilemap(mapWidth, mapHeight, tileWidth, tileHeight, layers, tiles.ToArray(), objectlayers);
         }
     }
 }

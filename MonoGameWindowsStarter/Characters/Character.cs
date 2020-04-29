@@ -20,6 +20,7 @@ namespace MonoGameWindowsStarter.Characters
         public abstract float AttackSpeed { get; }
         public abstract float Range { get;}
         public abstract int MaxHealth { get; }
+        public abstract int Difficulty { get; }
         public string Holder { get; set; }
         public abstract void Attack(GameTime gameTime, Vector position, Vector direction, bool mouseDown);
         public abstract void HandleCollision(Projectile projectile, Entity collider, string direction);

@@ -22,7 +22,7 @@ namespace MonoGameWindowsStarter.Characters
 
         public override string AttackAnimation => "AttackDefault";
 
-        public override float MoveSpeed => 4;
+        public override float MoveSpeed => 6;
 
         public override int AttackDamage => 10;
 
@@ -31,6 +31,8 @@ namespace MonoGameWindowsStarter.Characters
         public override float Range => 3;
 
         public override int MaxHealth => 50;
+
+        public override int Difficulty => 0;
 
         private ProjectileSpawner projectileSpawner;
         private float projectileSpeed = 5f;

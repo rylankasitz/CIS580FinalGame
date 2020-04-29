@@ -128,7 +128,7 @@ namespace Engine
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.LightGray);
+            GraphicsDevice.Clear(WindowManager.BackgroundColor);
 
             parallaxHandler.Draw(spriteBatch, this);
 

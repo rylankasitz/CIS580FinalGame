@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.2" tiledversion="1.3.2" name="DungeonTileSet" tilewidth="8" tileheight="8" tilecount="120" columns="8">
- <image source="../Sprites/MapTileSet.png" trans="ff00ff" width="64" height="120"/>
+<tileset version="1.2" tiledversion="1.3.2" name="DungeonTileSet" tilewidth="8" tileheight="8" tilecount="128" columns="8">
+ <image source="../Sprites/MapTileSet.png" trans="ff00ff" width="64" height="128"/>
  <tile id="1">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="8"/>
+   <object id="1" x="0" y="6" width="8" height="2"/>
   </objectgroup>
  </tile>
  <tile id="2">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="8"/>
+   <object id="1" x="0" y="6" width="8" height="2"/>
   </objectgroup>
  </tile>
  <tile id="3">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>
+  </objectgroup>
+ </tile>
+ <tile id="4">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
   </objectgroup>
  </tile>
  <tile id="61">
@@ -74,5 +79,41 @@
    <frame tileid="76" duration="250"/>
    <frame tileid="77" duration="250"/>
   </animation>
+ </tile>
+ <tile id="120">
+  <properties>
+   <property name="Name" value="DoorL"/>
+   <property name="Trigger" type="bool" value="true"/>
+  </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="8"/>
+  </objectgroup>
+ </tile>
+ <tile id="121">
+  <properties>
+   <property name="Name" value="DoorR"/>
+   <property name="Trigger" type="bool" value="true"/>
+  </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="8"/>
+  </objectgroup>
+ </tile>
+ <tile id="122">
+  <properties>
+   <property name="Name" value="DoorU"/>
+   <property name="Trigger" type="bool" value="true"/>
+  </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="8"/>
+  </objectgroup>
+ </tile>
+ <tile id="123">
+  <properties>
+   <property name="Name" value="DoorD"/>
+   <property name="Trigger" type="bool" value="true"/>
+  </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="8"/>
+  </objectgroup>
  </tile>
 </tileset>

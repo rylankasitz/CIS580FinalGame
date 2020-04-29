@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Characters\BlackGhoul.cs" />
     <Compile Include="Characters\DefaultCharacter.cs" />
+    <Compile Include="Characters\Helpers\EnemySpawner.cs" />
     <Compile Include="Entities\CharacterPickup.cs" />
     <Compile Include="Entities\Enemy.cs" />
     <Compile Include="Entities\Player.cs" />
@@ -54,6 +55,8 @@
     <Compile Include="Scenes\MainScene.cs" />
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\Helpers\ProjectileSpawner.cs" />
+    <Compile Include="Scenes\Rooms\MapGenerator.cs" />
+    <Compile Include="Scenes\Rooms\Room.cs" />
     <Compile Include="UI\SliderBar.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +77,10 @@
     <ProjectReference Include="..\ECSEngine\ECSEngine.csproj">
       <Project>{a7b1ed4a-2583-4050-857e-3c8b06e582ac}</Project>
       <Name>ECSEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PlatformLibrary\PlatformLibrary.csproj">
+      <Project>{75FE1376-9E4F-4809-8C2D-6A0E39AF0B4C}</Project>
+      <Name>PlatformLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

@@ -15,18 +15,18 @@ namespace MonoGameWindowsStarter.Entities
 {
     [Sprite(ContentName: "MapTileSet", Layer: 0)]
     [Animation(CurrentAnimation: "Idle")]
-    [Transform(X: 100, Y: 100, Width: 32, Height: 32)]
+    [Transform(X: 100, Y: 100, Width: 40, Height: 40)]
     [Physics(VelocityX: 0, VelocityY: 0)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1)]
     public class Enemy : Entity
     {
         public Character Character;
+        public Transform Transform;
         public float TotalHealth;
         public float CurrentHealth;
 
         private Sprite sprite;
         private Animation animation;
-        private Transform transform;
         private BoxCollision boxCollision;
         private Physics physics;
 
@@ -34,6 +34,8 @@ namespace MonoGameWindowsStarter.Entities
 
         private float elapsedTintTime;
         private bool attack;
+
+        #region ECS Methods
 
         public override void Initialize()
         {
@@ -46,7 +48,7 @@ namespace MonoGameWindowsStarter.Entities
 
             sprite = GetComponent<Sprite>();
             animation = GetComponent<Animation>();
-            transform = GetComponent<Transform>();
+            Transform = GetComponent<Transform>();
             boxCollision = GetComponent<BoxCollision>();
             physics = GetComponent<Physics>();
 
@@ -67,6 +69,19 @@ namespace MonoGameWindowsStarter.Entities
             if (CurrentHealth <= 0)
                 onDeath();
         }
+
+        private void handleCollision(Entity entity, string direction)
+        {
+            if (entity.Name == "Projectile")
+            {
+                elapsedTintTime = 0;
+                sprite.Color = Color.Red;
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private void animate()
         {
@@ -97,7 +112,7 @@ namespace MonoGameWindowsStarter.Entities
         private void onDeath()
         {
             CharacterPickup characterPickup = SceneManager.GetCurrentScene().CreateEntity<CharacterPickup>();
-            characterPickup.Transform.Position = new Vector(transform.Position.X, transform.Position.Y);
+            characterPickup.Transform.Position = new Vector(Transform.Position.X, Transform.Position.Y);
             characterPickup.Character = Character;
 
             SceneManager.GetCurrentScene().RemoveEntity(this);
@@ -111,13 +126,6 @@ namespace MonoGameWindowsStarter.Entities
             }
         }
 
-        private void handleCollision(Entity entity, string direction)
-        {
-            if (entity.Name == "Projectile")
-            {
-                elapsedTintTime = 0;
-                sprite.Color = Color.Red;
-            }
-        }
+        #endregion
     }
 }

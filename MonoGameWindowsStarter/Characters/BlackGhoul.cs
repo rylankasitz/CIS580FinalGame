@@ -31,6 +31,7 @@ namespace MonoGameWindowsStarter.Characters
 
         public override int MaxHealth => 60;
 
+        public override int Difficulty => 1;
 
         private ProjectileSpawner projectileSpawner;
         private float projectileSpeed = 6f;

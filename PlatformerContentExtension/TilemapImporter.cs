@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Content.Pipeline;
 
 using TInput = PlatformerContentExtension.TilemapContent;
+using Microsoft.Xna.Framework;
 
 namespace PlatformerContentExtension
 {
@@ -82,6 +83,27 @@ namespace PlatformerContentExtension
                     DataString = dataString
                 });
                 count++;
+            }
+
+            // Add objects layers
+            XmlNodeList objectsLayers = map.SelectNodes("//objectgroup");
+            
+            if (objectsLayers != null)
+            {
+                foreach (XmlNode objectlayer in objectsLayers)
+                {
+                    string name = objectlayer.Attributes["name"].Value;
+                    output.Objects[name] = new List<Object>();
+                    foreach (XmlNode _object in objectlayer.ChildNodes)
+                    {
+                        if (_object.Name == "object")
+                        {
+                            float x = float.Parse(_object.Attributes["x"].Value);
+                            float y = float.Parse(_object.Attributes["y"].Value);
+                            output.Objects[name].Add(new Object(new Vector2((int)x, (int)y), Vector2.Zero));
+                        }
+                    }
+                }
             }
 
             return output;

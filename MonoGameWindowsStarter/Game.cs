@@ -28,6 +28,8 @@ namespace MonoGameWindowsStarter
 
             Camera.Position.X = WindowManager.Width / 2;
             Camera.Position.Y = WindowManager.Height / 2;
+
+            WindowManager.BackgroundColor = new Color(25, 23, 22);
         }
 
         public override void Update(GameTime gameTime)

@@ -59,6 +59,21 @@ namespace PlatformerContentExtension
                 output.Write(tileset.FirstGID);
                 output.WriteExternalReference(tileset.Reference);
             }
+
+            // Write object data
+            output.Write(value.Objects.Count);
+            foreach(KeyValuePair<string, List<Object>> objectLayers in value.Objects)
+            {
+                output.Write(objectLayers.Key);
+                output.Write(objectLayers.Value.Count);
+                foreach(Object _object in objectLayers.Value)
+                {
+                    output.Write((int)_object.Position.X);
+                    output.Write((int)_object.Position.Y);
+                    output.Write((int)_object.Scale.X);
+                    output.Write((int)_object.Scale.Y);
+                }
+            }
         }
 
         /// <summary>

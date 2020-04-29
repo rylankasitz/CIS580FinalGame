@@ -13,12 +13,14 @@ using MonoGameWindowsStarter.Characters;
 using MonoGameWindowsStarter.GlobalValues;
 using MonoGameWindowsStarter.UI;
 using ECSEngine.Systems;
+using Engine;
+using MonoGameWindowsStarter.Scenes;
 
 namespace MonoGameWindowsStarter.Entities
 {
-    [Sprite(ContentName: "MapTileSet", Layer: 0)]
+    [Sprite(ContentName: "MapTileSet", Layer: .75f)]
     [Animation(CurrentAnimation: "Idle")]
-    [Transform(X: 100, Y: 100, Width: 32, Height: 32)]
+    [Transform(X: 300, Y: 300, Width: 40, Height: 40)]
     [Physics(VelocityX: 0, VelocityY: 0)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1)]
     public class Player : Entity
@@ -37,6 +39,8 @@ namespace MonoGameWindowsStarter.Entities
         private float hitTime = .15f;
 
         private float elapsedTintTime;
+
+        #region ESC Methods
 
         public override void Initialize()
         {
@@ -74,6 +78,42 @@ namespace MonoGameWindowsStarter.Entities
             animate();
             attack(gameTime);
         }
+
+        private void handleCollision(Entity entity, string direction)
+        {
+            if (entity.Name == "Projectile")
+            {
+                elapsedTintTime = 0;
+                sprite.Color = Color.Red;
+            }
+
+            if (entity.Name.Contains("Door"))
+            {
+                MainScene scene = (MainScene) SceneManager.GetCurrentScene();
+                transform.Position = scene.MapGenerator.LoadNextRoom(entity.Name);
+
+                if (entity.Name == "DoorL")
+                {
+                    transform.Position.X -= transform.Scale.X;
+                }
+                else if (entity.Name == "DoorR")
+                {
+                    transform.Position.X += transform.Scale.X;
+                }
+                else if (entity.Name == "DoorU")
+                {
+                    transform.Position.Y -= transform.Scale.Y;
+                }
+                else if (entity.Name == "DoorD")
+                {
+                    transform.Position.Y += transform.Scale.Y;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private void move()
         {
@@ -154,13 +194,7 @@ namespace MonoGameWindowsStarter.Entities
             }
         }
 
-        private void handleCollision(Entity entity, string direction)
-        {
-            if (entity.Name == "Projectile")
-            {
-                elapsedTintTime = 0;
-                sprite.Color = Color.Red;
-            }
-        }
+        #endregion
+
     }
 }

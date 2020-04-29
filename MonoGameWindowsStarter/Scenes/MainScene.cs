@@ -4,8 +4,11 @@ using Engine.ECSCore;
 using Engine.Systems;
 using Microsoft.Xna.Framework;
 using MonoGameWindowsStarter.Characters;
+using MonoGameWindowsStarter.Characters.Helpers;
 using MonoGameWindowsStarter.Entities;
+using MonoGameWindowsStarter.Scenes.Rooms;
 using MonoGameWindowsStarter.UI;
+using PlatformLibrary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,20 +19,41 @@ namespace MonoGameWindowsStarter.Scenes
 {
     public class MainScene : Scene
     {
+        public MapGenerator MapGenerator { get; set; }
+
+        private int mapScale;
+
         public override void Initialize()
         {
-            MapManager.LoadMap("Room1", this, 4);
-            
-            Player player = CreateEntity<Player>();
+            mapScale = WindowManager.Width / 256;
 
-            Enemy enemy1 = CreateEntity<Enemy>();
-            enemy1.Character = new BlackGhoul();
-            enemy1.GetComponent<Transform>().Position = new Vector(300, 300);
+            // Temporarly add map names
+            MapGenerator = new MapGenerator(new string[] { 
+                "Room_1_+---",
+                "Room_2_--+-",
+                "Room_3_--++",
+                "Room_4_++--",
+                "Room_5_-+-+",
+                "Room_6_+++-",
+                "Room_7_-+++",
+                "Room_8_++++",
+                "Room_9_+--+",
+                "Room_10_---+",
+                "Room_11_+-+-",
+                "Room_12_++-+"
+            }, this);
+           
+            Player player = CreateEntity<Player>();
         }
 
         public override void Update(GameTime gameTime)
         {
             
+        }
+
+        public void LoadRoom(string name, bool flip)
+        {
+            MapManager.LoadMap(name, this, mapScale, flip);
         }
     }
 }

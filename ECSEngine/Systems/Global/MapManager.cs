@@ -16,24 +16,42 @@ namespace Engine.Systems
 {
     public static class MapManager
     {
+        private static Dictionary<string, List<TileMapObject>> ObjectLayers { get; set; }
         private static List<Entity> mapObjects = new List<Entity>();
         private static Tilemap tilemap;
         public static ContentManager Content;
 
-        public static void LoadMap (string name, Scene scene, float scale)
+        public static void LoadMap (string name, Scene scene, float scale, 
+            bool flipVertically = false, bool flipHorizontally = false)
         {
             tilemap = Content.Load<Tilemap>("Maps\\" + name);
+            ObjectLayers = tilemap.ObjectLayers;
 
             removeMapObjects();
-            createMapObjects(scene, scale);
-            Debug.WriteLine($"Loaded Map: {name}");
+            createMapObjects(scene, scale, flipVertically, flipHorizontally);
+            Debug.WriteLine($"Loaded Map: {name}\nFlip Vertically: {flipVertically}\nFlip Horizontally: {flipHorizontally}");
+        }
+
+        public static List<TileMapObject> GetObjectLayer(string name)
+        {
+            if (ObjectLayers.ContainsKey(name))
+            {
+                return ObjectLayers["Spawns"];
+            }
+
+            Debug.WriteLine($"No object layer found for '{name}'");
+
+            return new List<TileMapObject>();
+            
         }
 
         #region Private Methods
 
-        private static void createMapObjects(Scene scene, float mapScale)
+        private static void createMapObjects(Scene scene, float mapScale, bool flipVertically, bool flipHorizontally)
         {
             float layernum = 1;
+            float mapWidth = tilemap.MapWidth * tilemap.TileWidth * mapScale;
+            float mapHeight = tilemap.MapHeight * tilemap.TileHeight * mapScale;
             foreach (var layer in tilemap.Layers)
             {
                 for (uint y = 0; y < tilemap.MapHeight; y++)
@@ -47,6 +65,16 @@ namespace Engine.Systems
                             Vector position = new Vector(x * (tilemap.TileWidth), y * (tilemap.TileHeight)) * mapScale;
                             Vector scale = new Vector(tilemap.Tiles[tileIndex].Width, tilemap.Tiles[tileIndex].Height) * mapScale;
 
+                            if (flipVertically)
+                            {
+                                position.X += ((mapWidth / 2) - position.X)*2;
+                            }
+
+                            if (flipHorizontally)
+                            {
+                                position.Y += ((mapWidth / 2) - position.Y)*2;
+                            }
+
                             Tile tile = tilemap.Tiles[tileIndex];
                             if (tile.BoxCollider == Rectangle.Empty)
                             {
@@ -58,13 +86,13 @@ namespace Engine.Systems
                             {
                                 MapObjectCollision mapObject = scene.CreateEntity<MapObjectCollision>();
                                 setObjectPosition(mapObject, position, scale, tile, layernum, "MapTileSet"); // Change to not manual string
-                                setCollision(mapObject, tile.BoxCollider, tile);
+                                setCollision(mapObject, tile.BoxCollider, tile, mapScale);
                                 mapObjects.Add(mapObject);
                             }
                         }
                     }
                 }
-                layernum -= 1f / (float)(tilemap.Layers.Length * 2);
+                layernum -= 1f / (float)(tilemap.Layers.Length);
             }
         }
 
@@ -83,10 +111,10 @@ namespace Engine.Systems
             sprite.Layer = layernum;
         }
 
-        private static void setCollision(Entity obj, Rectangle collider, Tile tile)
+        private static void setCollision(Entity obj, Rectangle collider, Tile tile, float mapScale)
         {
             BoxCollision col = obj.GetComponent<BoxCollision>();
-            col.Position = new Vector(collider.X, collider.Y);
+            col.Position = new Vector(collider.X * mapScale, collider.Y * mapScale);
             col.Scale = new Vector(collider.Width / (float)tilemap.TileWidth, collider.Height / (float)tilemap.TileHeight);
             col.TriggerOnly = tile.Properties.ContainsKey("Trigger") ? (tile.Properties["Trigger"] == "true") : false;
         }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.Collections.Generic;
 
 namespace PlatformLibrary
 {
@@ -15,6 +16,8 @@ namespace PlatformLibrary
         
         // An array of all tile layers in the tilemap
         public TilemapLayer[] Layers { get; set; }
+
+        public Dictionary<string, List<TileMapObject>> ObjectLayers;
 
         // The width of the map, measured in tiles
         public uint MapWidth { get; set; }
@@ -41,7 +44,8 @@ namespace PlatformLibrary
         /// <param name="tileHeight">The heigh of the tiles, in pixels</param>
         /// <param name="layers">The layers of the map</param>
         /// <param name="tiles">The tiles of the map</param>
-        public Tilemap(uint mapWidth, uint mapHeight, uint tileWidth, uint tileHeight, TilemapLayer[] layers, Tile[] tiles)
+        public Tilemap(uint mapWidth, uint mapHeight, uint tileWidth, uint tileHeight, TilemapLayer[] layers, Tile[] tiles,
+            Dictionary<string, List<TileMapObject>> objectlayers)
         {
             this.MapWidth = mapWidth;
             this.MapHeight = mapHeight;
@@ -49,8 +53,22 @@ namespace PlatformLibrary
             this.TileHeight = tileHeight;
             this.Layers = layers;
             this.Tiles = tiles;
+
+            ObjectLayers = objectlayers;
         }
 
         #endregion    
+    }
+
+    public class TileMapObject
+    {
+        public Vector2 Position { get; set; }
+        public Vector2 Scale { get; set; }
+
+        public TileMapObject(Vector2 position, Vector2 scale) 
+        {
+            Position = position;
+            Scale = scale;
+        }
     }
 }

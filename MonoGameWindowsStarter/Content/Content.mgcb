@@ -27,10 +27,65 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/BasicFont.spritefont
 
-#begin Maps/Room1.tmx
+#begin Maps/Room_1_+---.tmx
 /importer:TilemapImporter
 /processor:TilemapProcessor
-/build:Maps/Room1.tmx
+/build:Maps/Room_1_+---.tmx
+
+#begin Maps/Room_10_---+.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room_10_---+.tmx
+
+#begin Maps/Room_11_+-+-.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room_11_+-+-.tmx
+
+#begin Maps/Room_12_++-+.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room_12_++-+.tmx
+
+#begin Maps/Room_2_--+-.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room_2_--+-.tmx
+
+#begin Maps/Room_3_--++.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room_3_--++.tmx
+
+#begin Maps/Room_4_++--.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room_4_++--.tmx
+
+#begin Maps/Room_5_-+-+.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room_5_-+-+.tmx
+
+#begin Maps/Room_6_+++-.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room_6_+++-.tmx
+
+#begin Maps/Room_7_-+++.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room_7_-+++.tmx
+
+#begin Maps/Room_8_++++.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room_8_++++.tmx
+
+#begin Maps/Room_9_+--+.tmx
+/importer:TilemapImporter
+/processor:TilemapProcessor
+/build:Maps/Room_9_+--+.tmx
 
 #begin Sprites/HealthBar DARK.png
 /importer:TextureImporter

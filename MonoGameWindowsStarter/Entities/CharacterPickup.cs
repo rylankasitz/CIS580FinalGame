@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter.Entities
 {
-    [Sprite(ContentName: "MapTileSet", Layer: .2f)]
+    [Sprite(ContentName: "MapTileSet", Layer: .8f)]
     [Animation(CurrentAnimation: "CharacterPickup")]
     [Transform(X: 0, Y: 0, Width: 32, Height: 32)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1, TriggerOnly: true)]
