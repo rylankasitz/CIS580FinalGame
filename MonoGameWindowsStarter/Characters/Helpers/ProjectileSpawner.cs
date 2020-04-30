@@ -19,26 +19,28 @@ namespace MonoGameWindowsStarter.Characters.Helpers
         private HandleCollision handleCollision;
         private string layer;
 
-        public ProjectileSpawner(HandleCollision collisionHandler, Rectangle spriteSource, string contentName, string layer)
+        public ProjectileSpawner(HandleCollision collisionHandler, Rectangle spriteSource, string contentName)
         {
             source = spriteSource;
             this.contentName = contentName;
             this.handleCollision = collisionHandler;
             elapsedTime = 1000;
-            this.layer = layer;
         }
 
-        public bool Spawn(GameTime gameTime, Vector position, Vector direction, float spawnFrequency, float speed, out Projectile projectile)
+        public void Update(string holder, GameTime gameTime)
         {
+            this.layer = holder;
             elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+        }
 
+        public bool Spawn(Vector position, float spawnFrequency, out Projectile projectile)
+        {         
             if (elapsedTime > spawnFrequency)
             {
                 projectile = SceneManager.GetCurrentScene().CreateEntity<Projectile>();
                 projectile.Transform.Position = position;
                 projectile.Sprite.ContentName = contentName;
                 projectile.Sprite.SpriteLocation = source;
-                projectile.Physics.Velocity = direction * speed;
                 projectile.HandleCollision = handleCollision;
                 projectile.BoxCollision.Layer = layer;
                 elapsedTime = 0;

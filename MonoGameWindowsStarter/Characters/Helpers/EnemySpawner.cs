@@ -14,27 +14,48 @@ namespace MonoGameWindowsStarter.Characters.Helpers
 {
     public class EnemySpawner
     {
-        private Dictionary<int, List<Character>> characters;
+        private Dictionary<string, List<Enemy>> enemies;
         private Random random;
 
         public EnemySpawner()
         {
-            characters = new Dictionary<int, List<Character>>();
+            enemies = new Dictionary<string, List<Enemy>>();
             random = new Random();
-
-            CreateCharacters<Character>();
         }
 
         #region Public Methods
 
-        public void SpawnEnemiesInCurrentRoom(int minDifficulty, int maxDifficulty)
+        public void SpawnEnemiesInRoom(string roomName, int minDifficulty, int maxDifficulty)
         {
-            List<TileMapObject> spawns = MapManager.GetObjectLayer("Spawns");
-
-            foreach(TileMapObject spawn in spawns)
+            if (!enemies.ContainsKey(roomName))
             {
-                spawnEnemy(new Vector(spawn.Position.X, spawn.Position.Y), 
-                           random.Next(minDifficulty, maxDifficulty + 1));
+                List<TileMapObject> spawns = MapManager.GetObjectLayer("Spawns");
+
+                foreach (TileMapObject spawn in spawns)
+                {
+                    spawnEnemy(new Vector(spawn.Position.X, spawn.Position.Y),
+                               random.Next(minDifficulty, maxDifficulty + 1), roomName);
+                    break;
+                }
+            }
+            else
+            {
+                respawnEnemies(roomName);
+            }
+        }
+
+        public void RemoveAllEnemies(string room)
+        {
+            if (!enemies.ContainsKey(room)) return;
+
+            foreach(Enemy enemy in enemies[room])
+            {
+                SceneManager.GetCurrentScene().RemoveEntity(enemy);
+
+                if (enemy.CharacterPickup != null)
+                {
+                    SceneManager.GetCurrentScene().RemoveEntity(enemy.CharacterPickup);
+                }
             }
         }
 
@@ -42,25 +63,37 @@ namespace MonoGameWindowsStarter.Characters.Helpers
 
         #region Private Methods
 
-        private void spawnEnemy(Vector position, int difficulty)
+        private void spawnEnemy(Vector position, int difficulty, string roomName)
         {
             Enemy enemy = SceneManager.GetCurrentScene().CreateEntity<Enemy>();
-            enemy.Character = characters[difficulty][random.Next(0, characters[difficulty].Count)];
+            enemy.Character = createCharacter<BlackGhoul>(); // Change to random difficulty
             enemy.Transform.Position = position;
+            enemy.Character.OnSpawn(enemy);
+
+            if (!enemies.ContainsKey(roomName))
+                enemies.Add(roomName, new List<Enemy>());
+
+            enemies[roomName].Add(enemy);
         }
 
-        private void CreateCharacters<T>() where T : Character
+        private void respawnEnemies(string roomName)
         {
-            foreach (Type type in Assembly.GetAssembly(typeof(T)).GetTypes()
-                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(T))))
+            for (int i = 0; i < enemies[roomName].Count; i++)
             {
-                T obj = (T)Activator.CreateInstance(type, new object[0]);
-
-                if (!characters.ContainsKey(obj.Difficulty))
-                    characters[obj.Difficulty] = new List<Character>();
-
-                characters[obj.Difficulty].Add(obj);
+                if (enemies[roomName][i].CharacterPickup == null)
+                {
+                    Enemy enemy = SceneManager.GetCurrentScene().CreateEntity<Enemy>();
+                    enemy.Character = enemies[roomName][i].Character;
+                    enemy.Transform.Position = enemies[roomName][i].Transform.Position;
+                    enemy.Character.OnSpawn(enemy);
+                    enemies[roomName][i] = enemy;
+                }
             }
+        }
+
+        private T createCharacter<T>() where T : Character, new()
+        {
+            return new T();
         }
 
         #endregion

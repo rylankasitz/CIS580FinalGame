@@ -29,6 +29,8 @@ namespace Engine.Systems
 
             removeMapObjects();
             createMapObjects(scene, scale, flipVertically, flipHorizontally);
+            setObjectLayers(scale);
+
             Debug.WriteLine($"Loaded Map: {name}\nFlip Vertically: {flipVertically}\nFlip Horizontally: {flipHorizontally}");
         }
 
@@ -124,6 +126,18 @@ namespace Engine.Systems
             foreach(Entity mapObject in mapObjects)
             {
                 SceneManager.GetCurrentScene().RemoveEntity(mapObject);
+            }
+        }
+
+        private static void setObjectLayers(float mapScale)
+        {
+            foreach(List<TileMapObject> mapObjects in ObjectLayers.Values)
+            {
+                foreach (TileMapObject mapObject in mapObjects)
+                {
+                    mapObject.Position *= mapScale;
+                    mapObject.Scale *= mapScale;
+                }
             }
         }
 

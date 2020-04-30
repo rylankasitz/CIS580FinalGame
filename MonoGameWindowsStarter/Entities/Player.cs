@@ -15,27 +15,30 @@ using MonoGameWindowsStarter.UI;
 using ECSEngine.Systems;
 using Engine;
 using MonoGameWindowsStarter.Scenes;
+using System.Diagnostics;
 
 namespace MonoGameWindowsStarter.Entities
 {
     [Sprite(ContentName: "MapTileSet", Layer: .75f)]
     [Animation(CurrentAnimation: "Idle")]
-    [Transform(X: 300, Y: 300, Width: 40, Height: 40)]
+    [Transform(X: 300, Y: 300, Width: 100, Height: 100)]
     [Physics(VelocityX: 0, VelocityY: 0)]
-    [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1)]
+    [BoxCollision(X: 0, Y: 0, Width: 1f, Height: 1f)]
     public class Player : Entity
     {
         public Character Character;
+        public Transform Transform;
+        public Physics Physics;
+        public Sprite Sprite;
         public float TotalHealth;
         public float CurrentHealth;
 
-        private Sprite sprite;
         private Animation animation;
-        private Transform transform;
         private BoxCollision boxCollision;
-        private Physics physics;
         private SliderBar healthBar;
 
+        private Vector spriteSize = new Vector(8, 8);
+        private float scale = 5;
         private float hitTime = .15f;
 
         private float elapsedTintTime;
@@ -51,16 +54,20 @@ namespace MonoGameWindowsStarter.Entities
             CurrentHealth = TotalHealth;
             elapsedTintTime = hitTime;
 
-            sprite = GetComponent<Sprite>();
+            Character.OnSpawn();
+
+            Sprite = GetComponent<Sprite>();
             animation = GetComponent<Animation>();
-            transform = GetComponent<Transform>();
+            Transform = GetComponent<Transform>();
             boxCollision = GetComponent<BoxCollision>();
-            physics = GetComponent<Physics>();
+            Physics = GetComponent<Physics>();
 
             boxCollision.HandleCollision = handleCollision;
             boxCollision.Layer = "Player";
 
             animation.CurrentAnimation = Character.IdleAnimation;
+
+            Sprite.ContentName = Character.SpriteSheet;
 
             healthBar = new SliderBar("HealthBars", "HealthBars",
                                        new Vector(WindowManager.Width * .03f, WindowManager.Height * .03f),
@@ -73,6 +80,8 @@ namespace MonoGameWindowsStarter.Entities
         {
             elapsedTintTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            Character.ProjectileSpawner.Update(Character.Holder, gameTime);
+
             hitTint();
             move();
             animate();
@@ -81,32 +90,34 @@ namespace MonoGameWindowsStarter.Entities
 
         private void handleCollision(Entity entity, string direction)
         {
+            Debug.WriteLine($"{direction}");
             if (entity.Name == "Projectile")
             {
                 elapsedTintTime = 0;
-                sprite.Color = Color.Red;
+                Sprite.Color = Color.Red;
+                healthBar.UpdateFill(CurrentHealth / TotalHealth);
             }
 
             if (entity.Name.Contains("Door"))
             {
                 MainScene scene = (MainScene) SceneManager.GetCurrentScene();
-                transform.Position = scene.MapGenerator.LoadNextRoom(entity.Name);
+                Transform.Position = scene.MapGenerator.LoadNextRoom(entity.Name);
 
                 if (entity.Name == "DoorL")
                 {
-                    transform.Position.X -= transform.Scale.X;
+                    Transform.Position.X -= Transform.Scale.X;
                 }
                 else if (entity.Name == "DoorR")
                 {
-                    transform.Position.X += transform.Scale.X;
+                    Transform.Position.X += Transform.Scale.X;
                 }
                 else if (entity.Name == "DoorU")
                 {
-                    transform.Position.Y -= transform.Scale.Y;
+                    Transform.Position.Y -= Transform.Scale.Y;
                 }
                 else if (entity.Name == "DoorD")
                 {
-                    transform.Position.Y += transform.Scale.Y;
+                    Transform.Position.Y += Transform.Scale.Y;
                 }
             }
         }
@@ -116,50 +127,55 @@ namespace MonoGameWindowsStarter.Entities
         #region Private Methods
 
         private void move()
-        {
-            physics.Velocity = new Vector(0, 0);
+        {         
+            boxCollision.Scale = spriteSize / animation.AnimationScale;
+            boxCollision.Position = (Transform.Scale - (spriteSize*scale)) / 2;
+
+            Physics.Velocity = new Vector(0, 0);
 
             float speed = Character.MoveSpeed * PlayerStats.SpeedMod;
 
             if(InputManager.KeyPressed(Keys.W))
             {
-                physics.Velocity.Y = -speed;
+                Physics.Velocity.Y = -speed;
             }
             else if (InputManager.KeyPressed(Keys.S))
             {
-                physics.Velocity.Y = speed;
+                Physics.Velocity.Y = speed;
             }
 
             if (InputManager.KeyPressed(Keys.D))
             {
-                physics.Velocity.X = speed;
+                Physics.Velocity.X = speed;
             }
             else if (InputManager.KeyPressed(Keys.A))
             {
-                physics.Velocity.X = -speed;
+                Physics.Velocity.X = -speed;
             }
 
-            if (physics.Velocity != Vector2.Zero) 
+            if (Physics.Velocity != Vector2.Zero) 
             {
-                Vector2 normalized = new Vector2(physics.Velocity.X, physics.Velocity.Y);
+                Vector2 normalized = new Vector2(Physics.Velocity.X, Physics.Velocity.Y);
                 normalized.Normalize();
-                physics.Velocity = new Vector(normalized.X, normalized.Y) * speed;
+                Physics.Velocity = new Vector(normalized.X, normalized.Y) * speed;
             }
         }
 
         private void animate()
         {
-            if (physics.Velocity.X != 0 || physics.Velocity.Y != 0)
+            Transform.Scale = animation.AnimationScale * scale;
+
+            if (Physics.Velocity.X != 0 || Physics.Velocity.Y != 0)
             {
                 animation.CurrentAnimation = Character.WalkAnimation;
 
-                if (physics.Velocity.X < 0)
+                if (Physics.Velocity.X < 0)
                 {
-                    sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
+                    Sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
                 }
-                else if (physics.Velocity.X > 0)
+                else if (Physics.Velocity.X > 0)
                 {
-                    sprite.SpriteEffects = SpriteEffects.None;
+                    Sprite.SpriteEffects = SpriteEffects.None;
                 }
             }
             else
@@ -169,20 +185,19 @@ namespace MonoGameWindowsStarter.Entities
 
             if (InputManager.LeftMouseDown())
             {
-                animation.CurrentAnimation = Character.AttackAnimation;
+                animation.Play(Character.AttackAnimation);
             }
         }
 
         private void attack(GameTime gameTime)
         {
-            if (InputManager.LeftMousePressed() || InputManager.LeftMouseDown())
+            if (InputManager.LeftMousePressed())
             {
-                Vector position = InputManager.GetMousePosition();
-                Vector2 direction = new Vector2(position.X - transform.Position.X,
-                                                position.Y - transform.Position.Y);
+                Vector position = InputManager.GetMousePosition() - Transform.Scale/2;
+                Vector2 direction = new Vector2(position.X - Transform.Position.X,
+                                                position.Y - Transform.Position.Y);
                 direction.Normalize();
-                Character.Attack(gameTime, transform.Position + (transform.Scale/2), new Vector(direction.X, direction.Y), 
-                    InputManager.LeftMouseDown());
+                Character.Attack(Transform.Position + (Transform.Scale/2), new Vector(direction.X, direction.Y));
             }       
         }
 
@@ -190,7 +205,7 @@ namespace MonoGameWindowsStarter.Entities
         {
             if (hitTime < elapsedTintTime)
             {
-                sprite.Color = Color.White;
+                Sprite.Color = Color.White;
             }
         }
 

@@ -12,6 +12,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
         public string Name { get; set; }
         public string Type { get; set; }
         public string Directions { get; set; }
+        public string DungeonName { get; set; }
         public bool Flip { get; set; }
     }
 }

@@ -22,13 +22,15 @@ namespace MonoGameWindowsStarter.Entities
     {
         public Character Character;
         public Transform Transform;
+        public Physics Physics;
         public float TotalHealth;
         public float CurrentHealth;
+        public CharacterPickup CharacterPickup;
 
         private Sprite sprite;
         private Animation animation;
         private BoxCollision boxCollision;
-        private Physics physics;
+  
 
         private float hitTime = .15f;
 
@@ -50,7 +52,7 @@ namespace MonoGameWindowsStarter.Entities
             animation = GetComponent<Animation>();
             Transform = GetComponent<Transform>();
             boxCollision = GetComponent<BoxCollision>();
-            physics = GetComponent<Physics>();
+            Physics = GetComponent<Physics>();
 
             boxCollision.Layer = "Enemy";
             boxCollision.HandleCollision = handleCollision;
@@ -61,8 +63,11 @@ namespace MonoGameWindowsStarter.Entities
         public override void Update(GameTime gameTime)
         {
             elapsedTintTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            Character.Holder = Name;
 
-            attack = Character.AILogic(physics);
+            Character.AILogicCMD.Update(gameTime);
+            Character.ProjectileSpawner.Update(Character.Holder, gameTime);
+
             animate();
             hitTint();
 
@@ -85,15 +90,15 @@ namespace MonoGameWindowsStarter.Entities
 
         private void animate()
         {
-            if (physics.Velocity.X != 0 || physics.Velocity.Y != 0)
+            if (Physics.Velocity.X != 0 || Physics.Velocity.Y != 0)
             {
                 animation.CurrentAnimation = Character.WalkAnimation;
 
-                if (physics.Velocity.X < 0)
+                if (Physics.Velocity.X < 0)
                 {
                     sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
                 }
-                else if (physics.Velocity.X > 0)
+                else if (Physics.Velocity.X > 0)
                 {
                     sprite.SpriteEffects = SpriteEffects.None;
                 }
@@ -111,9 +116,9 @@ namespace MonoGameWindowsStarter.Entities
 
         private void onDeath()
         {
-            CharacterPickup characterPickup = SceneManager.GetCurrentScene().CreateEntity<CharacterPickup>();
-            characterPickup.Transform.Position = new Vector(Transform.Position.X, Transform.Position.Y);
-            characterPickup.Character = Character;
+            CharacterPickup = SceneManager.GetCurrentScene().CreateEntity<CharacterPickup>();
+            CharacterPickup.Transform.Position = new Vector(Transform.Position.X, Transform.Position.Y);
+            CharacterPickup.Character = Character;
 
             SceneManager.GetCurrentScene().RemoveEntity(this);
         }

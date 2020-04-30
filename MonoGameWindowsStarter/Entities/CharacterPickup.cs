@@ -48,6 +48,7 @@ namespace MonoGameWindowsStarter.Entities
                 {
                     player.Character = Character;
                     player.Character.Holder = "Player";
+                    player.Sprite.ContentName = player.Character.SpriteSheet;
 
                     SceneManager.GetCurrentScene().RemoveEntity(this);
                 }

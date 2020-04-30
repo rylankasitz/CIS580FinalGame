@@ -10,6 +10,7 @@ using Engine.Componets;
 using Engine.ECSCore;
 using System.IO;
 using System.Diagnostics;
+using ECSEngine.Systems;
 
 namespace Engine.Systems
 {
@@ -79,7 +80,22 @@ namespace Engine.Systems
 
                     spriteBatch.DrawString(font, text.Text, transform.Position, text.Color, transform.Rotation, new Vector2(0,0), transform.Scale, SpriteEffects.None, 0f);
                 }
+
+                if (WindowManager.Debug && entity.HasComponent<BoxCollision>())
+                {
+                    BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
+                    spriteBatch.Draw(textures[WindowManager.MouseTexture],
+                        new Rectangle((int)(boxCollision.Position.X + transform.Position.X),
+                                      (int)(boxCollision.Position.Y + transform.Position.Y),
+                                      (int)(boxCollision.Scale.X * transform.Scale.X),
+                                      (int)(boxCollision.Scale.Y * transform.Scale.Y)), Color.White);
+                }
             }
+
+            if (WindowManager.MouseTexture != "")
+                spriteBatch.Draw(textures[WindowManager.MouseTexture], 
+                    new Rectangle((int)InputManager.GetMousePosition().X, (int)InputManager.GetMousePosition().Y, 8, 8), 
+                    Color.White);
         }
     }
 }

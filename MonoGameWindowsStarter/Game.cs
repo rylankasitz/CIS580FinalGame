@@ -30,6 +30,7 @@ namespace MonoGameWindowsStarter
             Camera.Position.Y = WindowManager.Height / 2;
 
             WindowManager.BackgroundColor = new Color(25, 23, 22);
+            WindowManager.MouseTexture = "MouseIcon";
         }
 
         public override void Update(GameTime gameTime)

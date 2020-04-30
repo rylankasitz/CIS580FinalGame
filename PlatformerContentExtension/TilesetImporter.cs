@@ -45,7 +45,7 @@ namespace PlatformerContentExtension
             // A tileset will contain an image element that serves as the source of the tiles
             XmlNodeList images = tileset.SelectNodes("//image");
             var imageFilename = images[0].Attributes["source"].Value;
-            var imageColorKey = images[0].Attributes["trans"].Value;
+            var imageColorKey = images[0].Attributes["trans"] != null ? images[0].Attributes["trans"].Value : null;
 
             TileContent[] tileContent = new TileContent[tileCount];
             XmlNodeList tiles = tileset.SelectNodes("//tile");
@@ -87,7 +87,7 @@ namespace PlatformerContentExtension
                             int tileid = int.Parse(a.Attributes["tileid"].Value);
                             int duration = int.Parse(a.Attributes["duration"].Value);
                             Rectangle source = new Rectangle((int)(tileid % columns), 
-                                (int)Math.Floor(tileid / (float) columns), tileWidth, tileHeight);
+                                (int)Math.Floor(tileid / (float) columns), tileWidth, tileHeight);        
                             tileContent[id].Animation.Frames.Add(new Frame(source, duration / (double)1000));
                             animation = true;
                         }

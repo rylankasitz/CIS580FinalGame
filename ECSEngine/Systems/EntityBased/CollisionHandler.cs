@@ -68,44 +68,44 @@ namespace Engine.Systems
             return (p1.X < p2.X + s2.X && p1.X + s1.X > p2.X && p1.Y < p2.Y + s2.Y && p1.Y + s1.Y > p2.Y);
         }
 
-        private string handlePhysics(Entity entity, Transform transform, Vector p, Vector s, bool isTrigger)
+        private string handlePhysics(Entity entity, Transform transform, Vector p1, Vector s1, Vector p2, Vector s2, bool isTrigger)
         {
             string side = "";
             if (entity.HasComponent<Physics>())
             {
                 Physics physics = entity.GetComponent<Physics>();
 
-                if (transform.Position.Y + transform.Scale.Y - (physics.Velocity.Y*2) > p.Y && 
-                    transform.Position.Y - (physics.Velocity.Y*2) < p.Y + s.Y) {
+                if (p2.Y + s2.Y - (physics.Velocity.Y*2) > p1.Y && 
+                    p2.Y - (physics.Velocity.Y*2) < p1.Y + s1.Y) {
 
                     if (physics.Velocity.X > 0)
                     {
                         if (!isTrigger)
-                            transform.Position.X = p.X - transform.Scale.X;
+                            transform.Position.X = p1.X - transform.Scale.X - (transform.Position.X - p2.X);
                         side = "Left";
                     }
                     else if (physics.Velocity.X < 0)
                     {
                         if (!isTrigger)
-                            transform.Position.X = p.X + s.X;
+                            transform.Position.X = p1.X + s1.X - (p2.X - transform.Position.X);
                         side = "Right";
                     }
                 }
 
-                if (transform.Position.X + transform.Scale.X - (physics.Velocity.X*2) > p.X && 
-                    transform.Position.X - (physics.Velocity.X*2) < p.X + s.X)
+                if (p2.X + s2.X - (physics.Velocity.X*2) > p1.X && 
+                    p2.X - (physics.Velocity.X*2) < p1.X + s1.X)
                 {
 
                     if (physics.Velocity.Y > 0)
                     {
                         if (!isTrigger)
-                            transform.Position.Y = p.Y - transform.Scale.Y;
+                            transform.Position.Y = p1.Y - transform.Scale.Y - (transform.Position.Y - p2.Y);
                         side = "Top";
                     }
                     else if (physics.Velocity.Y < 0)
                     {
                         if (!isTrigger)
-                            transform.Position.Y = p.Y + s.Y;
+                            transform.Position.Y = p1.Y + s1.Y - (p2.Y - transform.Position.Y);
                         side = "Bottom";
                     }
                 }
@@ -128,8 +128,8 @@ namespace Engine.Systems
 
                     if (checkCollision(collider1, collider2, transform1, transform2))
                     {
-                        string side1 = handlePhysics(entity1, transform1, p2, s2, collider1.TriggerOnly || collider2.TriggerOnly);
-                        string side2 = handlePhysics(entity2, transform2, p1, s1, collider1.TriggerOnly || collider2.TriggerOnly);
+                        string side1 = handlePhysics(entity1, transform1, p2, s2, p1, s1, collider1.TriggerOnly || collider2.TriggerOnly);
+                        string side2 = handlePhysics(entity2, transform2, p1, s1, p2, s2, collider1.TriggerOnly || collider2.TriggerOnly);
 
                         collider1.HandleCollision?.Invoke(entity2, side1);
                         collider2.HandleCollision?.Invoke(entity1, side2);

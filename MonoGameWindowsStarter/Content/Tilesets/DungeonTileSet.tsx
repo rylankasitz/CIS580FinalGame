@@ -13,7 +13,7 @@
  </tile>
  <tile id="3">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="8"/>
+   <object id="2" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="4">

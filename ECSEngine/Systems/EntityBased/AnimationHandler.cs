@@ -59,8 +59,12 @@ namespace Engine.Systems
         {
             foreach (Entity entity in Entities)
             {
-                AnimationTracker current = getAnimation(entity);
                 Animation animation = entity.GetComponent<Animation>();
+
+                if (animation.Playing)
+                    animation.CurrentAnimation = animation.PlayeringAnimation;
+
+                AnimationTracker current = getAnimation(entity);
 
                 if (current != null)
                 {
@@ -76,6 +80,12 @@ namespace Engine.Systems
                     current.FrameNumber = (int)Math.Floor(current.TimeIntoAnimation / current.FrameDuration);
 
                     sprite.SpriteLocation = current.CurrentFrame;
+
+                    if (current.FrameNumber == current.Frames.Count - 1 && animation.Playing)
+                    {
+                        animation.Playing = false;
+                        current.TimeIntoAnimation = 0;
+                    }
                 }
             }
         }
@@ -97,6 +107,7 @@ namespace Engine.Systems
                 AnimationTracker animationTracker = new AnimationTracker(animationData[animation.CurrentAnimation].Parent);
                 animationTracker.Frames = animationData[animation.CurrentAnimation].Frames;
                 animation.AnimationTracker[animation.CurrentAnimation] = animationTracker;
+                animation.AnimationScale = new Vector(animationTracker.Parent.Width, animationTracker.Parent.Height);
                 return animationTracker;               
             }
 
@@ -111,7 +122,7 @@ namespace Engine.Systems
             {
                 SpriteSheetAnimations spriteSheetAnimation = new SpriteSheetAnimations();
                 spriteSheetAnimation.Width = tileset[i].Width;
-                spriteSheetAnimation.Height = tileset[i].Width;
+                spriteSheetAnimation.Height = tileset[i].Height;
                 spriteSheetAnimation.Margin = 0; // change
                 spriteSheetAnimation.Spacing = 0; // change
 

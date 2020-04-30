@@ -20,6 +20,7 @@ namespace MonoGameWindowsStarter.Scenes
     public class MainScene : Scene
     {
         public MapGenerator MapGenerator { get; set; }
+        public Player Player { get; set; }
 
         private int mapScale;
 
@@ -42,8 +43,8 @@ namespace MonoGameWindowsStarter.Scenes
                 "Room_11_+-+-",
                 "Room_12_++-+"
             }, this);
-           
-            Player player = CreateEntity<Player>();
+
+            Player = CreateEntity<Player>();
         }
 
         public override void Update(GameTime gameTime)

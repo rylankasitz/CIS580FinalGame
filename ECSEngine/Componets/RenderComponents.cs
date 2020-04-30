@@ -31,10 +31,19 @@ namespace Engine.Componets
     {
         public string CurrentAnimation { get; set; } = string.Empty;
         public Dictionary<string, AnimationTracker> AnimationTracker { get; set; } = new Dictionary<string, AnimationTracker>();
+        public Vector AnimationScale { get; set; } = new Vector(0, 0);
+        public bool Playing { get; set; } = false;
+        public string PlayeringAnimation { get; set; } = "";
         public Animation() { }
         public Animation(string CurrentAnimation)
         {
             this.CurrentAnimation = CurrentAnimation;
+        }
+
+        public void Play(string animation)
+        {
+            Playing = true;
+            PlayeringAnimation = animation;
         }
     }
 

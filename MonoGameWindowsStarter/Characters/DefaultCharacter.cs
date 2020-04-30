@@ -16,46 +16,36 @@ namespace MonoGameWindowsStarter.Characters
 {
     public class DefaultCharacter : Character
     {
+        public override string SpriteSheet => "MapTileSet";
         public override string IdleAnimation => "IdleDefault";
-
         public override string WalkAnimation  => "WalkDefault";
-
         public override string AttackAnimation => "AttackDefault";
 
         public override float MoveSpeed => 6;
-
         public override int AttackDamage => 10;
-
         public override float AttackSpeed => .4f;
-
         public override float Range => 3;
-
         public override int MaxHealth => 50;
-
         public override int Difficulty => 0;
 
-        private ProjectileSpawner projectileSpawner;
-        private float projectileSpeed = 5f;
-        private string projectileSprite = "Projectiles";
-        private Rectangle projectileSource = new Rectangle(197, 117, 8, 8);
+        public override string ProjectileSprite => "Projectiles";
+        public override Rectangle ProjectileSource => new Rectangle(197, 117, 8, 8);
 
-        public override bool AILogic(Physics physics)
+        private float projectileSpeed = 5f;
+
+        public override void OnStateSwitch(string lastState)
         {
-            return false;
+               
         }
 
-        public override void Attack(GameTime gameTime, Vector position, Vector direction, bool mouseDown)
+        public override void Attack(Vector position, Vector direction)
         {
-            if (mouseDown)
-            {
-                projectileSpawner = new ProjectileSpawner(HandleCollision, projectileSource, projectileSprite, Holder);
-            }
-
             Projectile projectile;
             float attackSpeed = AttackSpeed;
+
             if (Holder == "Player") attackSpeed = AttackSpeed * PlayerStats.AttackSpeedMod;
 
-            if (projectileSpawner.Spawn(gameTime, position, direction, AttackSpeed, projectileSpeed, out projectile)) 
+            if (ProjectileSpawner.Spawn(position, attackSpeed, out projectile)) 
             {
                 if (Holder == "Player")
                     projectile.Damage = AttackDamage * PlayerStats.AttackDamageMod;
@@ -64,6 +54,7 @@ namespace MonoGameWindowsStarter.Characters
 
                 projectile.Range = Range*100;
                 projectile.Transform.Scale = new Vector(12, 12);
+                projectile.Physics.Velocity = direction * projectileSpeed;
             }
         }
 
@@ -80,7 +71,8 @@ namespace MonoGameWindowsStarter.Characters
                 player.CurrentHealth -= projectile.Damage;
             }
 
-            SceneManager.GetCurrentScene().RemoveEntity(projectile);
+            if (collider.Name != "Projectile")
+                SceneManager.GetCurrentScene().RemoveEntity(projectile);
         }
     }
 }

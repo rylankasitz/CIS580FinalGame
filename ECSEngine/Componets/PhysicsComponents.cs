@@ -16,6 +16,7 @@ namespace Engine.Componets
         public static Vector operator +(Vector a, Vector b) => new Vector(a.X + b.X, a.Y + b.Y);
         public static Vector operator -(Vector a, Vector b) => new Vector(a.X - b.X, a.Y - b.Y);
         public static Vector operator *(Vector a, Vector b) => new Vector(a.X * b.X, a.Y * b.Y);
+        public static Vector operator /(Vector a, Vector b) => new Vector(a.X / b.X, a.Y / b.Y);
 
         public static Vector operator *(Vector v, float n) => new Vector(v.X * n, v.Y * n);
         public static Vector operator /(Vector v, float n) => new Vector(v.X/n, v.Y/n);

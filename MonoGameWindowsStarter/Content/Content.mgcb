@@ -87,6 +87,18 @@
 /processor:TilemapProcessor
 /build:Maps/Room_9_+--+.tmx
 
+#begin Sprites/Charles_Spear.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Charles_Spear.png
+
 #begin Sprites/HealthBar DARK.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -111,6 +123,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/MapTileSet.png
 
+#begin Sprites/MouseIcon.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/MouseIcon.png
+
 #begin Sprites/projectiles.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -122,6 +146,11 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/projectiles.png;Sprites/Projectiles.png
+
+#begin Tilesets/Charles_Spear.tsx
+/importer:TilesetImporter
+/processor:TilesetProcessor
+/build:Tilesets/Charles_Spear.tsx
 
 #begin Tilesets/DungeonTileSet.tsx
 /importer:TilesetImporter

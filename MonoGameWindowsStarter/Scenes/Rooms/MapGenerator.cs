@@ -51,7 +51,8 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
         public Vector LoadNextRoom(string name)
         {
             string newDoor = "";
-            
+            enemySpawner.RemoveAllEnemies(roomLayout[currentX, currentY].DungeonName);
+
             if (name == "DoorL")
             {
                 currentX--;
@@ -74,6 +75,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             }
 
             bool flip = roomLayout[currentX, currentY].Flip;
+
             scene.LoadRoom(roomLayout[currentX, currentY].MapName, flip);
 
             if (flip)
@@ -86,7 +88,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 
             Transform door = scene.GetEntity<MapObjectCollision>(newDoor).GetComponent<Transform>();
 
-            enemySpawner.SpawnEnemiesInCurrentRoom(1, 1); // change manual values
+            enemySpawner.SpawnEnemiesInRoom(roomLayout[currentX, currentY].DungeonName, 1, 1); // change manual values
 
             return new Vector(door.Position.X, door.Position.Y);
         }
@@ -114,6 +116,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
                         roomLayout[i, j].Type = roomNameParts[0];
                         roomLayout[i, j].Directions = roomNameParts[2];
                         roomLayout[i, j].Flip = possibleRooms[roomName] == 1;
+                        roomLayout[i, j].DungeonName = roomNameParts[1] + "-" + i + "," + j;
 
                         spawn = new Vector2(i, j);
                     }

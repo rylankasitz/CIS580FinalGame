@@ -15,46 +15,70 @@ namespace MonoGameWindowsStarter.Characters
 {
     public class BlackGhoul : Character
     {
+        public override string SpriteSheet => "MapTileSet";
         public override string IdleAnimation => "IdleBlackGhoul";
-
         public override string WalkAnimation => "WalkBlackGhoul";
-
         public override string AttackAnimation => "AttackBlackGhoul";
 
         public override float MoveSpeed => 6;
-
         public override int AttackDamage => 8;
-
         public override float AttackSpeed => .4f;
-
         public override float Range => 2;
-
         public override int MaxHealth => 60;
-
         public override int Difficulty => 1;
 
-        private ProjectileSpawner projectileSpawner;
-        private float projectileSpeed = 6f;
-        private string projectileSprite = "Projectiles";
-        private Rectangle projectileSource = new Rectangle(197, 117, 8, 8);
+        public override string ProjectileSprite => "Projectiles";
+        public override Rectangle ProjectileSource => new Rectangle(197, 117, 8, 8);
 
-        public override bool AILogic(Physics physics)
+        private float projectileSpeed = 6f;
+
+        public override void OnStateSwitch(string lastState)
         {
-            return false;
+            switch (lastState)
+            {
+                case "Start":
+                    AILogicCMD.Wait(.5f);
+                    AILogicCMD.CurrentState = "Waiting";
+                    break;
+
+                case "Waiting":
+                    AILogicCMD.Wait(.2f);
+                    if (AILogicCMD.InRangeOfPlayer(100))
+                        AILogicCMD.CurrentState = "Attacking";
+                    else
+                        AILogicCMD.CurrentState = "Moving";
+                    break;
+
+                case "Moving":
+                    AILogicCMD.MoveToPlayer(.3f);
+                    if (AILogicCMD.InRangeOfPlayer((int)(Range * 100)))
+                        AILogicCMD.CurrentState = "Attacking";
+                    else
+                        AILogicCMD.CurrentState = "Waiting";
+                    break;
+
+                case "Attacking":
+                    AILogicCMD.AttackPlayer(.5f, 0);
+                    if (AILogicCMD.InRangeOfPlayer((int)(Range * 100)))
+                        AILogicCMD.CurrentState = "Attacking";
+                    else
+                        AILogicCMD.CurrentState = "Moving";
+                    break;
+
+                default:
+                    break;
+            }       
         }
 
-        public override void Attack(GameTime gameTime, Vector position, Vector direction, bool mouseDown)
+        public override void Attack(Vector position, Vector direction)
         {
-            if (mouseDown)
-            {
-                projectileSpawner = new ProjectileSpawner(HandleCollision, projectileSource, projectileSprite, Holder);
-            }
-
             Projectile projectile;
             float attackSpeed = AttackSpeed;
-            if (Holder == "Player") attackSpeed = AttackSpeed * PlayerStats.AttackSpeedMod;
 
-            if (projectileSpawner.Spawn(gameTime, position, direction, attackSpeed, projectileSpeed, out projectile))
+            if (Holder == "Player")
+                attackSpeed *= PlayerStats.AttackSpeedMod;
+
+            if (ProjectileSpawner.Spawn(position, attackSpeed, out projectile))
             {
                 if (Holder == "Player")
                     projectile.Damage = AttackDamage * PlayerStats.AttackDamageMod;
@@ -63,6 +87,7 @@ namespace MonoGameWindowsStarter.Characters
 
                 projectile.Range = Range*100;
                 projectile.Transform.Scale = new Vector(12, 12);
+                projectile.Physics.Velocity = (direction * projectileSpeed);
             }
         }
 
@@ -79,7 +104,8 @@ namespace MonoGameWindowsStarter.Characters
                 player.CurrentHealth -= projectile.Damage;
             }
 
-            SceneManager.GetCurrentScene().RemoveEntity(projectile);
+            if (collider.Name != "Projectile")
+                SceneManager.GetCurrentScene().RemoveEntity(projectile);
         }
     }
 }
