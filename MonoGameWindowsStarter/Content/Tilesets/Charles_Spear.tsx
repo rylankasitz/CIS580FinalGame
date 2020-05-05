@@ -6,7 +6,8 @@
    <property name="Animation" value="AttackCharles"/>
   </properties>
   <objectgroup draworder="index" id="3">
-   <object id="2" x="22.75" y="10.25" width="6.5" height="6"/>
+   <object id="2" type="Attack" x="24" y="11" width="5" height="5"/>
+   <object id="3" type="Collision" x="17" y="7" width="7" height="9"/>
   </objectgroup>
   <animation>
    <frame tileid="0" duration="200"/>
@@ -17,32 +18,46 @@
  </tile>
  <tile id="1">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="22.125" y="9.375" width="18" height="6.5"/>
+   <object id="1" type="Attack" x="22.125" y="10" width="17.875" height="5"/>
+   <object id="2" type="Collision" x="14" y="7" width="8" height="9"/>
   </objectgroup>
  </tile>
  <tile id="2">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="23" y="9.75" width="16" height="6.25"/>
+   <object id="1" type="Attack" x="23" y="10" width="16" height="6"/>
+   <object id="2" type="Collision" x="15" y="7" width="8" height="9"/>
   </objectgroup>
  </tile>
  <tile id="3">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="23.125" y="10.25" width="12.125" height="6.75"/>
+   <object id="1" type="Attack" x="23.125" y="11" width="12.125" height="5"/>
+   <object id="2" type="Collision" x="15" y="7" width="8" height="9"/>
   </objectgroup>
  </tile>
  <tile id="6">
   <properties>
    <property name="Animation" value="WalkCharles"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="17" y="7" width="7" height="9"/>
+  </objectgroup>
   <animation>
    <frame tileid="6" duration="200"/>
    <frame tileid="7" duration="200"/>
   </animation>
  </tile>
+ <tile id="7">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="17" y="8" width="7" height="8"/>
+  </objectgroup>
+ </tile>
  <tile id="12">
   <properties>
    <property name="Animation" value="IdleCharles"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="15" y="7" width="9" height="9"/>
+  </objectgroup>
   <animation>
    <frame tileid="12" duration="200"/>
    <frame tileid="13" duration="200"/>
@@ -51,5 +66,30 @@
    <frame tileid="16" duration="200"/>
    <frame tileid="17" duration="200"/>
   </animation>
+ </tile>
+ <tile id="13">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="15" y="7" width="9" height="9"/>
+  </objectgroup>
+ </tile>
+ <tile id="14">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="15" y="7" width="9" height="9"/>
+  </objectgroup>
+ </tile>
+ <tile id="15">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="15" y="7" width="9" height="9"/>
+  </objectgroup>
+ </tile>
+ <tile id="16">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="15" y="7" width="9" height="9"/>
+  </objectgroup>
+ </tile>
+ <tile id="17">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="15" y="7" width="9" height="9"/>
+  </objectgroup>
  </tile>
 </tileset>

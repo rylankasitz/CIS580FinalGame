@@ -73,12 +73,15 @@ namespace PlatformerContentExtension
                     }       
                     if (child.Name == "objectgroup")
                     {
-                        XmlNode collision = child.FirstChild;
-                        float x = float.Parse(collision.Attributes["x"].Value);
-                        float y = float.Parse(collision.Attributes["y"].Value);
-                        float width = float.Parse(collision.Attributes["width"].Value);
-                        float height = float.Parse(collision.Attributes["height"].Value);
-                        tileContent[id].BoxCollision = new Rectangle((int)x, (int)y, (int)width, (int)height);
+                        foreach (XmlNode collision in child.ChildNodes)
+                        {
+                            float x = float.Parse(collision.Attributes["x"].Value);
+                            float y = float.Parse(collision.Attributes["y"].Value);
+                            float width = float.Parse(collision.Attributes["width"].Value);
+                            float height = float.Parse(collision.Attributes["height"].Value);
+                            string pname = collision.Attributes["type"] != null ? collision.Attributes["type"].Value : "unamed";
+                            tileContent[id].BoxCollisions.Add(pname, new Rectangle((int)x, (int)y, (int)width, (int)height));
+                        }
                     }
                     if (child.Name == "animation")
                     {

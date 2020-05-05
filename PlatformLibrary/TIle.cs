@@ -12,7 +12,7 @@ namespace PlatformLibrary
         #region Properties
 
         public Rectangle Source { get; set; }
-        public Rectangle BoxCollider { get; set; }
+        public Dictionary<string, Rectangle> BoxColliders { get; set; }
         public Texture2D Texture { get; set; }
         public TilesetAnimation Animation { get; set; }
         public Dictionary<string, string> Properties { get; set; }
@@ -24,11 +24,11 @@ namespace PlatformLibrary
 
         #region Initialization
 
-        public Tile(Rectangle source, Rectangle boxCollider, Dictionary<string, string> properties, Texture2D texture, TilesetAnimation animation)
+        public Tile(Rectangle source, Dictionary<string, Rectangle> boxColliders, Dictionary<string, string> properties, Texture2D texture, TilesetAnimation animation)
         {
             Texture = texture;
             Source = source;
-            BoxCollider = boxCollider;
+            BoxColliders = boxColliders;
             Properties = properties;
             Animation = animation;
         }

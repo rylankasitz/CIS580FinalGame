@@ -15,7 +15,7 @@ namespace PlatformerContentExtension
     {
         public Rectangle Source { get; set; }
         public bool Solid { get; set; }
-        public Rectangle BoxCollision { get; set; } = Rectangle.Empty;
+        public Dictionary<string, Rectangle> BoxCollisions { get; set; } = new Dictionary<string, Rectangle>();
         public Animation Animation { get; set; }
         public Dictionary<string, string> Properties { get; set; }
 

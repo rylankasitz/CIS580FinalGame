@@ -32,7 +32,7 @@ namespace MonoGameWindowsStarter
             WindowManager.BackgroundColor = new Color(25, 23, 22);
             WindowManager.MouseTexture = "MouseIcon";
 
-            //WindowManager.Debug = true;
+            WindowManager.Debug = true;
         }
 
         public override void Update(GameTime gameTime)

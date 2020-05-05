@@ -39,21 +39,25 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             this.layer = holder;
             elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (animationBased)
+            if (animationBased && animation.CurrentCollisions.ContainsKey("Attack"))
             {
                 projectile.Transform.Position = transform.Position;
                 if (sprite.SpriteEffects == SpriteEffects.FlipHorizontally)
                 {
-                    float diffX = animation.ColliderPosition.X - (transform.Scale.X/2);
-                    float sub = diffX * 2 + transform.Scale.X * animation.ColliderScale.X;
-                    projectile.BoxCollision.Position = animation.ColliderPosition - new Vector(sub, 0);
-                    projectile.BoxCollision.Scale = animation.ColliderScale;
+                    float diffX = animation.CurrentCollisions["Attack"].Position.X - (transform.Scale.X/2);
+                    float sub = diffX * 2 + transform.Scale.X * animation.CurrentCollisions["Attack"].Scale.X;
+                    projectile.BoxCollision.Position = animation.CurrentCollisions["Attack"].Position - new Vector(sub, 0);
+                    projectile.BoxCollision.Scale = animation.CurrentCollisions["Attack"].Scale;
                 }
                 else
                 {
-                    projectile.BoxCollision.Position = animation.ColliderPosition;
-                    projectile.BoxCollision.Scale = animation.ColliderScale;
+                    projectile.BoxCollision.Position = animation.CurrentCollisions["Attack"].Position;
+                    projectile.BoxCollision.Scale = animation.CurrentCollisions["Attack"].Scale;
                 }
+            }
+            else if (projectile != null)
+            {
+                projectile.BoxCollision.Scale = new Vector(0, 0);
             }
         }
 
@@ -91,30 +95,24 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                 if (projectile.Sprite.ContentName == "")
                     projectile.Sprite.Enabled = false;
 
-                Animation animation;
-                Transform transform;
-                Sprite sprite;
                 if (holder == "Player")
                 {
                     Player player = (Player)entity;
-                    transform = player.Transform;
-                    animation = player.Animation;
-                    sprite = player.Sprite;
+                    this.transform = player.Transform;
+                    this.animation = player.Animation;
+                    this.sprite = player.Sprite;
                 }
                 else
                 {
                     Enemy enemy = (Enemy)entity;
-                    transform = enemy.Transform;
-                    animation = enemy.Animation;
-                    sprite = enemy.Sprite;
+                    this.transform = enemy.Transform;
+                    this.animation = enemy.Animation;
+                    this.sprite = enemy.Sprite;
                 }
 
-                projectile.Transform.Scale = transform.Scale;
+                projectile.Transform.Scale = this.transform.Scale;
 
                 this.projectile = projectile;
-                this.animation = animation;
-                this.transform = transform;
-                this.sprite = sprite;
 
                 animationBased = true;
 

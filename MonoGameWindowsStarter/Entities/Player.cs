@@ -128,8 +128,8 @@ namespace MonoGameWindowsStarter.Entities
 
         private void move()
         {         
-            boxCollision.Scale = SpriteSize / Animation.AnimationScale;
-            boxCollision.Position = (Transform.Scale - (SpriteSize * SpriteScale)) / 2;
+            //boxCollision.Scale = SpriteSize / Animation.AnimationScale;
+            //boxCollision.Position = (Transform.Scale - (SpriteSize * SpriteScale)) / 2;
 
             Physics.Velocity = new Vector(0, 0);
 
@@ -169,11 +169,11 @@ namespace MonoGameWindowsStarter.Entities
             {
                 Animation.CurrentAnimation = Character.WalkAnimation;
 
-                if (Physics.Velocity.X < 0)
+                if (Physics.Velocity.X < 0 && !Animation.Playing)
                 {
                     Sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
                 }
-                else if (Physics.Velocity.X > 0)
+                else if (Physics.Velocity.X > 0 && !Animation.Playing)
                 {
                     Sprite.SpriteEffects = SpriteEffects.None;
                 }

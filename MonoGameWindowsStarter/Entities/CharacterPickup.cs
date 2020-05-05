@@ -49,6 +49,8 @@ namespace MonoGameWindowsStarter.Entities
                     player.Character = Character;
                     player.Character.Holder = "Player";
                     player.Sprite.ContentName = player.Character.SpriteSheet;
+                    player.Animation.CurrentAnimation = Character.IdleAnimation;
+                    player.Transform.Position += player.Transform.Scale / 2 - player.Animation.AnimationScale / 2;
 
                     SceneManager.GetCurrentScene().RemoveEntity(this);
                 }

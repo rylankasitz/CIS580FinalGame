@@ -80,7 +80,7 @@ namespace Engine.Systems
                             }
 
                             Tile tile = tilemap.Tiles[tileIndex];
-                            if (tile.BoxCollider == Rectangle.Empty)
+                            if (tile.BoxColliders.Count == 0)
                             {
                                 MapObject mapObject = scene.CreateEntity<MapObject>();
                                 setObjectPosition(mapObject, position, scale, tile, layernum, "MapTileSet"); // Change to not manual string
@@ -88,9 +88,10 @@ namespace Engine.Systems
                             }
                             else
                             {
+                                KeyValuePair<string, Rectangle> boxCollider = tile.BoxColliders.First<KeyValuePair<string, Rectangle>>();
                                 MapObjectCollision mapObject = scene.CreateEntity<MapObjectCollision>();
                                 setObjectPosition(mapObject, position, scale, tile, layernum, "MapTileSet"); // Change to not manual string
-                                setCollision(mapObject, tile.BoxCollider, tile, mapScale);
+                                setCollision(mapObject, boxCollider.Value, tile, mapScale);
                                 mapObjects.Add(mapObject);
                             }
                         }

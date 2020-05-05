@@ -81,8 +81,20 @@ namespace Engine.Systems
 
                     sprite.SpriteLocation = current.CurrentFrame;
 
-                    animation.ColliderPosition = current.Frames[current.FrameNumber].CollisionPosition;
-                    animation.ColliderScale = current.Frames[current.FrameNumber].CollisionScale;
+                    animation.CurrentCollisions = new Dictionary<string, BoxCollision>();                    
+                    foreach (KeyValuePair<string, BoxCollision> pair in current.Frames[current.FrameNumber].Colliders)
+                    {
+                        if (pair.Key == "Collision")
+                        {
+                            BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
+                            boxCollision.Position = pair.Value.Position;
+                            boxCollision.Scale = pair.Value.Scale;
+                        }
+                        else
+                        {
+                            animation.CurrentCollisions.Add(pair.Key, pair.Value);
+                        }
+                    }
 
                     if (current.FrameNumber == current.Frames.Count - 1 && animation.Playing)
                     {
@@ -135,12 +147,17 @@ namespace Engine.Systems
 
                 foreach (TilesetFrame frame in tileset[i].Animation.Frames)
                 {
-                    Vector pos = new Vector((tileset[frame.Id].BoxCollider.X * MapManager.Scale),
-                                            (tileset[frame.Id].BoxCollider.Y * MapManager.Scale));
-                    Vector scale = new Vector((tileset[frame.Id].BoxCollider.Width / (float)tileset[frame.Id].Width),
-                                              (tileset[frame.Id].BoxCollider.Height / (float)tileset[frame.Id].Height));
+                    Dictionary<string, BoxCollision> colliders = new Dictionary<string, BoxCollision>();
+                    foreach(KeyValuePair<string, Rectangle> collider in tileset[frame.Id].BoxColliders)
+                    {
+                        BoxCollision collision = new BoxCollision();
+                        collision.Position = new Vector(collider.Value.X * MapManager.Scale, collider.Value.Y * MapManager.Scale);
+                        collision.Scale = new Vector(collider.Value.Width / (float)tileset[frame.Id].Width,
+                                                     collider.Value.Height / (float)tileset[frame.Id].Height);
+                        colliders.Add(collider.Key, collision);
+                    }
 
-                    animationTracker.AddFrame(frame.Duration, frame.Source.X, frame.Source.Y, pos, scale);
+                    animationTracker.AddFrame(frame.Duration, frame.Source.X, frame.Source.Y, colliders);
                 }
 
                 animationData[name] = animationTracker;
@@ -205,9 +222,9 @@ namespace Engine.Systems
             Frames = new List<Frame>();
         }
 
-        public void AddFrame(float duration, int spriteX, int spriteY, Vector pos, Vector scale)
+        public void AddFrame(float duration, int spriteX, int spriteY, Dictionary<string, BoxCollision> colliders)
         {
-            Frames.Add(new Frame(duration, spriteX, spriteY, Parent, pos, scale));
+            Frames.Add(new Frame(duration, spriteX, spriteY, Parent, colliders));
         }
     }
 
@@ -215,16 +232,14 @@ namespace Engine.Systems
     {
         public float Duration { get; set; }
         public Rectangle FrameLocation { get; set; }
-        public Vector CollisionPosition { get; set; }
-        public Vector CollisionScale{ get; set; }
-        public Frame(float duration, int spriteX, int spriteY, SpriteSheetAnimations parent, Vector pos, Vector scale)
+        public Dictionary<string, BoxCollision> Colliders { get; set; }
+        public Frame(float duration, int spriteX, int spriteY, SpriteSheetAnimations parent, Dictionary<string, BoxCollision> colliders)
         {
             Duration = duration;
             FrameLocation = new Rectangle(spriteX * (parent.Width + parent.Spacing) + parent.Margin,
                                           spriteY * (parent.Height + parent.Spacing) + parent.Margin,
                                           parent.Width, parent.Height);
-            CollisionPosition = pos;
-            CollisionScale = scale;
+            Colliders = colliders;
         }
     }
 

@@ -43,11 +43,18 @@ namespace PlatformLibrary
                     tileWidth,
                     tileHeight);
 
-                var boxCollision = new Rectangle(
-                    input.ReadInt32(),
-                    input.ReadInt32(),
-                    input.ReadInt32(),
-                    input.ReadInt32());
+                Dictionary<string, Rectangle> boxCollisions = new Dictionary<string, Rectangle>();
+                int colliderCount = input.ReadInt32();
+                for (int j = 0; j < colliderCount; j++)
+                {
+                    string type = input.ReadString();
+                    Rectangle boxCollision = new Rectangle(
+                        input.ReadInt32(),
+                        input.ReadInt32(),
+                        input.ReadInt32(),
+                        input.ReadInt32());
+                    boxCollisions.Add(type, boxCollision);
+                }
 
                 TilesetAnimation animation = new TilesetAnimation();
                 animation.Frames = new List<TilesetFrame>();
@@ -70,7 +77,7 @@ namespace PlatformLibrary
                 }
 
                 // Create the tile
-                tiles[i] = new Tile(source, boxCollision, properties, texture, animation);
+                tiles[i] = new Tile(source, boxCollisions, properties, texture, animation);
             }
 
             // Construct and return the tileset
