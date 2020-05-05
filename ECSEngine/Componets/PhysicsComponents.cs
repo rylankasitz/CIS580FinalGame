@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Engine.ECSCore;
+using System.Collections.Generic;
 
 namespace Engine.Componets
 {
     public delegate void HandleCollision(Entity collider, string side);
+    public delegate void HandleCollisionEnter(Entity collider, string side);
 
     public class Vector
     {
@@ -60,8 +62,10 @@ namespace Engine.Componets
         public Vector Position { get; set; }
         public Vector Scale { get; set; }
         public HandleCollision HandleCollision { get; set; }
+        public HandleCollisionEnter HandleCollisionEnter { get; set; }
         public bool TriggerOnly { get; set; }
         public string Layer { get; set; } = "All";
+        public List<Entity> CollidingObjects = new List<Entity>();
         public BoxCollision() { }
         public BoxCollision(int X, int Y, float Width, float Height, bool TriggerOnly = false)
         {

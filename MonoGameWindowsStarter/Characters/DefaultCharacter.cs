@@ -14,7 +14,7 @@ using MonoGameWindowsStarter.GlobalValues;
 
 namespace MonoGameWindowsStarter.Characters
 {
-    public class DefaultCharacter : Character
+    /*public class DefaultCharacter : Character
     {
         public override string SpriteSheet => "MapTileSet";
         public override string IdleAnimation => "IdleDefault";
@@ -38,41 +38,26 @@ namespace MonoGameWindowsStarter.Characters
                
         }
 
-        public override void Attack(Vector position, Vector direction)
-        {
-            Projectile projectile;
+        public override void Attack(Player player)
+        {          
             float attackSpeed = AttackSpeed;
 
-            if (Holder == "Player") attackSpeed = AttackSpeed * PlayerStats.AttackSpeedMod;
+            if (Holder == "Player") 
+                attackSpeed = AttackSpeed * PlayerStats.AttackSpeedMod;
 
-            if (ProjectileSpawner.Spawn(position, attackSpeed, out projectile)) 
-            {
-                if (Holder == "Player")
-                    projectile.Damage = AttackDamage * PlayerStats.AttackDamageMod;
-                else
-                    projectile.Damage = AttackDamage;
-
-                projectile.Range = Range*100;
-                projectile.Transform.Scale = new Vector(12, 12);
-                projectile.Physics.Velocity = direction * projectileSpeed;
-            }
+            ProjectileSpawner.CreateProjectile(attackSpeed, true);
         }
 
-        public override void HandleCollision(Projectile projectile, Entity collider, string direction)
+        public override void OnProjectileSpawn(Projectile projectile, )
         {
-            if (collider.Name == "Enemy")
-            {
-                Enemy enemy = (Enemy)collider;
-                enemy.CurrentHealth -= projectile.Damage;
-            }
-            else if (collider.Name == "Player")
-            {
-                Player player = (Player)collider;
-                player.CurrentHealth -= projectile.Damage;
-            }
+            if (Holder == "Player")
+                projectile.Damage = AttackDamage * PlayerStats.AttackDamageMod;
+            else
+                projectile.Damage = AttackDamage;
 
-            if (collider.Name != "Projectile")
-                SceneManager.GetCurrentScene().RemoveEntity(projectile);
-        }
-    }
+            projectile.Range = Range * 100;
+            projectile.Transform.Scale = new Vector(12, 12);
+            projectile.Physics.Velocity = direction * projectileSpeed;
+        }*
+    }*/
 }

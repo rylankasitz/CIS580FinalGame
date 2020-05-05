@@ -30,15 +30,16 @@ namespace MonoGameWindowsStarter.Entities
         public Transform Transform;
         public Physics Physics;
         public Sprite Sprite;
+        public Animation Animation;
+        public Vector SpriteSize = new Vector(8, 8);
+        public float SpriteScale = 5;
         public float TotalHealth;
         public float CurrentHealth;
 
-        private Animation animation;
         private BoxCollision boxCollision;
         private SliderBar healthBar;
 
-        private Vector spriteSize = new Vector(8, 8);
-        private float scale = 5;
+
         private float hitTime = .15f;
 
         private float elapsedTintTime;
@@ -48,7 +49,7 @@ namespace MonoGameWindowsStarter.Entities
         public override void Initialize()
         {
             Name = "Player";
-            Character = new DefaultCharacter();
+            Character = new Charles();
             Character.Holder = "Player";
             TotalHealth = Character.MaxHealth;
             CurrentHealth = TotalHealth;
@@ -57,7 +58,7 @@ namespace MonoGameWindowsStarter.Entities
             Character.OnSpawn();
 
             Sprite = GetComponent<Sprite>();
-            animation = GetComponent<Animation>();
+            Animation = GetComponent<Animation>();
             Transform = GetComponent<Transform>();
             boxCollision = GetComponent<BoxCollision>();
             Physics = GetComponent<Physics>();
@@ -65,7 +66,7 @@ namespace MonoGameWindowsStarter.Entities
             boxCollision.HandleCollision = handleCollision;
             boxCollision.Layer = "Player";
 
-            animation.CurrentAnimation = Character.IdleAnimation;
+            Animation.CurrentAnimation = Character.IdleAnimation;
 
             Sprite.ContentName = Character.SpriteSheet;
 
@@ -90,7 +91,6 @@ namespace MonoGameWindowsStarter.Entities
 
         private void handleCollision(Entity entity, string direction)
         {
-            Debug.WriteLine($"{direction}");
             if (entity.Name == "Projectile")
             {
                 elapsedTintTime = 0;
@@ -101,23 +101,23 @@ namespace MonoGameWindowsStarter.Entities
             if (entity.Name.Contains("Door"))
             {
                 MainScene scene = (MainScene) SceneManager.GetCurrentScene();
-                Transform.Position = scene.MapGenerator.LoadNextRoom(entity.Name);
+                Transform.Position = scene.MapGenerator.LoadNextRoom(entity.Name) - (Transform.Scale/2);
 
                 if (entity.Name == "DoorL")
                 {
-                    Transform.Position.X -= Transform.Scale.X;
+                    Transform.Position.X -= SpriteSize.X * SpriteScale;
                 }
                 else if (entity.Name == "DoorR")
                 {
-                    Transform.Position.X += Transform.Scale.X;
+                    Transform.Position.X += SpriteSize.X * SpriteScale;
                 }
                 else if (entity.Name == "DoorU")
                 {
-                    Transform.Position.Y -= Transform.Scale.Y;
+                    Transform.Position.Y -= SpriteSize.Y * SpriteScale;
                 }
                 else if (entity.Name == "DoorD")
                 {
-                    Transform.Position.Y += Transform.Scale.Y;
+                    Transform.Position.Y += SpriteSize.Y * SpriteScale;
                 }
             }
         }
@@ -128,8 +128,8 @@ namespace MonoGameWindowsStarter.Entities
 
         private void move()
         {         
-            boxCollision.Scale = spriteSize / animation.AnimationScale;
-            boxCollision.Position = (Transform.Scale - (spriteSize*scale)) / 2;
+            boxCollision.Scale = SpriteSize / Animation.AnimationScale;
+            boxCollision.Position = (Transform.Scale - (SpriteSize * SpriteScale)) / 2;
 
             Physics.Velocity = new Vector(0, 0);
 
@@ -163,11 +163,11 @@ namespace MonoGameWindowsStarter.Entities
 
         private void animate()
         {
-            Transform.Scale = animation.AnimationScale * scale;
+            Transform.Scale = Animation.AnimationScale * SpriteScale;
 
             if (Physics.Velocity.X != 0 || Physics.Velocity.Y != 0)
             {
-                animation.CurrentAnimation = Character.WalkAnimation;
+                Animation.CurrentAnimation = Character.WalkAnimation;
 
                 if (Physics.Velocity.X < 0)
                 {
@@ -180,12 +180,12 @@ namespace MonoGameWindowsStarter.Entities
             }
             else
             {
-                animation.CurrentAnimation = Character.IdleAnimation;
+                Animation.CurrentAnimation = Character.IdleAnimation;
             }
 
             if (InputManager.LeftMouseDown())
             {
-                animation.Play(Character.AttackAnimation);
+                Animation.Play(Character.AttackAnimation);
             }
         }
 
@@ -197,7 +197,7 @@ namespace MonoGameWindowsStarter.Entities
                 Vector2 direction = new Vector2(position.X - Transform.Position.X,
                                                 position.Y - Transform.Position.Y);
                 direction.Normalize();
-                Character.Attack(Transform.Position + (Transform.Scale/2), new Vector(direction.X, direction.Y));
+                Character.Attack(this, Transform.Position, new Vector(direction.X, direction.Y));
             }       
         }
 

@@ -24,13 +24,14 @@ namespace MonoGameWindowsStarter.Characters
         public override int AttackDamage => 8;
         public override float AttackSpeed => .4f;
         public override float Range => 2;
-        public override int MaxHealth => 60;
+        public override int MaxHealth => 10;
         public override int Difficulty => 1;
 
         public override string ProjectileSprite => "Projectiles";
         public override Rectangle ProjectileSource => new Rectangle(197, 117, 8, 8);
 
         private float projectileSpeed = 6f;
+        private float aiAttackSpeedMod = 3f;
 
         public override void OnStateSwitch(string lastState)
         {
@@ -70,42 +71,25 @@ namespace MonoGameWindowsStarter.Characters
             }       
         }
 
-        public override void Attack(Vector position, Vector direction)
+        public override void Attack(Entity holder, Vector position, Vector direction)
         {
-            Projectile projectile;
-            float attackSpeed = AttackSpeed;
+            float attackSpeed = AttackSpeed * aiAttackSpeedMod;
 
             if (Holder == "Player")
-                attackSpeed *= PlayerStats.AttackSpeedMod;
+                attackSpeed = AttackSpeed * PlayerStats.AttackSpeedMod;
 
-            if (ProjectileSpawner.Spawn(position, attackSpeed, out projectile))
+            Projectile projectile;
+            if (ProjectileSpawner.CreateProjectile(position, attackSpeed, out projectile))
             {
                 if (Holder == "Player")
                     projectile.Damage = AttackDamage * PlayerStats.AttackDamageMod;
                 else
                     projectile.Damage = AttackDamage;
 
-                projectile.Range = Range*100;
+                projectile.Range = Range * 100;
                 projectile.Transform.Scale = new Vector(12, 12);
                 projectile.Physics.Velocity = (direction * projectileSpeed);
-            }
-        }
-
-        public override void HandleCollision(Projectile projectile, Entity collider, string direction)
-        {
-            if (collider.Name == "Enemy")
-            {
-                Enemy enemy = (Enemy)collider;
-                enemy.CurrentHealth -= projectile.Damage;
-            }
-            else if (collider.Name == "Player")
-            {
-                Player player = (Player)collider;
-                player.CurrentHealth -= projectile.Damage;
-            }
-
-            if (collider.Name != "Projectile")
-                SceneManager.GetCurrentScene().RemoveEntity(projectile);
+            }           
         }
     }
 }

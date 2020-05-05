@@ -23,12 +23,12 @@ namespace MonoGameWindowsStarter.Entities
         public Character Character;
         public Transform Transform;
         public Physics Physics;
+        public Animation Animation;
+        public Sprite Sprite;
         public float TotalHealth;
         public float CurrentHealth;
         public CharacterPickup CharacterPickup;
 
-        private Sprite sprite;
-        private Animation animation;
         private BoxCollision boxCollision;
   
 
@@ -42,14 +42,14 @@ namespace MonoGameWindowsStarter.Entities
         public override void Initialize()
         {
             Name = "Enemy";
-            Character = new DefaultCharacter();
+            Character = new BlackGhoul();
             TotalHealth = Character.MaxHealth;
             CurrentHealth = TotalHealth;
             attack = false;
             elapsedTintTime = hitTime;
 
-            sprite = GetComponent<Sprite>();
-            animation = GetComponent<Animation>();
+            Sprite = GetComponent<Sprite>();
+            Animation = GetComponent<Animation>();
             Transform = GetComponent<Transform>();
             boxCollision = GetComponent<BoxCollision>();
             Physics = GetComponent<Physics>();
@@ -57,7 +57,7 @@ namespace MonoGameWindowsStarter.Entities
             boxCollision.Layer = "Enemy";
             boxCollision.HandleCollision = handleCollision;
 
-            animation.CurrentAnimation = Character.IdleAnimation;
+            Animation.CurrentAnimation = Character.IdleAnimation;
         }
 
         public override void Update(GameTime gameTime)
@@ -80,7 +80,7 @@ namespace MonoGameWindowsStarter.Entities
             if (entity.Name == "Projectile")
             {
                 elapsedTintTime = 0;
-                sprite.Color = Color.Red;
+                Sprite.Color = Color.Red;
             }
         }
 
@@ -92,25 +92,25 @@ namespace MonoGameWindowsStarter.Entities
         {
             if (Physics.Velocity.X != 0 || Physics.Velocity.Y != 0)
             {
-                animation.CurrentAnimation = Character.WalkAnimation;
+                Animation.CurrentAnimation = Character.WalkAnimation;
 
                 if (Physics.Velocity.X < 0)
                 {
-                    sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
+                    Sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
                 }
                 else if (Physics.Velocity.X > 0)
                 {
-                    sprite.SpriteEffects = SpriteEffects.None;
+                    Sprite.SpriteEffects = SpriteEffects.None;
                 }
             }
             else
             {
-                animation.CurrentAnimation = Character.IdleAnimation;
+                Animation.CurrentAnimation = Character.IdleAnimation;
             }
 
             if (attack)
             {
-                animation.CurrentAnimation = Character.AttackAnimation;
+                Animation.CurrentAnimation = Character.AttackAnimation;
             }
         }
 
@@ -127,7 +127,7 @@ namespace MonoGameWindowsStarter.Entities
         {
             if (hitTime < elapsedTintTime)
             {
-                sprite.Color = Color.White;
+                Sprite.Color = Color.White;
             }
         }
 

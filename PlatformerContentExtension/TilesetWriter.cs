@@ -64,6 +64,7 @@ namespace PlatformerContentExtension
                     output.Write(frame.Source.Width);
                     output.Write(frame.Source.Height);
                     output.Write(frame.Duration);
+                    output.Write(frame.Id);
                 }
                 output.Write(tile.Properties.Count);
                 foreach(KeyValuePair<string, string> prop in tile.Properties)

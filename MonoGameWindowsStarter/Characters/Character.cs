@@ -33,20 +33,21 @@ namespace MonoGameWindowsStarter.Characters
         public List<Enemy> Enemies { get; set; } = new List<Enemy>();
 
         public abstract void OnStateSwitch(string lastState);
-        public abstract void Attack(Vector position, Vector direction);
-        public abstract void HandleCollision(Projectile projectile, Entity collider, string direction);
+        public abstract void Attack(Entity holder, Vector position, Vector direction);
 
         public void OnSpawn(Enemy enemy)
         {
             Enemies = SceneManager.GetCurrentScene().GetEntities<Enemy>();
+            Player player = SceneManager.GetCurrentScene().GetEntity<Player>("Player");
             AILogicCMD = new AILogic(enemy);
-            ProjectileSpawner = new ProjectileSpawner(HandleCollision, ProjectileSource, ProjectileSprite);
+            ProjectileSpawner = new ProjectileSpawner(ProjectileSource, ProjectileSprite);
         }
 
         public void OnSpawn()
         {
             Enemies = SceneManager.GetCurrentScene().GetEntities<Enemy>();
-            ProjectileSpawner = new ProjectileSpawner(HandleCollision, ProjectileSource, ProjectileSprite);
+            Player player = SceneManager.GetCurrentScene().GetEntity<Player>("Player");
+            ProjectileSpawner = new ProjectileSpawner(ProjectileSource, ProjectileSprite);
         }
     }
 }

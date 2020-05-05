@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using MonoGameWindowsStarter.Entities;
+using MonoGameWindowsStarter.GlobalValues;
+using Engine;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGameWindowsStarter.Characters
 {
@@ -19,8 +22,8 @@ namespace MonoGameWindowsStarter.Characters
 
         public override float MoveSpeed => 6;
         public override int AttackDamage => 8;
-        public override float AttackSpeed => .4f;
-        public override float Range => 2;
+        public override float AttackSpeed => .8f;
+        public override float Range => 0;
         public override int MaxHealth => 60;
         public override int Difficulty => 1;
 
@@ -32,14 +35,16 @@ namespace MonoGameWindowsStarter.Characters
 
         }
 
-        public override void Attack(Vector position, Vector direction)
-        {
-            
-        }
-
-        public override void HandleCollision(Projectile projectile, Entity collider, string direction)
-        {
-            
+        public override void Attack(Entity holder, Vector position, Vector direction)
+        {            
+            Projectile projectile;
+            if(ProjectileSpawner.AnimationBasedProjectile(holder, Holder, out projectile))
+            {
+                if (Holder == "Player")
+                    projectile.Damage = AttackDamage * PlayerStats.AttackDamageMod;
+                else
+                    projectile.Damage = AttackDamage;
+            }               
         }
     }
 }

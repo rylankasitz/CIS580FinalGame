@@ -57,8 +57,8 @@ namespace PlatformLibrary
                 for(int j = 0; j < frameCount; j++)
                 {
                     animation.Frames.Add(new TilesetFrame(
-                        new Rectangle(input.ReadInt32(), input.ReadInt32(), 
-                        input.ReadInt32(),input.ReadInt32()), (float)input.ReadDouble()));
+                        new Rectangle(input.ReadInt32(), input.ReadInt32(), input.ReadInt32(), input.ReadInt32()), 
+                                     (float)input.ReadDouble(), input.ReadInt32()));
                 }
 
                 int propLength = input.ReadInt32();

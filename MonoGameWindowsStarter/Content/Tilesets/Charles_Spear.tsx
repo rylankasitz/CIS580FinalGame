@@ -5,12 +5,30 @@
   <properties>
    <property name="Animation" value="AttackCharles"/>
   </properties>
+  <objectgroup draworder="index" id="3">
+   <object id="2" x="22.75" y="10.25" width="6.5" height="6"/>
+  </objectgroup>
   <animation>
    <frame tileid="0" duration="200"/>
    <frame tileid="1" duration="200"/>
    <frame tileid="2" duration="200"/>
    <frame tileid="3" duration="200"/>
   </animation>
+ </tile>
+ <tile id="1">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="22.125" y="9.375" width="18" height="6.5"/>
+  </objectgroup>
+ </tile>
+ <tile id="2">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="23" y="9.75" width="16" height="6.25"/>
+  </objectgroup>
+ </tile>
+ <tile id="3">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="23.125" y="10.25" width="12.125" height="6.75"/>
+  </objectgroup>
  </tile>
  <tile id="6">
   <properties>

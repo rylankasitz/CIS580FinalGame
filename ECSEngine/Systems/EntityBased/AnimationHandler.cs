@@ -81,6 +81,9 @@ namespace Engine.Systems
 
                     sprite.SpriteLocation = current.CurrentFrame;
 
+                    animation.ColliderPosition = current.Frames[current.FrameNumber].CollisionPosition;
+                    animation.ColliderScale = current.Frames[current.FrameNumber].CollisionScale;
+
                     if (current.FrameNumber == current.Frames.Count - 1 && animation.Playing)
                     {
                         animation.Playing = false;
@@ -132,7 +135,12 @@ namespace Engine.Systems
 
                 foreach (TilesetFrame frame in tileset[i].Animation.Frames)
                 {
-                    animationTracker.AddFrame(frame.Duration, frame.Source.X, frame.Source.Y);
+                    Vector pos = new Vector((tileset[frame.Id].BoxCollider.X * MapManager.Scale),
+                                            (tileset[frame.Id].BoxCollider.Y * MapManager.Scale));
+                    Vector scale = new Vector((tileset[frame.Id].BoxCollider.Width / (float)tileset[frame.Id].Width),
+                                              (tileset[frame.Id].BoxCollider.Height / (float)tileset[frame.Id].Height));
+
+                    animationTracker.AddFrame(frame.Duration, frame.Source.X, frame.Source.Y, pos, scale);
                 }
 
                 animationData[name] = animationTracker;
@@ -197,9 +205,9 @@ namespace Engine.Systems
             Frames = new List<Frame>();
         }
 
-        public void AddFrame(float duration, int spriteX, int spriteY)
+        public void AddFrame(float duration, int spriteX, int spriteY, Vector pos, Vector scale)
         {
-            Frames.Add(new Frame(duration, spriteX, spriteY, Parent));
+            Frames.Add(new Frame(duration, spriteX, spriteY, Parent, pos, scale));
         }
     }
 
@@ -207,12 +215,16 @@ namespace Engine.Systems
     {
         public float Duration { get; set; }
         public Rectangle FrameLocation { get; set; }
-        public Frame(float duration, int spriteX, int spriteY, SpriteSheetAnimations parent)
+        public Vector CollisionPosition { get; set; }
+        public Vector CollisionScale{ get; set; }
+        public Frame(float duration, int spriteX, int spriteY, SpriteSheetAnimations parent, Vector pos, Vector scale)
         {
             Duration = duration;
             FrameLocation = new Rectangle(spriteX * (parent.Width + parent.Spacing) + parent.Margin,
                                           spriteY * (parent.Height + parent.Spacing) + parent.Margin,
                                           parent.Width, parent.Height);
+            CollisionPosition = pos;
+            CollisionScale = scale;
         }
     }
 

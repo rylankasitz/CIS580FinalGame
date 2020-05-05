@@ -34,6 +34,8 @@ namespace Engine.Componets
         public Vector AnimationScale { get; set; } = new Vector(0, 0);
         public bool Playing { get; set; } = false;
         public string PlayeringAnimation { get; set; } = "";
+        public Vector ColliderPosition { get; set; } = new Vector(0, 0);
+        public Vector ColliderScale { get; set; } = new Vector(0, 0);
         public Animation() { }
         public Animation(string CurrentAnimation)
         {

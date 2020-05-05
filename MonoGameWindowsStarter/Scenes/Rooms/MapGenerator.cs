@@ -90,7 +90,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 
             enemySpawner.SpawnEnemiesInRoom(roomLayout[currentX, currentY].DungeonName, 1, 1); // change manual values
 
-            return new Vector(door.Position.X, door.Position.Y);
+            return door.Position + (door.Scale/2);
         }
 
         #endregion

@@ -37,11 +37,13 @@ namespace PlatformerContentExtension
     {
         public Rectangle Source { get; set; }
         public double Duration { get; set; }
+        public int Id { get; set; }
 
-        public Frame(Rectangle source, double duration)
+        public Frame(Rectangle source, double duration, int id)
         {
             Source = source;
             Duration = duration;
+            Id = id;
         }
     }
 }

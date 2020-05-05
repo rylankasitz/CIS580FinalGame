@@ -88,7 +88,7 @@ namespace Engine.Systems
                         new Rectangle((int)(boxCollision.Position.X + transform.Position.X),
                                       (int)(boxCollision.Position.Y + transform.Position.Y),
                                       (int)(boxCollision.Scale.X * transform.Scale.X),
-                                      (int)(boxCollision.Scale.Y * transform.Scale.Y)), Color.White);
+                                      (int)(boxCollision.Scale.Y * transform.Scale.Y)), new Color(Color.White, .5f));
                 }
             }
 

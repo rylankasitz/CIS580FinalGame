@@ -47,11 +47,13 @@ namespace PlatformLibrary
     {
         public float Duration { get; set; }
         public Rectangle Source { get; set; }
+        public int Id { get; set; }
 
-        public TilesetFrame(Rectangle source, float duration)
+        public TilesetFrame(Rectangle source, float duration, int id)
         {
             Source = source;
             Duration = duration;
+            Id = id;
         }
     }
 }

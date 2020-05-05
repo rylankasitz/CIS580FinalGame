@@ -20,12 +20,14 @@ namespace Engine.Systems
         private static List<Entity> mapObjects = new List<Entity>();
         private static Tilemap tilemap;
         public static ContentManager Content;
+        public static float Scale;
 
         public static void LoadMap (string name, Scene scene, float scale, 
             bool flipVertically = false, bool flipHorizontally = false)
         {
             tilemap = Content.Load<Tilemap>("Maps\\" + name);
             ObjectLayers = tilemap.ObjectLayers;
+            Scale = scale;
 
             removeMapObjects();
             createMapObjects(scene, scale, flipVertically, flipHorizontally);

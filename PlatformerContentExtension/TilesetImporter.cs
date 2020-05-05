@@ -88,13 +88,14 @@ namespace PlatformerContentExtension
                             int duration = int.Parse(a.Attributes["duration"].Value);
                             Rectangle source = new Rectangle((int)(tileid % columns), 
                                 (int)Math.Floor(tileid / (float) columns), tileWidth, tileHeight);        
-                            tileContent[id].Animation.Frames.Add(new Frame(source, duration / (double)1000));
+                            tileContent[id].Animation.Frames.Add(new Frame(source, duration / (double)1000, tileid));
                             animation = true;
                         }
                     }
                 }
-                if (animation) tileContent[id].Animation.Name = tileContent[id].Properties["Animation"] == null
-                        ? "Unamed" : tileContent[id].Properties["Animation"];
+                if (animation) 
+                    tileContent[id].Animation.Name = tileContent[id].Properties["Animation"] == null
+                                                    ? "Unamed" : tileContent[id].Properties["Animation"];
             }
 
             // Create and return the TileContent

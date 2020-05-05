@@ -5,14 +5,13 @@ using Engine.ECSCore;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter.Entities
 {
-
-    public delegate void HandleCollision(Projectile projectile, Entity collider, string direction);
 
     [Sprite(ContentName: "Projectiles", Layer: 0.1f)]
     [Transform(X: 0, Y: 0, Width: 12, Height: 12)]
@@ -23,7 +22,6 @@ namespace MonoGameWindowsStarter.Entities
         public Sprite Sprite;
         public Transform Transform;
         public Physics Physics;
-        public HandleCollision HandleCollision;
         public BoxCollision BoxCollision;
 
         public float Damage;
@@ -40,7 +38,7 @@ namespace MonoGameWindowsStarter.Entities
             Physics = GetComponent<Physics>();
             BoxCollision = GetComponent<BoxCollision>();
 
-            BoxCollision.HandleCollision = handleCollision;
+            BoxCollision.HandleCollisionEnter = handleCollisionEnter;
 
             Damage = 0;
             Range = -1;
@@ -66,9 +64,21 @@ namespace MonoGameWindowsStarter.Entities
             distanceTraveled += vel.Length();
         }
 
-        private void handleCollision(Entity entity, string direction)
+        private void handleCollisionEnter(Entity entity, string direction)
         {
-            HandleCollision(this, entity, direction);
+            if (entity.Name == "Enemy")
+            {
+                Enemy enemy = (Enemy)entity;
+                enemy.CurrentHealth -= Damage;
+            }
+            else if (entity.Name == "Player")
+            {
+                Player player = (Player)entity;
+                player.CurrentHealth -= Damage;
+            }
+
+            if (entity.Name != "Projectile" && Range != -1)
+                SceneManager.GetCurrentScene().RemoveEntity(this);
         }
     }
 }

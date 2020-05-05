@@ -14,11 +14,11 @@ namespace MonoGameWindowsStarter.Characters.Helpers
     public class AILogic
     {
         public string CurrentState { get; set; } = "Start";
+        public Enemy AI;
 
         #region Private Variables
 
         private Player player;
-        private Enemy ai;
         private Random random;
 
         private float movementElapsedTime;
@@ -38,7 +38,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
 
         public AILogic(Enemy character)
         {
-            ai = character;
+            AI = character;
             MainScene scene = (MainScene)SceneManager.GetCurrentScene();
             player = scene.Player;
             random = new Random();
@@ -62,7 +62,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             if (stateSwitch)
             {
                 stateSwitch = false;
-                ai.Character.OnStateSwitch(CurrentState);
+                AI.Character.OnStateSwitch(CurrentState);
             }
 
             // Attack
@@ -72,8 +72,8 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                     new Vector2(random.Next(1, (int)((1 - attackAccuracy) * 100) + 2), 
                                 random.Next(1, (int)((1 - attackAccuracy) * 100) + 2));
                 dir.Normalize();
-                
-                ai.Character.Attack(ai.Transform.Position, new Vector(dir.X, dir.Y));
+
+                AI.Character.Attack(player, AI.Transform.Position, new Vector(dir.X, dir.Y));
             }
             else if (attackDuration != 0)
             {
@@ -84,11 +84,11 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             // Move
             if (movementElapsedTime < movementDuration)
             {
-                ai.Physics.Velocity = movementDirection * ai.Character.MoveSpeed;
+                AI.Physics.Velocity = movementDirection * AI.Character.MoveSpeed;
             }
             else if (movementDuration != 0)
             {
-                ai.Physics.Velocity = new Vector(0, 0);
+                AI.Physics.Velocity = new Vector(0, 0);
                 stateSwitch = true;
                 movementDuration = 0;
             }
@@ -114,7 +114,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
 
         public void MoveTo(Vector position, float duration)
         {          
-            Vector2 d = position - ai.Transform.Position;
+            Vector2 d = position - AI.Transform.Position;
             d.Normalize();
 
             movementDirection = new Vector(d.X, d.Y);
@@ -137,7 +137,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
 
         public bool InRangeOfPlayer(int distance)
         {
-            Vector2 diff = player.Transform.Position - ai.Transform.Position;
+            Vector2 diff = player.Transform.Position - AI.Transform.Position;
             int magnitude = (int)diff.Length();
 
             return magnitude < distance;
@@ -149,7 +149,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
 
         private Vector getPlayerDirection()
         {
-            Vector2 d = player.Transform.Position - ai.Transform.Position;
+            Vector2 d = player.Transform.Position - AI.Transform.Position;
             float magnitude = d.Length();
             d.Normalize();
             return new Vector(d.X, d.Y);
