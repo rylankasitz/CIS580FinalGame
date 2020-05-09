@@ -3,6 +3,7 @@ using Engine.Componets;
 using Engine.Systems;
 using Microsoft.Xna.Framework;
 using MonoGameWindowsStarter.Characters.Helpers;
+using MonoGameWindowsStarter.UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,16 +15,17 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 {
     public class MapGenerator
     {
-        private int mapWidth = 6;
-        private int mapHeight = 6;
+        private int mapWidth = 8;
+        private int mapHeight = 8;
         private int currentX, currentY = 0;
 
-        private float roomCount = 14;
+        private float roomCount = 20;
 
         private Room[,] roomLayout;
         private Random rand;
         private MainScene scene;
         private EnemySpawner enemySpawner;
+        private MiniMap miniMap;
 
         private string[] roomNames;
 
@@ -32,6 +34,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             rand = new Random();
             roomLayout = new Room[mapWidth, mapHeight];
             enemySpawner = new EnemySpawner();
+
             this.roomNames = roomNames;
             this.scene = scene;
 
@@ -44,9 +47,21 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 
             scene.LoadRoom(roomLayout[currentX, currentY].MapName, 
                            roomLayout[currentX, currentY].Flip);
+
+            miniMap = new MiniMap(roomLayout, mapWidth, mapHeight);
+            miniMap.Disable();
+            miniMap.Discover(currentX, currentY);
         }
 
         #region Public Methods
+
+        public void SetMinimap(bool state)
+        {
+            if (state)
+                miniMap.Enable();
+            else
+                miniMap.Disable();
+        }
 
         public Vector LoadNextRoom(string name)
         {
@@ -88,7 +103,9 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 
             Transform door = scene.GetEntity<MapObjectCollision>(newDoor).GetComponent<Transform>();
 
-            enemySpawner.SpawnEnemiesInRoom(roomLayout[currentX, currentY].DungeonName, 1, 1); // change manual values
+            enemySpawner.SpawnEnemiesInRoom(roomLayout[currentX, currentY].DungeonName, roomLayout[currentX, currentY].Flip, 1, 1); // change manual values
+
+            miniMap.Discover(currentX, currentY);
 
             return door.Position + (door.Scale/2);
         }

@@ -21,21 +21,100 @@
    <object id="1" x="0" y="0" width="8" height="2"/>
   </objectgroup>
  </tile>
+ <tile id="5">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="11">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="12">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="13">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="14">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="28">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="6" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="29">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="6" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="30">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="6" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="31">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="6" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="32">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="37">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="40">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="41">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="42">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="43">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="49">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="50">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
  <tile id="61">
   <properties>
    <property name="Animation" value="AttackBlackGhoul"/>
   </properties>
-  <animation>
-   <frame tileid="77" duration="100"/>
-  </animation>
  </tile>
  <tile id="62">
   <properties>
    <property name="Animation" value="AttackDefault"/>
   </properties>
-  <animation>
-   <frame tileid="63" duration="200"/>
-  </animation>
  </tile>
  <tile id="63">
   <properties>

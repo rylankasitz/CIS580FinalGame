@@ -10,7 +10,7 @@ namespace Engine.ECSCore
     public delegate void HandleGrid(Entity entity1, Entity entity2);
     public class Grid
     {
-        private const int NUM_CELLS = 160;
+        private const int NUM_CELLS = 100;
         private const int CELL_SIZE = 320;
 
         private Entity[][] cells;
@@ -59,16 +59,19 @@ namespace Engine.ECSCore
             int cellX = (int)(transform.Position.X / CELL_SIZE);
             int cellY = (int)(transform.Position.Y / CELL_SIZE);
 
-            entity.Prev = null;
-            entity.Next = cells[cellX][cellY];
-            cells[cellX][cellY] = entity;
-
-            if (entity.Next != null)
+            if (cellX < NUM_CELLS && cellY < NUM_CELLS)
             {
-                entity.Next.Prev = entity;
+                entity.Prev = null;
+                entity.Next = cells[cellX][cellY];
+                cells[cellX][cellY] = entity;
+
+                if (entity.Next != null)
+                {
+                    entity.Next.Prev = entity;
+                }
+                entity.OldCellX = cellX;
+                entity.OldCellY = cellY;
             }
-            entity.OldCellX = cellX;
-            entity.OldCellY = cellY;
         }
 
         public void Handle(HandleGrid handleGrid)

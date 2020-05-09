@@ -59,6 +59,7 @@
     <Compile Include="Characters\Helpers\ProjectileSpawner.cs" />
     <Compile Include="Scenes\Rooms\MapGenerator.cs" />
     <Compile Include="Scenes\Rooms\Room.cs" />
+    <Compile Include="UI\MiniMap.cs" />
     <Compile Include="UI\SliderBar.cs" />
   </ItemGroup>
   <ItemGroup>

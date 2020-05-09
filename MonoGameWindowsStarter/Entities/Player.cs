@@ -38,7 +38,7 @@ namespace MonoGameWindowsStarter.Entities
 
         private BoxCollision boxCollision;
         private SliderBar healthBar;
-
+        private MainScene scene;
 
         private float hitTime = .15f;
 
@@ -54,6 +54,8 @@ namespace MonoGameWindowsStarter.Entities
             TotalHealth = Character.MaxHealth;
             CurrentHealth = TotalHealth;
             elapsedTintTime = hitTime;
+
+            scene = (MainScene)SceneManager.GetCurrentScene();
 
             Character.OnSpawn();
 
@@ -83,10 +85,13 @@ namespace MonoGameWindowsStarter.Entities
 
             Character.ProjectileSpawner.Update(Character.Holder, gameTime);
 
+            Debug.WriteLine($"{Transform.Position.X}, {Transform.Position.Y}");
+
             hitTint();
             move();
             animate();
             attack(gameTime);
+            setMinmap();
         }
 
         private void handleCollision(Entity entity, string direction)
@@ -128,8 +133,8 @@ namespace MonoGameWindowsStarter.Entities
 
         private void move()
         {         
-            //boxCollision.Scale = SpriteSize / Animation.AnimationScale;
-            //boxCollision.Position = (Transform.Scale - (SpriteSize * SpriteScale)) / 2;
+            boxCollision.Scale = SpriteSize / Animation.AnimationScale;
+            boxCollision.Position = (Transform.Scale - (SpriteSize * SpriteScale)) / 2;
 
             Physics.Velocity = new Vector(0, 0);
 
@@ -199,6 +204,18 @@ namespace MonoGameWindowsStarter.Entities
                 direction.Normalize();
                 Character.Attack(this, Transform.Position, new Vector(direction.X, direction.Y));
             }       
+        }
+
+        private void setMinmap()
+        {
+            if (InputManager.KeyDown(Keys.LeftShift))
+            {         
+                scene.MapGenerator.SetMinimap(true);
+            }
+            else if (InputManager.KeyUp(Keys.LeftShift))
+            {
+                scene.MapGenerator.SetMinimap(false);
+            }
         }
 
         private void hitTint()

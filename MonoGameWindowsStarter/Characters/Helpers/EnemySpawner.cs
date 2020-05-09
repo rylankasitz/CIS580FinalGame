@@ -1,4 +1,5 @@
-﻿using Engine;
+﻿using ECSEngine.Systems;
+using Engine;
 using Engine.Componets;
 using Engine.Systems;
 using MonoGameWindowsStarter.Entities;
@@ -25,7 +26,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
 
         #region Public Methods
 
-        public void SpawnEnemiesInRoom(string roomName, int minDifficulty, int maxDifficulty)
+        public void SpawnEnemiesInRoom(string roomName, bool flipped, int minDifficulty, int maxDifficulty)
         {
             if (!enemies.ContainsKey(roomName))
             {
@@ -33,7 +34,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
 
                 foreach (TileMapObject spawn in spawns)
                 {
-                    spawnEnemy(new Vector(spawn.Position.X, spawn.Position.Y),
+                    spawnEnemy(new Vector(spawn.Position.X + (WindowManager.Width / 2 - spawn.Position.X), spawn.Position.Y),
                                random.Next(minDifficulty, maxDifficulty + 1), roomName);
                     break;
                 }

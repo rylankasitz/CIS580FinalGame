@@ -39,7 +39,7 @@
    <property name="Animation" value="WalkCharles"/>
   </properties>
   <objectgroup draworder="index" id="2">
-   <object id="1" type="Collision" x="17" y="7" width="7" height="9"/>
+   <object id="2" type="Collision" x="17" y="8" width="8" height="8"/>
   </objectgroup>
   <animation>
    <frame tileid="6" duration="200"/>
@@ -48,7 +48,7 @@
  </tile>
  <tile id="7">
   <objectgroup draworder="index" id="2">
-   <object id="1" type="Collision" x="17" y="8" width="7" height="8"/>
+   <object id="1" type="Collision" x="17" y="8" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="12">
