@@ -66,6 +66,17 @@ namespace Engine.Componets
         public bool TriggerOnly { get; set; }
         public string Layer { get; set; } = "All";
         public List<Entity> CollidingObjects = new List<Entity>();
+        public string[] Layers
+        {
+            get
+            {
+                if (Layer.Contains("|"))
+                {
+                    return Layer.Split('|');
+                }
+                return new string[1] { Layer };
+            }
+        }
         public BoxCollision() { }
         public BoxCollision(int X, int Y, float Width, float Height, bool TriggerOnly = false)
         {

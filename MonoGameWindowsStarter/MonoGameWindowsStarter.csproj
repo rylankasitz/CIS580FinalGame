@@ -41,9 +41,13 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Characters\BlackEye.cs" />
     <Compile Include="Characters\BlackGhoul.cs" />
+    <Compile Include="Characters\BlackSlime.cs" />
     <Compile Include="Characters\Charles.cs" />
-    <Compile Include="Characters\DefaultCharacter.cs" />
+    <Compile Include="Characters\FireSummoner.cs" />
+    <Compile Include="Characters\Templates\CharacterMeleeTemplate.cs" />
+    <Compile Include="Characters\Templates\CharacterProjectileTemplate.cs" />
     <Compile Include="Characters\Helpers\AILogic.cs" />
     <Compile Include="Characters\Helpers\EnemySpawner.cs" />
     <Compile Include="Entities\CharacterPickup.cs" />
@@ -54,13 +58,17 @@
     <Compile Include="GlobalValues\PlayerStats.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scenes\GameoverScene.cs" />
     <Compile Include="Scenes\MainScene.cs" />
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\Helpers\ProjectileSpawner.cs" />
+    <Compile Include="Scenes\PlayerScene.cs" />
     <Compile Include="Scenes\Rooms\MapGenerator.cs" />
     <Compile Include="Scenes\Rooms\Room.cs" />
+    <Compile Include="UI\ButtonUI.cs" />
     <Compile Include="UI\MiniMap.cs" />
     <Compile Include="UI\SliderBar.cs" />
+    <Compile Include="UI\TextUI.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">

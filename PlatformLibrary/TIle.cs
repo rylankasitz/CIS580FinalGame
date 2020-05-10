@@ -16,6 +16,8 @@ namespace PlatformLibrary
         public Texture2D Texture { get; set; }
         public TilesetAnimation Animation { get; set; }
         public Dictionary<string, string> Properties { get; set; }
+        public int Spacing { get; set; }
+        public int Margin { get; set; }
 
         public int Width => Source.Width;
         public int Height => Source.Height;
@@ -24,13 +26,15 @@ namespace PlatformLibrary
 
         #region Initialization
 
-        public Tile(Rectangle source, Dictionary<string, Rectangle> boxColliders, Dictionary<string, string> properties, Texture2D texture, TilesetAnimation animation)
+        public Tile(Rectangle source, Dictionary<string, Rectangle> boxColliders, Dictionary<string, string> properties, Texture2D texture, TilesetAnimation animation, int spacing, int margin)
         {
             Texture = texture;
             Source = source;
             BoxColliders = boxColliders;
             Properties = properties;
             Animation = animation;
+            Spacing = spacing;
+            Margin = margin;
         }
 
         #endregion

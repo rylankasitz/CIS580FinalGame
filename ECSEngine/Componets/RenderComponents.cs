@@ -50,9 +50,10 @@ namespace Engine.Componets
 
     public class TextDraw : Component
     {
+        public string Font { get; set; } = "";
         public string Text { get; set; } = "";
+        public bool Center { get; set; } = false;
         public Color Color { get; set; } = Color.Black;
-
         public TextDraw() { }
         public TextDraw(string Text)
         {

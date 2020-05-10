@@ -37,6 +37,11 @@ namespace Engine.Systems
             return Mouse.GetState().LeftButton == ButtonState.Pressed; 
         }
 
+        public static bool LeftMouseUp()
+        {
+            return Mouse.GetState().LeftButton == ButtonState.Released;
+        }
+
         public static bool LeftMouseDown()
         {
             return OldMouseState.LeftButton == ButtonState.Released && 

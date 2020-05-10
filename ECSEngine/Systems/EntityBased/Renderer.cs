@@ -45,7 +45,7 @@ namespace Engine.Systems
         public void LoadContent(ContentManager content, Dictionary<string, Texture2D> textures)
         {
             contentManager = content;
-            font = contentManager.Load<SpriteFont>("Fonts/BasicFont");
+            font = contentManager.Load<SpriteFont>("Fonts/PixelFont");
             this.textures = textures;
         }
 
@@ -78,7 +78,11 @@ namespace Engine.Systems
                 {
                     TextDraw text = entity.GetComponent<TextDraw>();
 
-                    spriteBatch.DrawString(font, text.Text, transform.Position, text.Color, transform.Rotation, new Vector2(0,0), transform.Scale, SpriteEffects.None, 0f);
+                    if (!text.Center)
+                        spriteBatch.DrawString(font, text.Text, transform.Position, text.Color, transform.Rotation, new Vector2(0, 0), transform.Scale, SpriteEffects.None, 0f);
+                    else
+                        spriteBatch.DrawString(font, text.Text, transform.Position - ((font.MeasureString(text.Text)/2)*transform.Scale), 
+                            text.Color, transform.Rotation, new Vector2(0, 0), transform.Scale, SpriteEffects.None, 0f); ;
                 }
 
                 if (WindowManager.Debug && entity.HasComponent<BoxCollision>())

@@ -27,6 +27,13 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/BasicFont.spritefont
 
+#begin Fonts/PixelFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/PixelFont.spritefont
+
 #begin Maps/Room_1_+---.tmx
 /importer:TilemapImporter
 /processor:TilemapProcessor
@@ -86,6 +93,18 @@
 /importer:TilemapImporter
 /processor:TilemapProcessor
 /build:Maps/Room_9_+--+.tmx
+
+#begin Sprites/Button.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Button.png
 
 #begin Sprites/Charles_Spear.png
 /importer:TextureImporter
@@ -195,7 +214,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/MouseIcon.png
 
-#begin Sprites/projectiles.png
+#begin Sprites/ProjectileBubble.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -205,7 +224,43 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/projectiles.png;Sprites/Projectiles.png
+/build:Sprites/ProjectileBubble.png
+
+#begin Sprites/ProjectileCircle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ProjectileCircle.png
+
+#begin Sprites/ProjectileFire.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ProjectileFire.png
+
+#begin Sprites/ProjectileStar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/ProjectileStar.png
 
 #begin Tilesets/Charles_Spear.tsx
 /importer:TilesetImporter
@@ -216,4 +271,24 @@
 /importer:TilesetImporter
 /processor:TilesetProcessor
 /build:Tilesets/DungeonTileSet.tsx
+
+#begin Tilesets/ProjectileBubble.tsx
+/importer:TilesetImporter
+/processor:TilesetProcessor
+/build:Tilesets/ProjectileBubble.tsx
+
+#begin Tilesets/ProjectileCircle.tsx
+/importer:TilesetImporter
+/processor:TilesetProcessor
+/build:Tilesets/ProjectileCircle.tsx
+
+#begin Tilesets/ProjectileFire.tsx
+/importer:TilesetImporter
+/processor:TilesetProcessor
+/build:Tilesets/ProjectileFire.tsx
+
+#begin Tilesets/ProjectileStar.tsx
+/importer:TilesetImporter
+/processor:TilesetProcessor
+/build:Tilesets/ProjectileStar.tsx
 

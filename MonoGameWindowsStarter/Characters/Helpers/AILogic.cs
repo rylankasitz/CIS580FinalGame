@@ -13,8 +13,12 @@ namespace MonoGameWindowsStarter.Characters.Helpers
 {
     public class AILogic
     {
+        #region Public Variables
+
         public string CurrentState { get; set; } = "Start";
         public Enemy AI;
+
+        #endregion
 
         #region Private Variables
 
@@ -35,6 +39,8 @@ namespace MonoGameWindowsStarter.Characters.Helpers
         private bool stateSwitch;
 
         #endregion
+
+        #region ECS Methods
 
         public AILogic(Enemy character)
         {
@@ -73,7 +79,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                                 random.Next(1, (int)((1 - attackAccuracy) * 100) + 2));
                 dir.Normalize();
 
-                AI.Character.Attack(player, AI.Transform.Position, new Vector(dir.X, dir.Y));
+                AI.Character.Attack(player, AI.Transform.Position + (AI.Transform.Scale/2), new Vector(dir.X, dir.Y));
             }
             else if (attackDuration != 0)
             {
@@ -84,7 +90,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             // Move
             if (movementElapsedTime < movementDuration)
             {
-                AI.Physics.Velocity = movementDirection * AI.Character.MoveSpeed;
+                AI.Physics.Velocity = movementDirection * AI.Character.MoveSpeed * AI.Character.AIMoveSpeedMod;
             }
             else if (movementDuration != 0)
             {
@@ -104,6 +110,50 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             attackElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
             waitElapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
+
+        #endregion
+
+        #region AI Templates
+
+        public void BasicMovementTemplate(string lastState, Vector attackRange, float accuracy)
+        {
+            switch (lastState)
+            {
+                case "Start":
+                    Wait(.5f);
+                    CurrentState = "Waiting";
+                    break;
+
+                case "Waiting":
+                    Wait(.2f);
+                    if (InRangeOfPlayer((int)attackRange.X, (int)attackRange.Y))
+                        CurrentState = "Attacking";
+                    else
+                        CurrentState = "Moving";
+                    break;
+
+                case "Moving":
+                    MoveToPlayer(.3f);
+                    if (InRangeOfPlayer((int)attackRange.X, (int)attackRange.Y))
+                        CurrentState = "Attacking";
+                    else
+                        CurrentState = "Waiting";
+                    break;
+
+                case "Attacking":
+                    AttackPlayer(.5f, accuracy);
+                    if (InRangeOfPlayer((int)attackRange.X, (int)attackRange.Y))
+                        CurrentState = "Attacking";
+                    else
+                        CurrentState = "Moving";
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        #endregion
 
         #region Custom AI Methods
 
@@ -143,14 +193,21 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             return magnitude < distance;
         }
 
+        public bool InRangeOfPlayer(int distanceX, int distanceY)
+        {
+            Vector2 diff = player.Transform.Position - AI.Transform.Position;
+
+            return Math.Abs(diff.X) < distanceX && Math.Abs(diff.Y) < distanceY;
+        }
+
         #endregion
 
         #region Private Methods
 
         private Vector getPlayerDirection()
         {
-            Vector2 d = player.Transform.Position - AI.Transform.Position;
-            float magnitude = d.Length();
+            Vector2 d = (player.Transform.Position + player.Transform.Scale/2) - 
+                (AI.Transform.Position + AI.Transform.Scale /2);
             d.Normalize();
             return new Vector(d.X, d.Y);
         }

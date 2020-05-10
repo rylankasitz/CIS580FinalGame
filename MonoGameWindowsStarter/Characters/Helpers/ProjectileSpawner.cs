@@ -5,6 +5,7 @@ using Engine.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameWindowsStarter.Entities;
+using MonoGameWindowsStarter.GlobalValues;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,7 +18,6 @@ namespace MonoGameWindowsStarter.Characters.Helpers
     public class ProjectileSpawner
     {
         private float elapsedTime;
-        private Rectangle source;
         private string contentName;
         private string layer;
         private Animation animation;
@@ -25,18 +25,19 @@ namespace MonoGameWindowsStarter.Characters.Helpers
         private Projectile projectile;
         private Transform transform;
         private Sprite sprite;
+        private Character character;
 
-        public ProjectileSpawner(Rectangle spriteSource, string contentName)
+        public ProjectileSpawner(string contentName, Character character)
         {
-            source = spriteSource;
             this.contentName = contentName;
             elapsedTime = 1000;
             animationBased = false;
+            this.character = character;
         }
 
         public void Update(string holder, GameTime gameTime)
         {
-            this.layer = holder;
+            layer = holder;
             elapsedTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (animationBased && animation.CurrentCollisions.ContainsKey("Attack"))
@@ -66,13 +67,25 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             if (elapsedTime > spawnFrequency)
             {
                 projectile = SceneManager.GetCurrentScene().CreateEntity<Projectile>();
+                projectile.Animation.CurrentAnimation = character.ProjectileAnimation;
                 projectile.Sprite.ContentName = contentName;
-                projectile.Sprite.SpriteLocation = source;
                 projectile.BoxCollision.Layer = layer;
                 projectile.Transform.Position = position;
+                projectile.Transform.Scale = character.ProjectileScale;
 
                 if (projectile.Sprite.ContentName == "")
                     projectile.Sprite.Enabled = false;
+
+                if (character.Holder == "Player")
+                {
+                    projectile.Damage = character.AttackDamage * PlayerStats.AttackDamageMod;
+                    projectile.Range = 100 * character.Range;
+                }
+                else
+                {
+                    projectile.Damage = character.AttackDamage * character.AIAttackDamageMod;
+                    projectile.Range = 100 * character.Range * character.AIAttackRangeMod;
+                }               
 
                 elapsedTime = 0;
 
@@ -89,7 +102,6 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             {
                 projectile = SceneManager.GetCurrentScene().CreateEntity<Projectile>();
                 projectile.Sprite.ContentName = contentName;
-                projectile.Sprite.SpriteLocation = source;
                 projectile.BoxCollision.Layer = layer;
 
                 if (projectile.Sprite.ContentName == "")
@@ -111,6 +123,11 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                 }
 
                 projectile.Transform.Scale = this.transform.Scale;
+
+                if (character.Holder == "Player")
+                    projectile.Damage = character.AttackDamage * PlayerStats.AttackDamageMod;
+                else
+                    projectile.Damage = character.AttackDamage * character.AIAttackDamageMod;
 
                 this.projectile = projectile;
 

@@ -30,6 +30,8 @@ namespace PlatformLibrary
             // Read in the tile attributes
             var tileWidth = input.ReadInt32();
             var tileHeight = input.ReadInt32();
+            var margin = input.ReadInt32();
+            var spacing = input.ReadInt32();
             var tileCount = input.ReadInt32();
 
             // Read in the tiles - the number will vary based on the tileset 
@@ -77,7 +79,7 @@ namespace PlatformLibrary
                 }
 
                 // Create the tile
-                tiles[i] = new Tile(source, boxCollisions, properties, texture, animation);
+                tiles[i] = new Tile(source, boxCollisions, properties, texture, animation, spacing, margin);
             }
 
             // Construct and return the tileset

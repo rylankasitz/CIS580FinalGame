@@ -11,48 +11,47 @@ using Engine;
 using MonoGameWindowsStarter.Entities;
 using MonoGameWindowsStarter.Characters.Helpers;
 using MonoGameWindowsStarter.GlobalValues;
-using Engine.Systems;
 
 namespace MonoGameWindowsStarter.Characters
 {
-    public class BlackGhoul : Character
+    public class BlackEye : Character
     {
         #region Animation Variables
 
         public override string SpriteSheet => "MapTileSet";
-        public override string IdleAnimation => "IdleBlackGhoul";
-        public override string WalkAnimation => "WalkBlackGhoul";
-        public override string AttackAnimation => "AttackBlackGhoul";
+        public override string IdleAnimation => "IdleBlackEye";
+        public override string WalkAnimation => "WalkBlackEye";
+        public override string AttackAnimation => "AttackBlackEye";
 
         #endregion
 
         #region Character Stats
 
-        public override float MoveSpeed => 8;
+        public override float MoveSpeed => 3;
         public override int AttackDamage => 10;
         public override float AttackSpeed => .4f;
         public override float Range => 2;
-        public override int MaxHealth => 80;
+        public override int MaxHealth => 100;
 
         #endregion
 
         #region AI Modifiers
 
-        public override int Difficulty => 2;
-        public override float AIMoveSpeedMod => .5f;
+        public override int Difficulty => 1;
+        public override float AIMoveSpeedMod => 1;
         public override float AIAttackDamageMod => 1;
-        public override float AIAttackSpeedMod => .5f;
+        public override float AIAttackSpeedMod => 1;
         public override float AIAttackRangeMod => 1;
-        public override float AIHealthMod => .1f;
+        public override float AIHealthMod => 1;
 
         #endregion
 
         #region Projectile Variables
 
-        public override string ProjectileSprite => "ProjectileStar";
-        public override string ProjectileAnimation => "ProjectileStar";
-        public override Vector ProjectileScale => new Vector(17, 17) * 1.5f;
-        public override float ProjectileSpeed => 6f;
+        public override string ProjectileSprite => "ProjectileBubble";
+        public override string ProjectileAnimation => "ProjectileBubble";
+        public override Vector ProjectileScale => new Vector(16, 16)*2f;
+        public override float ProjectileSpeed => 5f;
 
         #endregion
 

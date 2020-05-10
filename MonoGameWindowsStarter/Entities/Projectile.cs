@@ -13,19 +13,22 @@ using System.Threading.Tasks;
 namespace MonoGameWindowsStarter.Entities
 {
 
-    [Sprite(ContentName: "Projectiles", Layer: 0.1f)]
+    [Sprite(ContentName: "Projectiles", Layer: 0.74f)]
     [Transform(X: 0, Y: 0, Width: 12, Height: 12)]
     [Physics(VelocityX: 0, VelocityY: 0)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1, TriggerOnly: true)]
+    [Animation()]
     public class Projectile : Entity
     {
         public Sprite Sprite;
         public Transform Transform;
         public Physics Physics;
         public BoxCollision BoxCollision;
+        public Animation Animation;
 
         public float Damage;
         public float Range;
+        public bool DeleteOnHit;
 
         private float distanceTraveled;
 
@@ -37,9 +40,11 @@ namespace MonoGameWindowsStarter.Entities
             Transform = GetComponent<Transform>();
             Physics = GetComponent<Physics>();
             BoxCollision = GetComponent<BoxCollision>();
+            Animation = GetComponent<Animation>();
 
             BoxCollision.HandleCollisionEnter = handleCollisionEnter;
 
+            DeleteOnHit = true;
             Damage = 0;
             Range = -1;
             distanceTraveled = 0;
@@ -77,7 +82,7 @@ namespace MonoGameWindowsStarter.Entities
                 player.CurrentHealth -= Damage;
             }
 
-            if (entity.Name != "Projectile" && Range != -1)
+            if (entity.Name != "Projectile" && Range != -1 && DeleteOnHit)
                 SceneManager.GetCurrentScene().RemoveEntity(this);
         }
     }

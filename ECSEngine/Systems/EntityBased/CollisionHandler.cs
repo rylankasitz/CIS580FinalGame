@@ -121,7 +121,20 @@ namespace Engine.Systems
 
             if (collider1.Enabled && collider2.Enabled)
             {
-                if (collider1.Layer != collider2.Layer || (collider1.Layer == "All" && collider2.Layer == "All"))
+                bool differentLayers = true;
+                foreach (string layer1 in collider1.Layers)
+                {
+                    foreach(string layer2 in collider2.Layers)
+                    {
+                        if (layer1 == layer2)
+                        {
+                            differentLayers = false;
+                            break;
+                        }                     
+                    }
+                }
+
+                if (differentLayers || (collider1.Layer == "All" && collider2.Layer == "All"))
                 {
                     Transform transform1 = entity1.GetComponent<Transform>();
                     Transform transform2 = entity2.GetComponent<Transform>();

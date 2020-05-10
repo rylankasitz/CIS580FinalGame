@@ -72,12 +72,14 @@ namespace Engine.Systems
 
                     current.TimeIntoAnimation += gameTime.ElapsedGameTime.TotalSeconds;
 
-                    if (current.TimeIntoAnimation > current.TotalDuration)
+                    if (current.TimeIntoAnimation >= current.FrameDuration)
                     {
+                        current.FrameNumber++;
                         current.TimeIntoAnimation = 0;
-                    }
 
-                    current.FrameNumber = (int)Math.Floor(current.TimeIntoAnimation / current.FrameDuration);
+                        if (current.FrameNumber == current.Frames.Count)
+                            current.FrameNumber = 0;
+                    }
 
                     sprite.SpriteLocation = current.CurrentFrame;
 
@@ -99,7 +101,7 @@ namespace Engine.Systems
                     if (current.FrameNumber == current.Frames.Count - 1 && animation.Playing)
                     {
                         animation.Playing = false;
-                        current.TimeIntoAnimation = 0;
+                        current.FrameNumber = 0;
                     }
                 }
             }
@@ -126,7 +128,7 @@ namespace Engine.Systems
                 return animationTracker;               
             }
 
-            Debug.WriteLine($"Animation '{animation.CurrentAnimation}' was not found");
+            //Debug.WriteLine($"Animation '{animation.CurrentAnimation}' was not found");
 
             return null;
         }
@@ -138,8 +140,8 @@ namespace Engine.Systems
                 SpriteSheetAnimations spriteSheetAnimation = new SpriteSheetAnimations();
                 spriteSheetAnimation.Width = tileset[i].Width;
                 spriteSheetAnimation.Height = tileset[i].Height;
-                spriteSheetAnimation.Margin = 0; // change
-                spriteSheetAnimation.Spacing = 0; // change
+                spriteSheetAnimation.Margin = tileset[i].Margin;
+                spriteSheetAnimation.Spacing = tileset[i].Spacing;
 
                 AnimationTracker animationTracker = new AnimationTracker(spriteSheetAnimation);
 

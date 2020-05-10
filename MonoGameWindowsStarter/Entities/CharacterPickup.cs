@@ -51,6 +51,8 @@ namespace MonoGameWindowsStarter.Entities
                     player.Sprite.ContentName = player.Character.SpriteSheet;
                     player.Animation.CurrentAnimation = Character.IdleAnimation;
                     player.Transform.Position += player.Transform.Scale / 2 - player.Animation.AnimationScale / 2;
+                    player.CurrentHealth = (player.CurrentHealth / (float) player.TotalHealth) * Character.MaxHealth;
+                    player.TotalHealth = Character.MaxHealth;
 
                     SceneManager.GetCurrentScene().RemoveEntity(this);
                 }

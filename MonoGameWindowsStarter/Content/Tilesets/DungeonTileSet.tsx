@@ -159,6 +159,89 @@
    <frame tileid="77" duration="250"/>
   </animation>
  </tile>
+ <tile id="78">
+  <properties>
+   <property name="Animation" value="IdleBlackSlime"/>
+  </properties>
+  <animation>
+   <frame tileid="78" duration="200"/>
+  </animation>
+ </tile>
+ <tile id="79">
+  <properties>
+   <property name="Animation" value="WalkBlackSlime"/>
+  </properties>
+  <animation>
+   <frame tileid="78" duration="500"/>
+   <frame tileid="79" duration="500"/>
+  </animation>
+ </tile>
+ <tile id="80">
+  <properties>
+   <property name="Animation" value="IdleFireSummoner"/>
+  </properties>
+  <animation>
+   <frame tileid="80" duration="1000"/>
+  </animation>
+ </tile>
+ <tile id="81">
+  <properties>
+   <property name="Animation" value="WalkFireSummoner"/>
+  </properties>
+  <animation>
+   <frame tileid="80" duration="200"/>
+   <frame tileid="81" duration="200"/>
+  </animation>
+ </tile>
+ <tile id="82">
+  <properties>
+   <property name="Animation" value="AttackBlackGhoul"/>
+  </properties>
+  <animation>
+   <frame tileid="77" duration="500"/>
+  </animation>
+ </tile>
+ <tile id="83">
+  <properties>
+   <property name="Animation" value="AttackBlackSlime"/>
+  </properties>
+  <animation>
+   <frame tileid="79" duration="1000"/>
+  </animation>
+ </tile>
+ <tile id="84">
+  <properties>
+   <property name="Animation" value="AttackBlackEye"/>
+  </properties>
+  <animation>
+   <frame tileid="81" duration="400"/>
+  </animation>
+ </tile>
+ <tile id="85">
+  <properties>
+   <property name="Animation" value="AttackFireSummoner"/>
+  </properties>
+  <animation>
+   <frame tileid="102" duration="1000"/>
+  </animation>
+ </tile>
+ <tile id="101">
+  <properties>
+   <property name="Animation" value="IdleFireSummoner"/>
+  </properties>
+  <animation>
+   <frame tileid="101" duration="1000"/>
+  </animation>
+ </tile>
+ <tile id="102">
+  <properties>
+   <property name="Animation" value="WalkFireSummoner"/>
+  </properties>
+  <animation>
+   <frame tileid="101" duration="100"/>
+   <frame tileid="102" duration="100"/>
+  </animation>
+ </tile>
  <tile id="120">
   <properties>
    <property name="Name" value="DoorL"/>

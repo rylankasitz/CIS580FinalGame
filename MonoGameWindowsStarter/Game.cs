@@ -14,17 +14,23 @@ namespace MonoGameWindowsStarter
     public class Game : GameLayout
     {
         MainScene mainScene;
+        GameoverScene gameoverScene;
+        PlayScene playScene;
 
         public override void AddScenes()
-        {           
+        {
             SceneManager.AddScene(mainScene = new MainScene());
+            SceneManager.AddScene(gameoverScene = new GameoverScene());
+            SceneManager.AddScene(playScene = new PlayScene());
 
-            mainScene.Name = "Main Scene";
+            mainScene.Name = "Main";
+            gameoverScene.Name = "Gameover";
+            playScene.Name = "Play";
         }
 
         public override void Initialize()
         {
-            SceneManager.LoadScene("Main Scene");
+            SceneManager.LoadScene("Play");
 
             Camera.Position.X = WindowManager.Width / 2;
             Camera.Position.Y = WindowManager.Height / 2;

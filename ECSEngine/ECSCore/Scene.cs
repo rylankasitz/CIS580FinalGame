@@ -47,6 +47,14 @@ namespace Engine.ECSCore
             Entities.Remove(entity);
         }
 
+        public void RemoveAllEntities()
+        {
+            while(Entities.Count > 0)
+            {
+                RemoveEntity(Entities[0]);
+            }
+        }
+
         public T GetEntity<T>(string name) where T : Entity, new()
         {
             foreach(Entity entity in Entities)

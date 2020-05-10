@@ -43,7 +43,7 @@ namespace MonoGameWindowsStarter.Entities
         {
             Name = "Enemy";
             Character = new BlackGhoul();
-            TotalHealth = Character.MaxHealth;
+            TotalHealth = Character.MaxHealth * Character.AIHealthMod;
             CurrentHealth = TotalHealth;
             attack = false;
             elapsedTintTime = hitTime;
@@ -54,7 +54,7 @@ namespace MonoGameWindowsStarter.Entities
             boxCollision = GetComponent<BoxCollision>();
             Physics = GetComponent<Physics>();
 
-            boxCollision.Layer = "Enemy";
+            boxCollision.Layer = "Enemy|Character";
             boxCollision.HandleCollision = handleCollision;
 
             Animation.CurrentAnimation = Character.IdleAnimation;

@@ -38,6 +38,8 @@ namespace PlatformerContentExtension
             // Write the tile width & height 
             output.Write(value.TileWidth);
             output.Write(value.TileHeight);
+            output.Write(value.Margin);
+            output.Write(value.Spacing);
 
             // Write the number of tiles - this will be used to 
             // specify the expected number of tiles in the reader

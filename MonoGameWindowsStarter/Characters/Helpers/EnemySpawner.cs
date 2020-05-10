@@ -6,6 +6,7 @@ using MonoGameWindowsStarter.Entities;
 using PlatformLibrary;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -16,11 +17,13 @@ namespace MonoGameWindowsStarter.Characters.Helpers
     public class EnemySpawner
     {
         private Dictionary<string, List<Enemy>> enemies;
+        private Dictionary<int, List<Type>> characters;
         private Random random;
 
         public EnemySpawner()
         {
             enemies = new Dictionary<string, List<Enemy>>();
+            characters = getCharacterTypes();
             random = new Random();
         }
 
@@ -34,9 +37,12 @@ namespace MonoGameWindowsStarter.Characters.Helpers
 
                 foreach (TileMapObject spawn in spawns)
                 {
-                    spawnEnemy(new Vector(spawn.Position.X + (WindowManager.Width / 2 - spawn.Position.X), spawn.Position.Y),
-                               random.Next(minDifficulty, maxDifficulty + 1), roomName);
-                    break;
+                    if (flipped)
+                        spawnEnemy(new Vector(spawn.Position.X + (WindowManager.Width / 2 - spawn.Position.X), spawn.Position.Y),
+                                   random.Next(minDifficulty, maxDifficulty + 1), roomName);
+                    else
+                        spawnEnemy(new Vector(spawn.Position.X, spawn.Position.Y),
+                                   random.Next(minDifficulty, maxDifficulty + 1), roomName);
                 }
             }
             else
@@ -67,9 +73,11 @@ namespace MonoGameWindowsStarter.Characters.Helpers
         private void spawnEnemy(Vector position, int difficulty, string roomName)
         {
             Enemy enemy = SceneManager.GetCurrentScene().CreateEntity<Enemy>();
-            enemy.Character = createCharacter<BlackGhoul>(); // Change to random difficulty
+            enemy.Character = createCharacter(difficulty);
             enemy.Transform.Position = position;
             enemy.Character.OnSpawn(enemy);
+
+            Debug.WriteLine($"Spawned enemy with difficulty {enemy.Character.Difficulty}");
 
             if (!enemies.ContainsKey(roomName))
                 enemies.Add(roomName, new List<Enemy>());
@@ -92,9 +100,27 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             }
         }
 
-        private T createCharacter<T>() where T : Character, new()
+        private Character createCharacter(int difficulty)
         {
-            return new T();
+            return (Character) Activator.CreateInstance(characters[difficulty][random.Next(0, characters[difficulty].Count)]);
+        }
+
+        private Dictionary<int, List<Type>> getCharacterTypes()
+        {
+            Dictionary<int, List<Type>> characters = new Dictionary<int, List<Type>>();
+            foreach (Type type in Assembly.GetAssembly(typeof(Character)).GetTypes()
+                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Character))))
+            {
+                Character character = (Character)Activator.CreateInstance(type);
+
+                if (!characters.ContainsKey(character.Difficulty))
+                {
+                    characters.Add(character.Difficulty, new List<Type>());
+                    
+                }
+                characters[character.Difficulty].Add(type);
+            }
+            return characters;
         }
 
         #endregion

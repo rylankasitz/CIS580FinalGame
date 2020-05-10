@@ -66,7 +66,7 @@ namespace MonoGameWindowsStarter.Entities
             Physics = GetComponent<Physics>();
 
             boxCollision.HandleCollision = handleCollision;
-            boxCollision.Layer = "Player";
+            boxCollision.Layer = "Player|Character";
 
             Animation.CurrentAnimation = Character.IdleAnimation;
 
@@ -85,7 +85,8 @@ namespace MonoGameWindowsStarter.Entities
 
             Character.ProjectileSpawner.Update(Character.Holder, gameTime);
 
-            Debug.WriteLine($"{Transform.Position.X}, {Transform.Position.Y}");
+            if (CurrentHealth <= 0)
+                onDeath();
 
             hitTint();
             move();
@@ -203,7 +204,21 @@ namespace MonoGameWindowsStarter.Entities
                                                 position.Y - Transform.Position.Y);
                 direction.Normalize();
                 Character.Attack(this, Transform.Position, new Vector(direction.X, direction.Y));
+
+                if (direction.X > 0)
+                {
+                    Sprite.SpriteEffects = SpriteEffects.None;
+                }
+                else
+                {
+                    Sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
+                }
             }       
+        }
+
+        private void onDeath()
+        {
+            SceneManager.LoadScene("Gameover");
         }
 
         private void setMinmap()
