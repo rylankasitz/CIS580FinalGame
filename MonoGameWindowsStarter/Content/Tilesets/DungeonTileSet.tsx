@@ -2,26 +2,41 @@
 <tileset version="1.2" tiledversion="1.3.2" name="DungeonTileSet" tilewidth="8" tileheight="8" tilecount="128" columns="8">
  <image source="../Sprites/MapTileSet.png" trans="ff00ff" width="64" height="128"/>
  <tile id="1">
+  <properties>
+   <property name="Name" value="Wall"/>
+  </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="6" width="8" height="2"/>
   </objectgroup>
  </tile>
  <tile id="2">
+  <properties>
+   <property name="Name" value="Wall"/>
+  </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="6" width="8" height="2"/>
   </objectgroup>
  </tile>
  <tile id="3">
+  <properties>
+   <property name="Name" value="Wall"/>
+  </properties>
   <objectgroup draworder="index" id="2">
    <object id="2" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="4">
+  <properties>
+   <property name="Name" value="Wall"/>
+  </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="2"/>
   </objectgroup>
  </tile>
  <tile id="5">
+  <properties>
+   <property name="Name" value="Wall"/>
+  </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="2"/>
   </objectgroup>
@@ -105,6 +120,9 @@
   </objectgroup>
  </tile>
  <tile id="45">
+  <properties>
+   <property name="Name" value="Wall"/>
+  </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
@@ -120,6 +138,9 @@
   </objectgroup>
  </tile>
  <tile id="53">
+  <properties>
+   <property name="Name" value="Wall"/>
+  </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>

@@ -144,24 +144,28 @@ namespace Engine.Systems
                         string side1 = handlePhysics(entity1, transform1, p2, s2, p1, s1, collider1.TriggerOnly || collider2.TriggerOnly);
                         string side2 = handlePhysics(entity2, transform2, p1, s1, p2, s2, collider1.TriggerOnly || collider2.TriggerOnly);
 
-                        if (!collider1.CollidingObjects.Contains(entity2))
+                        if (collider1.HandleCollisionEnter != null && !collider1.CollidingObjects.Contains(entity2))
                         {
                             collider1.HandleCollisionEnter?.Invoke(entity2, side1);
+                            collider1.CollidingObjects.Add(entity2);
+                        }
+
+                        if (collider2.HandleCollisionEnter != null && !collider2.CollidingObjects.Contains(entity1))
+                        {
                             collider2.HandleCollisionEnter?.Invoke(entity1, side2);
+                            collider2.CollidingObjects.Add(entity1);
                         }
 
                         collider1.HandleCollision?.Invoke(entity2, side1);
                         collider2.HandleCollision?.Invoke(entity1, side2);
 
-                        collider1.CollidingObjects.Add(entity2);
-                        collider2.CollidingObjects.Add(entity1);
                     }
                     else
                     {
-                        if (collider1.CollidingObjects.Contains(entity2))
+                        if (collider1.HandleCollisionEnter != null)
                             collider1.CollidingObjects.Remove(entity2);
 
-                        if (collider2.CollidingObjects.Contains(entity1))
+                        if (collider2.HandleCollisionEnter != null)
                             collider2.CollidingObjects.Remove(entity1);
                     }
                 }

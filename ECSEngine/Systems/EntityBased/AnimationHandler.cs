@@ -61,47 +61,50 @@ namespace Engine.Systems
             {
                 Animation animation = entity.GetComponent<Animation>();
 
-                if (animation.Playing)
-                    animation.CurrentAnimation = animation.PlayeringAnimation;
-
-                AnimationTracker current = getAnimation(entity);
-
-                if (current != null)
+                if (animation.Enabled)
                 {
-                    Sprite sprite = entity.GetComponent<Sprite>();
+                    if (animation.Playing)
+                        animation.CurrentAnimation = animation.PlayeringAnimation;
 
-                    current.TimeIntoAnimation += gameTime.ElapsedGameTime.TotalSeconds;
+                    AnimationTracker current = getAnimation(entity);
 
-                    if (current.TimeIntoAnimation >= current.FrameDuration)
+                    if (current != null)
                     {
-                        current.FrameNumber++;
-                        current.TimeIntoAnimation = 0;
+                        Sprite sprite = entity.GetComponent<Sprite>();
 
-                        if (current.FrameNumber == current.Frames.Count)
+                        current.TimeIntoAnimation += gameTime.ElapsedGameTime.TotalSeconds;
+
+                        if (current.TimeIntoAnimation >= current.FrameDuration)
+                        {
+                            current.FrameNumber++;
+                            current.TimeIntoAnimation = 0;
+
+                            if (current.FrameNumber == current.Frames.Count)
+                                current.FrameNumber = 0;
+                        }
+
+                        sprite.SpriteLocation = current.CurrentFrame;
+
+                        animation.CurrentCollisions = new Dictionary<string, BoxCollision>();
+                        foreach (KeyValuePair<string, BoxCollision> pair in current.Frames[current.FrameNumber].Colliders)
+                        {
+                            if (pair.Key == "Collision")
+                            {
+                                BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
+                                boxCollision.Position = pair.Value.Position;
+                                boxCollision.Scale = pair.Value.Scale;
+                            }
+                            else
+                            {
+                                animation.CurrentCollisions.Add(pair.Key, pair.Value);
+                            }
+                        }
+
+                        if (current.FrameNumber == current.Frames.Count - 1 && animation.Playing)
+                        {
+                            animation.Playing = false;
                             current.FrameNumber = 0;
-                    }
-
-                    sprite.SpriteLocation = current.CurrentFrame;
-
-                    animation.CurrentCollisions = new Dictionary<string, BoxCollision>();                    
-                    foreach (KeyValuePair<string, BoxCollision> pair in current.Frames[current.FrameNumber].Colliders)
-                    {
-                        if (pair.Key == "Collision")
-                        {
-                            BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
-                            boxCollision.Position = pair.Value.Position;
-                            boxCollision.Scale = pair.Value.Scale;
                         }
-                        else
-                        {
-                            animation.CurrentCollisions.Add(pair.Key, pair.Value);
-                        }
-                    }
-
-                    if (current.FrameNumber == current.Frames.Count - 1 && animation.Playing)
-                    {
-                        animation.Playing = false;
-                        current.FrameNumber = 0;
                     }
                 }
             }

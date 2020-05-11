@@ -24,7 +24,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
         private int currentX, currentY = 0;
         private int keycount = 3;
 
-        private int roomCount = 15;
+        private int roomCount = 12;
 
         private Room[,] roomLayout;
         private Random rand;

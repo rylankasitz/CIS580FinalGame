@@ -120,12 +120,12 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             switch (lastState)
             {
                 case "Start":
-                    Wait(.5f);
+                    Wait(.1f);
                     CurrentState = "Waiting";
                     break;
 
                 case "Waiting":
-                    Wait(.2f);
+                    Wait(.5f);
                     if (InRangeOfPlayer((int)attackRange.X, (int)attackRange.Y))
                         CurrentState = "Attacking";
                     else
@@ -141,9 +141,9 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                     break;
 
                 case "Attacking":
-                    AttackPlayer(.5f, accuracy);
+                    AttackPlayer(.3f, accuracy);
                     if (InRangeOfPlayer((int)attackRange.X, (int)attackRange.Y))
-                        CurrentState = "Attacking";
+                        CurrentState = "Waiting";
                     else
                         CurrentState = "Moving";
                     break;

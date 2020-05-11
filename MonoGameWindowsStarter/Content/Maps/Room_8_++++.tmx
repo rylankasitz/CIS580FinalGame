@@ -46,19 +46,13 @@
 </data>
  </layer>
  <objectgroup id="4" name="Spawns">
-  <object id="1" x="187.748" y="93.5353">
-   <point/>
-  </object>
   <object id="2" x="60.3235" y="51.7381">
    <point/>
   </object>
-  <object id="3" x="59.1938" y="108.221">
+  <object id="3" x="82" y="95">
    <point/>
   </object>
-  <object id="4" x="128.103" y="78.8498">
-   <point/>
-  </object>
-  <object id="5" x="188.2" y="46.3158">
+  <object id="5" x="167" y="73">
    <point/>
   </object>
  </objectgroup>

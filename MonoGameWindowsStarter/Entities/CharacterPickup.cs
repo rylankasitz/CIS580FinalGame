@@ -5,6 +5,7 @@ using Engine.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGameWindowsStarter.Characters;
+using MonoGameWindowsStarter.GlobalValues;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,6 +23,7 @@ namespace MonoGameWindowsStarter.Entities
     {
         public Transform Transform;
         public Character Character;
+        public Vector NewScale;
 
         private BoxCollision boxCollision;
 
@@ -50,9 +52,10 @@ namespace MonoGameWindowsStarter.Entities
                     player.Character.Holder = "Player";
                     player.Sprite.ContentName = player.Character.SpriteSheet;
                     player.Animation.CurrentAnimation = Character.IdleAnimation;
-                    player.Transform.Position += player.Transform.Scale / 2 - player.Animation.AnimationScale / 2;
+                    player.Transform.Position += player.Transform.Scale / 2 - NewScale / 2;
                     player.CurrentHealth = (player.CurrentHealth / (float) player.TotalHealth) * Character.MaxHealth;
                     player.TotalHealth = Character.MaxHealth;
+                    player.Transform.Scale = NewScale;
 
                     SceneManager.GetCurrentScene().RemoveEntity(this);
                 }

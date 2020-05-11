@@ -17,7 +17,7 @@ namespace MonoGameWindowsStarter.Entities
     [Transform(X: 0, Y: 0, Width: 12, Height: 12)]
     [Physics(VelocityX: 0, VelocityY: 0)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1, TriggerOnly: true)]
-    [Animation()]
+    [Animation(CurrentAnimation: "")]
     public class Projectile : Entity
     {
         public Sprite Sprite;
@@ -84,7 +84,7 @@ namespace MonoGameWindowsStarter.Entities
                     player.CurrentHealth -= Damage;
             }
 
-            if (entity.Name != "Projectile" && Range != -1 && DeleteOnHit)
+            if ((entity.Name == "Wall" || entity.Name == "BlockedDoor")&& Range != -1 && DeleteOnHit)
                 SceneManager.GetCurrentScene().RemoveEntity(this);
         }
     }

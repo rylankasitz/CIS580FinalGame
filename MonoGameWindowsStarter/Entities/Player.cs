@@ -173,6 +173,7 @@ namespace MonoGameWindowsStarter.Entities
             // Temporarly set box collisionaw
             boxCollision.Scale = SpriteSize / Animation.AnimationScale;
             boxCollision.Position = new Vector(.5f, .5f) - ((SpriteSize / Animation.AnimationScale) / 2);
+            Transform.Scale = Animation.AnimationScale * MapConstants.Scale;
 
             Rolling = elapsedRollTime < rollTime;
 
@@ -224,8 +225,6 @@ namespace MonoGameWindowsStarter.Entities
 
         private void animate()
         {
-            Transform.Scale = Animation.AnimationScale * MapConstants.Scale;
-
             if (Physics.Velocity.X != 0 || Physics.Velocity.Y != 0)
             {
                 Animation.CurrentAnimation = Character.WalkAnimation;

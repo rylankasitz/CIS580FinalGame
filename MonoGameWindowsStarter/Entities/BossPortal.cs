@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter.Entities
 {
-    [Sprite(ContentName: "BossPortal", Layer: .77f)]
+    [Sprite(ContentName: "BossPortal", Layer: .81f)]
     [Transform(X: 0, Y: 0, Width: 8, Height: 8)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1, TriggerOnly: true)]
     public class BossPortal : Entity

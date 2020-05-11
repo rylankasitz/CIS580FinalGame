@@ -28,11 +28,11 @@ namespace MonoGameWindowsStarter.Characters
 
         #region Character Stats
 
-        public override float MoveSpeed => 6;
-        public override int AttackDamage => 10;
-        public override float AttackSpeed => 0;
+        public override float MoveSpeed => 5;
+        public override int AttackDamage => 15;
+        public override float AttackSpeed => .8f;
         public override float Range => 0;
-        public override int MaxHealth => 5000;
+        public override int MaxHealth => 100;
 
         #endregion
 

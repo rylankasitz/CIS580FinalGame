@@ -109,14 +109,14 @@ namespace Engine
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            SceneManager.UpdateScene(gameTime);
+
             physicsHandler.HandlePhysics();
             collisionHandler.CheckCollisions();
             animationHandler.UpdateAnimations(gameTime);
             stateHandler.UpdateStateMachine(gameTime);
             particleSystemHandler.UpdateParticleSystems(gameTime);
-            parallaxHandler.UpdateParallax(gameTime);
-
-            SceneManager.UpdateScene(gameTime);
+            parallaxHandler.UpdateParallax(gameTime);  
 
             InputManager.OldKeyboardState = InputManager.NewKeyboardState;
             InputManager.OldMouseState = InputManager.NewMouseState;

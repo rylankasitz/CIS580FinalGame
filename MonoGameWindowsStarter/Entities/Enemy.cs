@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter.Entities
 {
-    [Sprite(ContentName: "MapTileSet", Layer: 0)]
+    [Sprite(ContentName: "MapTileSet", Layer: .76f)]
     [Animation(CurrentAnimation: "Idle")]
     [Transform(X: 100, Y: 100, Width: 8, Height: 8)]
     [Physics(VelocityX: 0, VelocityY: 0)]
@@ -122,6 +122,7 @@ namespace MonoGameWindowsStarter.Entities
             CharacterPickup = SceneManager.GetCurrentScene().CreateEntity<CharacterPickup>();
             CharacterPickup.Transform.Position = new Vector(Transform.Position.X, Transform.Position.Y);
             CharacterPickup.Character = Character;
+            CharacterPickup.NewScale = Transform.Scale;
 
             SceneManager.GetCurrentScene().RemoveEntity(this);
 

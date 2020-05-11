@@ -104,6 +104,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                 projectile.Sprite.ContentName = contentName;
                 projectile.BoxCollision.Layer = layer;
                 projectile.Range = -1;
+                projectile.Animation.Enabled = false;
 
                 if (projectile.Sprite.ContentName == "")
                     projectile.Sprite.Enabled = false;
