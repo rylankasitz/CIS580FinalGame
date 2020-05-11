@@ -60,6 +60,11 @@ namespace MonoGameWindowsStarter.UI
             }
         }
 
+        public bool isDiscoverd(int x, int y)
+        {
+            return rooms[x, y].Discovered;
+        }
+
         public void Discover(int x, int y)
         {
             rooms[x, y].Discovered = true;

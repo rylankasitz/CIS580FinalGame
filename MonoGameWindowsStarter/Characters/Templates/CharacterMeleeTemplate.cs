@@ -37,7 +37,7 @@ namespace MonoGameWindowsStarter.Characters.Templates
 
         #region AI Modifiers
 
-        public override int Difficulty => 1;
+        public override int Difficulty => -1;
         public override float AIMoveSpeedMod => 1;
         public override float AIAttackDamageMod => 1;
         public override float AIAttackSpeedMod => 1;

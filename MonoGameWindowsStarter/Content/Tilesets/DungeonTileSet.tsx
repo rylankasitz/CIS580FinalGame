@@ -76,6 +76,14 @@
    <object id="1" x="0" y="0" width="8" height="2"/>
   </objectgroup>
  </tile>
+ <tile id="39">
+  <properties>
+   <property name="Name" value="BlockedDoor"/>
+  </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="8"/>
+  </objectgroup>
+ </tile>
  <tile id="40">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="2"/>
@@ -96,6 +104,11 @@
    <object id="1" x="0" y="0" width="8" height="2"/>
   </objectgroup>
  </tile>
+ <tile id="45">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="8"/>
+  </objectgroup>
+ </tile>
  <tile id="49">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="2"/>
@@ -104,6 +117,11 @@
  <tile id="50">
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="2"/>
+  </objectgroup>
+ </tile>
+ <tile id="53">
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="61">
@@ -178,7 +196,7 @@
  </tile>
  <tile id="80">
   <properties>
-   <property name="Animation" value="IdleFireSummoner"/>
+   <property name="Animation" value="IdleBlackEye"/>
   </properties>
   <animation>
    <frame tileid="80" duration="1000"/>
@@ -186,7 +204,7 @@
  </tile>
  <tile id="81">
   <properties>
-   <property name="Animation" value="WalkFireSummoner"/>
+   <property name="Animation" value="WalkBlackEye"/>
   </properties>
   <animation>
    <frame tileid="80" duration="200"/>
@@ -277,5 +295,10 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
+ </tile>
+ <tile id="124">
+  <properties>
+   <property name="Name" value="KeySpawn"/>
+  </properties>
  </tile>
 </tileset>

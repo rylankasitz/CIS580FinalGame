@@ -16,16 +16,19 @@ namespace MonoGameWindowsStarter
         MainScene mainScene;
         GameoverScene gameoverScene;
         PlayScene playScene;
+        EndScreen endScreen;
 
         public override void AddScenes()
         {
             SceneManager.AddScene(mainScene = new MainScene());
             SceneManager.AddScene(gameoverScene = new GameoverScene());
             SceneManager.AddScene(playScene = new PlayScene());
+            SceneManager.AddScene(endScreen = new EndScreen());
 
             mainScene.Name = "Main";
             gameoverScene.Name = "Gameover";
             playScene.Name = "Play";
+            endScreen.Name = "End Screen";
         }
 
         public override void Initialize()
@@ -38,7 +41,7 @@ namespace MonoGameWindowsStarter
             WindowManager.BackgroundColor = new Color(25, 23, 22);
             WindowManager.MouseTexture = "MouseIcon";
 
-            //WindowManager.Debug = true;
+            WindowManager.Debug = true;
         }
 
         public override void Update(GameTime gameTime)

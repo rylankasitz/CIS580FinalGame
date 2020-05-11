@@ -2,7 +2,11 @@
 using Engine.Componets;
 using Engine.Systems;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using MonoGameWindowsStarter.Characters;
 using MonoGameWindowsStarter.Characters.Helpers;
+using MonoGameWindowsStarter.Entities;
+using MonoGameWindowsStarter.GlobalValues;
 using MonoGameWindowsStarter.UI;
 using System;
 using System.Collections.Generic;
@@ -18,8 +22,9 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
         private int mapWidth = 8;
         private int mapHeight = 8;
         private int currentX, currentY = 0;
+        private int keycount = 3;
 
-        private float roomCount = 20;
+        private int roomCount = 15;
 
         private Room[,] roomLayout;
         private Random rand;
@@ -49,6 +54,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
                            roomLayout[currentX, currentY].Flip);
 
             miniMap = new MiniMap(roomLayout, mapWidth, mapHeight);
+            removeBlockedDoors();
             miniMap.Disable();
             miniMap.Discover(currentX, currentY);
         }
@@ -66,7 +72,11 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
         public Vector LoadNextRoom(string name)
         {
             string newDoor = "";
+
             enemySpawner.RemoveAllEnemies(roomLayout[currentX, currentY].DungeonName);
+            removeKey();
+            removeBossPortal();
+            removeProjectiles();
 
             if (name == "DoorL")
             {
@@ -91,19 +101,49 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 
             bool flip = roomLayout[currentX, currentY].Flip;
 
+            // Load new room
             scene.LoadRoom(roomLayout[currentX, currentY].MapName, flip);
+
+            if (miniMap.isDiscoverd(currentX, currentY))
+            {
+                removeBlockedDoors();
+            }
 
             if (flip)
             {
-                if (scene.GetEntity<MapObjectCollision>("DoorL") != null) 
-                    scene.GetEntity<MapObjectCollision>("DoorL").Name = "DoorR";
+                if (scene.GetEntity<MapObjectCollision>("DoorL") != null)
+                {
+                    MapObjectCollision doorObj = scene.GetEntity<MapObjectCollision>("DoorL");
+                    doorObj.Name = "DoorR";
+                    doorObj.GetComponent<Sprite>().SpriteEffects = SpriteEffects.FlipHorizontally;
+                }
+                    
                 else if (scene.GetEntity<MapObjectCollision>("DoorR") != null)
-                    scene.GetEntity<MapObjectCollision>("DoorR").Name = "DoorL";
+                {
+                    MapObjectCollision doorObj = scene.GetEntity<MapObjectCollision>("DoorR");
+                    doorObj.Name = "DoorL";
+                    doorObj.GetComponent<Sprite>().SpriteEffects = SpriteEffects.FlipHorizontally;
+                }              
             }
 
             Transform door = scene.GetEntity<MapObjectCollision>(newDoor).GetComponent<Transform>();
 
             enemySpawner.SpawnEnemiesInRoom(roomLayout[currentX, currentY].DungeonName, roomLayout[currentX, currentY].Flip, 1, 3); // change manual values
+
+            MapConstants.KeyRoom = roomLayout[currentX, currentY].HasKey;
+            MapConstants.BossPortalRoom = roomLayout[currentX, currentY].HasBossKey;
+
+            if (MapConstants.KeyRoom && miniMap.isDiscoverd(currentX, currentY))
+            {
+                Key key = SceneManager.GetCurrentScene().CreateEntity<Key>();
+                key.Transform.Position = SceneManager.GetCurrentScene().GetEntity<MapObject>("KeySpawn").GetComponent<Transform>().Position;
+            }
+
+            if (MapConstants.BossPortalRoom)
+            {
+                BossPortal boss = SceneManager.GetCurrentScene().CreateEntity<BossPortal>();
+                boss.Transform.Position = SceneManager.GetCurrentScene().GetEntity<MapObject>("KeySpawn").GetComponent<Transform>().Position;
+            }
 
             miniMap.Discover(currentX, currentY);
 
@@ -114,10 +154,51 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 
         #region Private Methods
 
+        private void removeKey()
+        {
+            roomLayout[currentX, currentY].HasKey = MapConstants.KeyRoom;
+            if (MapConstants.KeyRoom)
+            {
+                SceneManager.GetCurrentScene().RemoveEntity(SceneManager.GetCurrentScene().GetEntity<Key>("Key"));
+            }
+        }
+
+        private void removeBossPortal()
+        {
+            roomLayout[currentX, currentY].HasBossKey = MapConstants.BossPortalRoom;
+            if (MapConstants.BossPortalRoom)
+            {
+                SceneManager.GetCurrentScene().RemoveEntity(SceneManager.GetCurrentScene().GetEntity<BossPortal>("BossPortal"));
+            }
+        }
+
+        private void removeProjectiles()
+        {
+            foreach(Projectile projectile in SceneManager.GetCurrentScene().GetEntities<Projectile>())
+            {
+                if (projectile.Range != -1)
+                    SceneManager.GetCurrentScene().RemoveEntity(projectile);
+            }
+        }
+
+        private void removeBlockedDoors()
+        {
+            foreach (MapObjectCollision obj in SceneManager.GetCurrentScene().GetEntities<MapObjectCollision>())
+            {
+                if (obj.Name == "BlockedDoor")
+                {
+                    SceneManager.GetCurrentScene().RemoveEntity(obj);
+                }
+            }
+        }
+
         private Vector2 assignMap()
         {
             Vector2 spawn = Vector2.Zero;
             string type = "Room";
+            float keyperRoom = roomCount / (float) keycount;
+            int assignedRooms = 0;
+            int assignedKeys = 0;
             for(int i = 0; i < mapWidth; i++)
             {
                 for (int j = 0; j < mapHeight; j++)
@@ -136,9 +217,19 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
                         roomLayout[i, j].DungeonName = roomNameParts[1] + "-" + i + "," + j;
 
                         spawn = new Vector2(i, j);
+
+                        assignedRooms++;
+
+                        if (Math.Floor(keyperRoom * assignedKeys) < assignedRooms && assignedKeys < keycount) 
+                        {
+                            roomLayout[i, j].HasKey = true;
+                            assignedKeys++;
+                        }
                     }
                 }
             }
+
+            Debug.WriteLine($"Create {assignedKeys} keys");
 
             return spawn;
         }
@@ -146,14 +237,15 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
         private void generateMap()
         {
             Room spawn = new Room();
+            int rC = roomCount;
 
             int prevX = rand.Next(0, mapWidth);
             int prevY = rand.Next(0, mapHeight);
 
             roomLayout[prevX, prevY] = spawn;
-            roomCount--;
+            rC--;
 
-            while (roomCount > 0)
+            while (rC > 0)
             {
                 List<Vector2> nodes = getAvalibility(prevX, prevY);
   
@@ -170,7 +262,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 
                     prevX = (int)node.X;
                     prevY = (int)node.Y;
-                    roomCount--;
+                    rC--;
                 }
             }
         }

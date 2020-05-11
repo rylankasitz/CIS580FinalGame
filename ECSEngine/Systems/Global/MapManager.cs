@@ -16,7 +16,7 @@ namespace Engine.Systems
 {
     public static class MapManager
     {
-        private static Dictionary<string, List<TileMapObject>> ObjectLayers { get; set; }
+        private static Dictionary<string, List<MapLocationObject>> ObjectLayers { get; set; }
         private static List<Entity> mapObjects = new List<Entity>();
         private static Tilemap tilemap;
         public static ContentManager Content;
@@ -26,7 +26,7 @@ namespace Engine.Systems
             bool flipVertically = false, bool flipHorizontally = false)
         {
             tilemap = Content.Load<Tilemap>("Maps\\" + name);
-            ObjectLayers = tilemap.ObjectLayers;
+            ObjectLayers = new Dictionary<string, List<MapLocationObject>>();
             Scale = scale;
 
             removeMapObjects();
@@ -36,7 +36,7 @@ namespace Engine.Systems
             Debug.WriteLine($"Loaded Map: {name}\nFlip Vertically: {flipVertically}\nFlip Horizontally: {flipHorizontally}");
         }
 
-        public static List<TileMapObject> GetObjectLayer(string name)
+        public static List<MapLocationObject> GetObjectLayer(string name)
         {
             if (ObjectLayers.ContainsKey(name))
             {
@@ -45,7 +45,7 @@ namespace Engine.Systems
 
             Debug.WriteLine($"No object layer found for '{name}'");
 
-            return new List<TileMapObject>();
+            return new List<MapLocationObject>();
             
         }
 
@@ -119,7 +119,7 @@ namespace Engine.Systems
         private static void setCollision(Entity obj, Rectangle collider, Tile tile, float mapScale)
         {
             BoxCollision col = obj.GetComponent<BoxCollision>();
-            col.Position = new Vector(collider.X * mapScale, collider.Y * mapScale);
+            col.Position = new Vector(collider.X / (float)tilemap.TileWidth, collider.Y / (float)tilemap.TileHeight);
             col.Scale = new Vector(collider.Width / (float)tilemap.TileWidth, collider.Height / (float)tilemap.TileHeight);
             col.TriggerOnly = tile.Properties.ContainsKey("Trigger") ? (tile.Properties["Trigger"] == "true") : false;
         }
@@ -134,12 +134,14 @@ namespace Engine.Systems
 
         private static void setObjectLayers(float mapScale)
         {
-            foreach(List<TileMapObject> mapObjects in ObjectLayers.Values)
+            foreach(KeyValuePair <string, List<TileMapObject>> mapObjects in tilemap.ObjectLayers)
             {
-                foreach (TileMapObject mapObject in mapObjects)
+                ObjectLayers.Add(mapObjects.Key, new List<MapLocationObject>());
+                foreach (TileMapObject mapObject in mapObjects.Value)
                 {
-                    mapObject.Position *= mapScale;
-                    mapObject.Scale *= mapScale;
+                    MapLocationObject mapLocationObject = new MapLocationObject();
+                    mapLocationObject.Position = new Vector(mapObject.Position.X, mapObject.Position.Y) * mapScale;
+                    ObjectLayers[mapObjects.Key].Add(mapLocationObject);
                 }
             }
         }
@@ -178,6 +180,12 @@ namespace Engine.Systems
         {
 
         }
+    }
+
+    public class MapLocationObject
+    {
+        public Vector Position { get; set; }
+        public Vector Scale { get; set; }
     }
 
     #endregion

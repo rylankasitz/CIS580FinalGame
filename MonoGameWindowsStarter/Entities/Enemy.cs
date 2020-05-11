@@ -5,6 +5,8 @@ using Engine.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameWindowsStarter.Characters;
+using MonoGameWindowsStarter.GlobalValues;
+using MonoGameWindowsStarter.Scenes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +17,7 @@ namespace MonoGameWindowsStarter.Entities
 {
     [Sprite(ContentName: "MapTileSet", Layer: 0)]
     [Animation(CurrentAnimation: "Idle")]
-    [Transform(X: 100, Y: 100, Width: 40, Height: 40)]
+    [Transform(X: 100, Y: 100, Width: 8, Height: 8)]
     [Physics(VelocityX: 0, VelocityY: 0)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1)]
     public class Enemy : Entity
@@ -30,7 +32,6 @@ namespace MonoGameWindowsStarter.Entities
         public CharacterPickup CharacterPickup;
 
         private BoxCollision boxCollision;
-  
 
         private float hitTime = .15f;
 
@@ -56,6 +57,8 @@ namespace MonoGameWindowsStarter.Entities
 
             boxCollision.Layer = "Enemy|Character";
             boxCollision.HandleCollision = handleCollision;
+
+            Transform.Scale = Transform.Scale * MapConstants.Scale;
 
             Animation.CurrentAnimation = Character.IdleAnimation;
         }
@@ -121,6 +124,26 @@ namespace MonoGameWindowsStarter.Entities
             CharacterPickup.Character = Character;
 
             SceneManager.GetCurrentScene().RemoveEntity(this);
+
+            // Remove doors
+            if (SceneManager.GetCurrentScene().GetEntities<Enemy>().Count == 0)
+            {
+                foreach (MapObjectCollision obj in SceneManager.GetCurrentScene().GetEntities<MapObjectCollision>())
+                {
+                    if (obj.Name == "BlockedDoor")
+                    {
+                        SceneManager.GetCurrentScene().RemoveEntity(obj);
+                    }
+                }
+
+                if (MapConstants.KeyRoom) 
+                {
+                    Key key = SceneManager.GetCurrentScene().CreateEntity<Key>();
+                    MapObject keySpawn = SceneManager.GetCurrentScene().GetEntity<MapObject>("KeySpawn");
+                    key.Transform.Position = keySpawn.GetComponent<Transform>().Position;
+                }
+            }
+
         }
 
         private void hitTint()

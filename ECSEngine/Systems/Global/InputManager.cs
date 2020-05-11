@@ -48,6 +48,12 @@ namespace Engine.Systems
                    NewMouseState.LeftButton == ButtonState.Pressed;
         }
 
+        public static bool RightMouseDown()
+        {
+            return OldMouseState.RightButton == ButtonState.Released &&
+                   NewMouseState.RightButton == ButtonState.Pressed;
+        }
+
         public static Vector GetMousePosition()
         {
             return new Vector(Mouse.GetState().X, Mouse.GetState().Y);

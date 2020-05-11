@@ -79,7 +79,9 @@ namespace MonoGameWindowsStarter.Entities
             else if (entity.Name == "Player")
             {
                 Player player = (Player)entity;
-                player.CurrentHealth -= Damage;
+
+                if (!player.Rolling)
+                    player.CurrentHealth -= Damage;
             }
 
             if (entity.Name != "Projectile" && Range != -1 && DeleteOnHit)

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using MonoGameWindowsStarter.Characters;
 using MonoGameWindowsStarter.Characters.Helpers;
 using MonoGameWindowsStarter.Entities;
+using MonoGameWindowsStarter.GlobalValues;
 using MonoGameWindowsStarter.Scenes.Rooms;
 using MonoGameWindowsStarter.UI;
 using PlatformLibrary;
@@ -23,11 +24,9 @@ namespace MonoGameWindowsStarter.Scenes
         public MapGenerator MapGenerator { get; set; }
         public Player Player { get; set; }
 
-        private int mapScale;
-
         public override void Initialize()
         {
-            mapScale = WindowManager.Width / 256;
+            MapConstants.Scale = WindowManager.Width / MapConstants.Size;
 
             // Temporarly add map names
             MapGenerator = new MapGenerator(new string[] { 
@@ -55,7 +54,7 @@ namespace MonoGameWindowsStarter.Scenes
 
         public void LoadRoom(string name, bool flip)
         {
-            MapManager.LoadMap(name, this, mapScale, flip);
+            MapManager.LoadMap(name, this, MapConstants.Scale, flip);
         }
     }
 }

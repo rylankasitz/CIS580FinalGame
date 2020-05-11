@@ -79,7 +79,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                                 random.Next(1, (int)((1 - attackAccuracy) * 100) + 2));
                 dir.Normalize();
 
-                AI.Character.Attack(player, AI.Transform.Position + (AI.Transform.Scale/2), new Vector(dir.X, dir.Y));
+                AI.Character.Attack(AI, AI.Transform.Position, new Vector(dir.X, dir.Y));
             }
             else if (attackDuration != 0)
             {

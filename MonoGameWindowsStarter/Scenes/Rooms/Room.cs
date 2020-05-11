@@ -14,5 +14,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
         public string Directions { get; set; }
         public string DungeonName { get; set; }
         public bool Flip { get; set; }
+        public bool HasKey { get; set; } = false;
+        public bool HasBossKey { get; set; } = false;
     }
 }

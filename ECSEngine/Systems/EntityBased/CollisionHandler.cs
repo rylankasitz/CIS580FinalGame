@@ -60,8 +60,8 @@ namespace Engine.Systems
         private bool checkCollision(BoxCollision collider1, BoxCollision collider2, 
             Transform transform1, Transform transform2)
         {
-            p1 = collider1.Position + transform1.Position;
-            p2 = collider2.Position + transform2.Position;
+            p1 = transform1.Position + (collider1.Position * transform1.Scale);
+            p2 = transform2.Position + (collider2.Position * transform2.Scale);
             s1 = collider1.Scale * transform1.Scale;
             s2 = collider2.Scale * transform2.Scale;
 

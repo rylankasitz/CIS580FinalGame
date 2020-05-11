@@ -9,8 +9,8 @@ namespace ECSEngine.Systems
 {
     public static class WindowManager
     {
-        public static int Width { get; set; } = 1280;
-        public static int Height { get; set; } = 720;
+        public static int Width { get; set; } = 1536;
+        public static int Height { get; set; } = 864;
         public static Color BackgroundColor { get; set; } = Color.White;
         public static string MouseTexture = "";
         public static bool Debug { get; set; } = false;

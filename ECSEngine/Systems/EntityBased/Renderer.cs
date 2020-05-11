@@ -16,6 +16,8 @@ namespace Engine.Systems
 {
     public class Renderer : ECSCore.System 
     {
+        private int pixelUnit = 1920;
+
         private ContentManager contentManager;
         private SpriteFont font;
 
@@ -89,8 +91,8 @@ namespace Engine.Systems
                 {
                     BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
                     spriteBatch.Draw(textures[WindowManager.MouseTexture],
-                        new Rectangle((int)(boxCollision.Position.X + transform.Position.X),
-                                      (int)(boxCollision.Position.Y + transform.Position.Y),
+                        new Rectangle((int)((boxCollision.Position.X * transform.Scale.X) + transform.Position.X),
+                                      (int)((boxCollision.Position.Y * transform.Scale.Y) + transform.Position.Y),
                                       (int)(boxCollision.Scale.X * transform.Scale.X),
                                       (int)(boxCollision.Scale.Y * transform.Scale.Y)), new Color(Color.White, .5f));
                 }

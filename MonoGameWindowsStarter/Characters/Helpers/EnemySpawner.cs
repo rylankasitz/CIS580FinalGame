@@ -33,12 +33,10 @@ namespace MonoGameWindowsStarter.Characters.Helpers
         {
             if (!enemies.ContainsKey(roomName))
             {
-                List<TileMapObject> spawns = MapManager.GetObjectLayer("Spawns");
-
-                foreach (TileMapObject spawn in spawns)
+                foreach (MapLocationObject spawn in MapManager.GetObjectLayer("Spawns"))
                 {
                     if (flipped)
-                        spawnEnemy(new Vector(spawn.Position.X + (WindowManager.Width / 2 - spawn.Position.X), spawn.Position.Y),
+                        spawnEnemy(new Vector(spawn.Position.X + ((WindowManager.Width / 2) - spawn.Position.X)*2, spawn.Position.Y),
                                    random.Next(minDifficulty, maxDifficulty + 1), roomName);
                     else
                         spawnEnemy(new Vector(spawn.Position.X, spawn.Position.Y),
@@ -47,7 +45,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             }
             else
             {
-                respawnEnemies(roomName);
+                // explored
             }
         }
 
@@ -74,30 +72,15 @@ namespace MonoGameWindowsStarter.Characters.Helpers
         {
             Enemy enemy = SceneManager.GetCurrentScene().CreateEntity<Enemy>();
             enemy.Character = createCharacter(difficulty);
-            enemy.Transform.Position = position;
+            enemy.Transform.Position = new Vector(position.X, position.Y);
             enemy.Character.OnSpawn(enemy);
 
-            Debug.WriteLine($"Spawned enemy with difficulty {enemy.Character.Difficulty}");
+            Debug.WriteLine($"Spawned '{enemy.Character.GetType().Name}' with difficulty {enemy.Character.Difficulty} at {position.X}, {position.Y}");
 
             if (!enemies.ContainsKey(roomName))
                 enemies.Add(roomName, new List<Enemy>());
 
             enemies[roomName].Add(enemy);
-        }
-
-        private void respawnEnemies(string roomName)
-        {
-            for (int i = 0; i < enemies[roomName].Count; i++)
-            {
-                if (enemies[roomName][i].CharacterPickup == null)
-                {
-                    Enemy enemy = SceneManager.GetCurrentScene().CreateEntity<Enemy>();
-                    enemy.Character = enemies[roomName][i].Character;
-                    enemy.Transform.Position = enemies[roomName][i].Transform.Position;
-                    enemy.Character.OnSpawn(enemy);
-                    enemies[roomName][i] = enemy;
-                }
-            }
         }
 
         private Character createCharacter(int difficulty)

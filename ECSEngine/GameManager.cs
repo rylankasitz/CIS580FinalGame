@@ -58,12 +58,12 @@ namespace Engine
 
         protected override void Initialize()
         {
+            WindowWidth = WindowManager.Width;
+            WindowHeight = WindowManager.Height;
+
             graphics.PreferredBackBufferWidth = WindowWidth;
             graphics.PreferredBackBufferHeight = WindowHeight;
             graphics.ApplyChanges();
-
-            WindowWidth = WindowManager.Width;
-            WindowHeight = WindowManager.Width;
 
             Camera.Intitialize(GraphicsDevice.Viewport, WindowWidth, WindowHeight);
             MapManager.Content = Content;

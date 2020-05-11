@@ -32,7 +32,7 @@ namespace MonoGameWindowsStarter.Characters
         public override int AttackDamage => 10;
         public override float AttackSpeed => 0;
         public override float Range => 0;
-        public override int MaxHealth => 50;
+        public override int MaxHealth => 5000;
 
         #endregion
 

@@ -128,7 +128,7 @@ namespace Engine.Systems
                 return animationTracker;               
             }
 
-            //Debug.WriteLine($"Animation '{animation.CurrentAnimation}' was not found");
+            //Debug.WriteLine($"Animation '{animation.CurrentAnimation}' was not found for entity '{entity.Name}'");
 
             return null;
         }
@@ -153,7 +153,8 @@ namespace Engine.Systems
                     foreach(KeyValuePair<string, Rectangle> collider in tileset[frame.Id].BoxColliders)
                     {
                         BoxCollision collision = new BoxCollision();
-                        collision.Position = new Vector(collider.Value.X * MapManager.Scale, collider.Value.Y * MapManager.Scale);
+                        collision.Position = new Vector(collider.Value.X / (float)tileset[frame.Id].Width, 
+                                                        collider.Value.Y / (float)tileset[frame.Id].Height);
                         collision.Scale = new Vector(collider.Value.Width / (float)tileset[frame.Id].Width,
                                                      collider.Value.Height / (float)tileset[frame.Id].Height);
                         colliders.Add(collider.Key, collision);
