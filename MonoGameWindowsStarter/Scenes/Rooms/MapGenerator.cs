@@ -128,7 +128,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 
             Transform door = scene.GetEntity<MapObjectCollision>(newDoor).GetComponent<Transform>();
 
-            enemySpawner.SpawnEnemiesInRoom(roomLayout[currentX, currentY].DungeonName, roomLayout[currentX, currentY].Flip, 1, 3); // change manual values
+            enemySpawner.SpawnEnemiesInRoom(roomLayout[currentX, currentY].DungeonName, roomLayout[currentX, currentY].Flip, 1, 4); // change manual values
 
             MapConstants.KeyRoom = roomLayout[currentX, currentY].HasKey;
             MapConstants.BossPortalRoom = roomLayout[currentX, currentY].HasBossKey;

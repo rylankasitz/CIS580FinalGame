@@ -118,6 +118,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Button.png
 
+#begin Sprites/CharacterTrail.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/CharacterTrail.png
+
 #begin Sprites/Charles_Spear.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -130,7 +142,7 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Charles_Spear.png
 
-#begin Sprites/HealthBar DARK.png
+#begin Sprites/CoolDownBar.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -140,7 +152,43 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Sprites/HealthBar DARK.png;Sprites/HealthBars.png
+/build:Sprites/CoolDownBar.png
+
+#begin Sprites/CoolDownBarOutline.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/CoolDownBarOutline.png
+
+#begin Sprites/HealthBar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/HealthBar.png
+
+#begin Sprites/HealthBarOutline.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/HealthBarOutline.png
 
 #begin Sprites/Key.png
 /importer:TextureImporter
@@ -286,6 +334,23 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ProjectileStar.png
 
+#begin Sprites/SpiderCharacter.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/SpiderCharacter.png
+
+#begin Tilesets/CharacterTrail.tsx
+/importer:TilesetImporter
+/processor:TilesetProcessor
+/build:Tilesets/CharacterTrail.tsx
+
 #begin Tilesets/Charles_Spear.tsx
 /importer:TilesetImporter
 /processor:TilesetProcessor
@@ -315,4 +380,9 @@
 /importer:TilesetImporter
 /processor:TilesetProcessor
 /build:Tilesets/ProjectileStar.tsx
+
+#begin Tilesets/Spider.tsx
+/importer:TilesetImporter
+/processor:TilesetProcessor
+/build:Tilesets/Spider.tsx
 

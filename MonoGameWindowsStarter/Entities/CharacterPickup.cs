@@ -33,6 +33,8 @@ namespace MonoGameWindowsStarter.Entities
             boxCollision = GetComponent<BoxCollision>();
 
             boxCollision.HandleCollision = handleCollision;
+
+            Name = "CharacterPickup";
         }
 
         public override void Update(GameTime gameTime)
@@ -56,6 +58,15 @@ namespace MonoGameWindowsStarter.Entities
                     player.CurrentHealth = (player.CurrentHealth / (float) player.TotalHealth) * Character.MaxHealth;
                     player.TotalHealth = Character.MaxHealth;
                     player.Transform.Scale = NewScale;
+                    player.Character.ProjectileSpawner.animationBased = false;
+
+                    if ((player.CurrentHealth / (float)player.TotalHealth) < .33f)
+                    {
+                        player.CurrentHealth += player.CurrentHealth * .5f;
+
+                        if ((player.CurrentHealth / (float)player.TotalHealth) > .33f)
+                            player.CurrentHealth = player.TotalHealth * .33f;
+                    }
 
                     SceneManager.GetCurrentScene().RemoveEntity(this);
                 }

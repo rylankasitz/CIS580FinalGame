@@ -39,22 +39,25 @@ namespace MonoGameWindowsStarter.Entities
 
         public bool Rolling;
 
+        private Vector preVelocity;
+
         public int KeyCount;
         public List<Key> KeysUI;
 
         private BoxCollision boxCollision;
         private SliderBar healthBar;
+        private SliderBar cooldownBar;
+        private Trail jumpTrailStart;
+        private Trail jumpTrailEnd;
         private MainScene scene;
-
-        private Vector preVelocity;
 
         private float elapsedTintTime;
         private float elapsedRollTime;
 
         private float hitTime = .15f;
-        private float rollTime = .15f;
+        private float rollTime = .1f;
         private float rollCooldown = 2f;
-        private float rollSpeed = 4f;
+        private float rollDistance = 200;
 
         #region ESC Methods
 
@@ -89,11 +92,22 @@ namespace MonoGameWindowsStarter.Entities
 
             Sprite.ContentName = Character.SpriteSheet;
 
-            healthBar = new SliderBar("HealthBars", "HealthBars",
+            healthBar = new SliderBar("HealthBar", "HealthBarOutline",
                                        new Vector(WindowManager.Width * .03f, WindowManager.Height * .03f),
-                                       new Vector(WindowManager.Width * .15f, WindowManager.Height * .05f),
-                                       new Rectangle(18, 40, 64, 9),
-                                       new Rectangle(18, 29, 64, 9));
+                                       new Vector(WindowManager.Width * .15f, WindowManager.Height * .035f),
+                                       Rectangle.Empty,
+                                       Rectangle.Empty);
+
+            cooldownBar = new SliderBar("CoolDownBar", "CoolDownBarOutline",
+                                       new Vector(WindowManager.Width * .03f, WindowManager.Height * .07f),
+                                       new Vector(WindowManager.Width * .15f, WindowManager.Height * .015f),
+                                       Rectangle.Empty,
+                                       Rectangle.Empty);
+
+            jumpTrailStart = scene.CreateEntity<Trail>();
+            jumpTrailEnd = scene.CreateEntity<Trail>();
+
+            preVelocity = new Vector(0, 0);
         }
 
         public override void Update(GameTime gameTime)
@@ -102,7 +116,10 @@ namespace MonoGameWindowsStarter.Entities
                 elapsedTintTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (elapsedRollTime < rollCooldown)
+            {
+                cooldownBar.UpdateFill(elapsedRollTime / rollCooldown);
                 elapsedRollTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            }
 
             Character.ProjectileSpawner.Update(Character.Holder, gameTime);
 
@@ -110,10 +127,11 @@ namespace MonoGameWindowsStarter.Entities
                 onDeath();
 
             hitTint();
-            move();
+            move(gameTime);
             animate();
             attack(gameTime);
             setMinmap();
+            healthBar.UpdateFill(CurrentHealth / TotalHealth);
         }
 
         private void handleCollision(Entity entity, string direction)
@@ -168,12 +186,14 @@ namespace MonoGameWindowsStarter.Entities
 
         #region Private Methods
 
-        private void move()
+        private void move(GameTime gameTime)
         {         
             // Temporarly set box collisionaw
             boxCollision.Scale = SpriteSize / Animation.AnimationScale;
             boxCollision.Position = new Vector(.5f, .5f) - ((SpriteSize / Animation.AnimationScale) / 2);
             Transform.Scale = Animation.AnimationScale * MapConstants.Scale;
+
+            Vector2 normalized = Vector2.Zero;
 
             Rolling = elapsedRollTime < rollTime;
 
@@ -181,6 +201,8 @@ namespace MonoGameWindowsStarter.Entities
                 Physics.Velocity = new Vector(0, 0);
 
                 float speed = Character.MoveSpeed * PlayerStats.SpeedMod;
+
+                Sprite.Enabled = true;
 
                 if (InputManager.KeyPressed(Keys.W))
                 {
@@ -200,26 +222,43 @@ namespace MonoGameWindowsStarter.Entities
                     Physics.Velocity.X = -speed;
                 }
 
-                if (InputManager.KeyDown(Keys.Space) && elapsedRollTime >= rollCooldown)
-                {
-                    elapsedRollTime = 0;
-
-                }
 
                 if (Physics.Velocity != Vector2.Zero)
                 {
-                    Vector2 normalized = new Vector2(Physics.Velocity.X, Physics.Velocity.Y);
+                    normalized = new Vector2(Physics.Velocity.X, Physics.Velocity.Y);
                     normalized.Normalize();
                     Physics.Velocity = new Vector(normalized.X, normalized.Y) * speed;
                 }
 
-                Sprite.Enabled = true;
-                preVelocity = Physics.Velocity;
+                if (InputManager.KeyDown(Keys.Space) && elapsedRollTime >= rollCooldown)
+                {
+                    jumpTrailStart.Transform.Position = (Transform.Position + (Transform.Scale / 2)) - jumpTrailStart.Transform.Scale / 2;
+                    jumpTrailEnd.Transform.Position = jumpTrailStart.Transform.Position + new Vector(normalized.X, normalized.Y) * rollDistance;
+                    jumpTrailStart.Animation.Play(jumpTrailStart.Animation.CurrentAnimation);
+                    jumpTrailEnd.Animation.Play(jumpTrailEnd.Animation.CurrentAnimation);
+
+                    preVelocity = new Vector(normalized.X, normalized.Y);
+
+                    jumpTrailStart.Sprite.Enabled = true;
+                    jumpTrailEnd.Sprite.Enabled = true;
+                    Sprite.Enabled = false;
+                    elapsedRollTime = 0;
+                }
             }
             else if (Rolling)
             {
-                Physics.Velocity = preVelocity * rollSpeed;
                 Sprite.Enabled = false;
+                Physics.Velocity = preVelocity * (float) ((rollDistance / rollTime) * gameTime.ElapsedGameTime.TotalSeconds);
+            }
+
+            if (!jumpTrailStart.Animation.Playing)
+            {
+                jumpTrailStart.Sprite.Enabled = false;
+            }
+
+            if (!jumpTrailEnd.Animation.Playing)
+            {
+                jumpTrailEnd.Sprite.Enabled = false;
             }
         }
 
@@ -255,15 +294,6 @@ namespace MonoGameWindowsStarter.Entities
             {
                 Vector direction = getMouseDirection();
                 Character.Attack(this, Transform.Position, direction);
-
-                if (direction.X > 0)
-                {
-                    Sprite.SpriteEffects = SpriteEffects.None;
-                }
-                else
-                {
-                    Sprite.SpriteEffects = SpriteEffects.FlipHorizontally;
-                }
             }       
         }
 

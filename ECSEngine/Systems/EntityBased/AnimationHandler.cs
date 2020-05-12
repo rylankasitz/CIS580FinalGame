@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Content;
 using Engine.Componets;
 using Engine.ECSCore;
 using PlatformLibrary;
+using System.Reflection;
 
 namespace Engine.Systems
 {
@@ -120,6 +121,8 @@ namespace Engine.Systems
 
             if (animation.AnimationTracker.ContainsKey(animation.CurrentAnimation))
             {
+                animation.AnimationScale = new Vector(animation.AnimationTracker[animation.CurrentAnimation].Parent.Width, 
+                    animation.AnimationTracker[animation.CurrentAnimation].Parent.Height);
                 return animation.AnimationTracker[animation.CurrentAnimation];
             }
 

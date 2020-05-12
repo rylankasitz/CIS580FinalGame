@@ -46,6 +46,7 @@
     <Compile Include="Characters\BlackSlime.cs" />
     <Compile Include="Characters\Charles.cs" />
     <Compile Include="Characters\FireSummoner.cs" />
+    <Compile Include="Characters\Spider.cs" />
     <Compile Include="Characters\Templates\CharacterMeleeTemplate.cs" />
     <Compile Include="Characters\Templates\CharacterProjectileTemplate.cs" />
     <Compile Include="Characters\Helpers\AILogic.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Entities\Key.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Entities\Projectile.cs" />
+    <Compile Include="Entities\Trail.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GlobalValues\MapConstants.cs" />
     <Compile Include="GlobalValues\PlayerStats.cs" />

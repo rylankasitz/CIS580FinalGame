@@ -28,7 +28,7 @@ namespace MonoGameWindowsStarter.Characters
         #region Character Stats
 
         public override float MoveSpeed => 5.5f;
-        public override int AttackDamage => 7;
+        public override int AttackDamage => 25;
         public override float AttackSpeed => .5f;
         public override float Range => 2;
         public override int MaxHealth => 90;
@@ -39,9 +39,9 @@ namespace MonoGameWindowsStarter.Characters
 
         public override int Difficulty => 1;
         public override float AIMoveSpeedMod => 1f;
-        public override float AIAttackDamageMod => 1;
-        public override float AIAttackSpeedMod => .5f;
-        public override float AIAttackRangeMod => 1;
+        public override float AIAttackDamageMod => 1f;
+        public override float AIAttackSpeedMod => 1f;
+        public override float AIAttackRangeMod => 1f;
         public override float AIHealthMod => .5f;
 
         #endregion
@@ -60,7 +60,10 @@ namespace MonoGameWindowsStarter.Characters
         public override void OnStateSwitch(string lastState)
         {
             int range = (int)(Range * 100 * AIAttackRangeMod);
-            AILogicCMD.BasicMovementTemplate(lastState, new Vector(range, range), 1f);
+            AILogicCMD.BasicMovementTemplate(lastState, new Vector(range, range), 1f,
+                attackTime: .5f,
+                waitTime: 1f,
+                moveTime: .5f);
         }
 
         public override void Attack(Entity holder, Vector position, Vector direction)

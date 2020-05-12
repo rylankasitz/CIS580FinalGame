@@ -1,6 +1,7 @@
 ﻿using Engine;
 using Engine.Componets;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using MonoGameWindowsStarter.Entities;
 using MonoGameWindowsStarter.Scenes;
 using System;
@@ -80,6 +81,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                 dir.Normalize();
 
                 AI.Character.Attack(AI, AI.Transform.Position, new Vector(dir.X, dir.Y));
+                AI.Animation.Play(AI.Character.AttackAnimation);
             }
             else if (attackDuration != 0)
             {
@@ -115,17 +117,17 @@ namespace MonoGameWindowsStarter.Characters.Helpers
 
         #region AI Templates
 
-        public void BasicMovementTemplate(string lastState, Vector attackRange, float accuracy)
+        public void BasicMovementTemplate(string lastState, Vector attackRange, float accuracy, float waitTime = 1f, float moveTime = .3f, float attackTime = .3f)
         {
             switch (lastState)
             {
                 case "Start":
-                    Wait(.1f);
-                    CurrentState = "Waiting";
+                    Wait(.5f);
+                    CurrentState = "Moving";
                     break;
 
                 case "Waiting":
-                    Wait(.5f);
+                    Wait(waitTime);
                     if (InRangeOfPlayer((int)attackRange.X, (int)attackRange.Y))
                         CurrentState = "Attacking";
                     else
@@ -133,7 +135,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                     break;
 
                 case "Moving":
-                    MoveToPlayer(.3f);
+                    MoveToPlayer(moveTime);
                     if (InRangeOfPlayer((int)attackRange.X, (int)attackRange.Y))
                         CurrentState = "Attacking";
                     else
@@ -141,7 +143,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                     break;
 
                 case "Attacking":
-                    AttackPlayer(.3f, accuracy);
+                    AttackPlayer(attackTime, accuracy);
                     if (InRangeOfPlayer((int)attackRange.X, (int)attackRange.Y))
                         CurrentState = "Waiting";
                     else

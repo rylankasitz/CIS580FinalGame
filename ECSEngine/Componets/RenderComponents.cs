@@ -45,6 +45,11 @@ namespace Engine.Componets
         {
             Playing = true;
             PlayeringAnimation = animation;
+
+            if (AnimationTracker.ContainsKey(animation))
+            {
+                AnimationTracker[animation].FrameNumber = 0;
+            }
         }
     }
 

@@ -75,17 +75,24 @@ namespace MonoGameWindowsStarter.Entities
             {
                 Enemy enemy = (Enemy)entity;
                 enemy.CurrentHealth -= Damage;
+
+                Debug.WriteLine($"Dealt {Damage} to '{entity.Name}'");
             }
             else if (entity.Name == "Player")
             {
                 Player player = (Player)entity;
 
                 if (!player.Rolling)
+                {
                     player.CurrentHealth -= Damage;
+                    Debug.WriteLine($"Dealt {Damage} to '{entity.Name}'");
+                }
             }
 
-            if ((entity.Name == "Wall" || entity.Name == "BlockedDoor")&& Range != -1 && DeleteOnHit)
+            if ((entity.Name != "Projectile") && entity.Name != "CharacterPickup" && Range != -1 && DeleteOnHit)
+            {
                 SceneManager.GetCurrentScene().RemoveEntity(this);
+            }
         }
     }
 }

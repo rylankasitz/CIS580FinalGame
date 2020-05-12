@@ -3,6 +3,7 @@ using Engine;
 using Engine.Componets;
 using Engine.Systems;
 using MonoGameWindowsStarter.Entities;
+using MonoGameWindowsStarter.GlobalValues;
 using PlatformLibrary;
 using System;
 using System.Collections.Generic;
@@ -72,8 +73,11 @@ namespace MonoGameWindowsStarter.Characters.Helpers
         {
             Enemy enemy = SceneManager.GetCurrentScene().CreateEntity<Enemy>();
             enemy.Character = createCharacter(difficulty);
+            enemy.TotalHealth = enemy.Character.MaxHealth * enemy.Character.AIHealthMod;
+            enemy.CurrentHealth = enemy.Character.MaxHealth * enemy.Character.AIHealthMod;
             enemy.Transform.Position = new Vector(position.X, position.Y);
             enemy.Character.OnSpawn(enemy);
+            enemy.Sprite.ContentName = enemy.Character.SpriteSheet;
 
             Debug.WriteLine($"Spawned '{enemy.Character.GetType().Name}' with difficulty {enemy.Character.Difficulty} at {position.X}, {position.Y}");
 

@@ -21,8 +21,8 @@ namespace MonoGameWindowsStarter.Characters.Helpers
         private string contentName;
         private string layer;
         private Animation animation;
-        private bool animationBased;
-        private Projectile projectile;
+        public bool animationBased;
+        public Projectile projectile;
         private Transform transform;
         private Sprite sprite;
         private Character character;
@@ -54,6 +54,15 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                 {
                     projectile.BoxCollision.Position = animation.CurrentCollisions["Attack"].Position;
                     projectile.BoxCollision.Scale = animation.CurrentCollisions["Attack"].Scale;
+                }
+
+                if (!animation.Playing)
+                {
+                    projectile.BoxCollision.Enabled = false;
+                }
+                else
+                {
+                    projectile.BoxCollision.Enabled = true;
                 }
             }
             else if (projectile != null)
