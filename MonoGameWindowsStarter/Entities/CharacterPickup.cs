@@ -15,9 +15,9 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter.Entities
 {
-    [Sprite(ContentName: "MapTileSet", Layer: .8f)]
-    [Animation(CurrentAnimation: "CharacterPickup")]
-    [Transform(X: 0, Y: 0, Width: 32, Height: 32)]
+    [Sprite(ContentName: "Soul_Small", Layer: .8f)]
+    [Animation(CurrentAnimation: "Soul")]
+    [Transform(X: 0, Y: 0, Width: 64, Height: 64)]
     [BoxCollision(X: 0, Y: 0, Width: 1, Height: 1, TriggerOnly: true)]
     public class CharacterPickup : Entity
     {

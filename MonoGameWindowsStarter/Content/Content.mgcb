@@ -334,6 +334,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/ProjectileStar.png
 
+#begin Sprites/Soul_Small.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/Soul_Small.png
+
 #begin Sprites/SpiderCharacter.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -380,6 +392,11 @@
 /importer:TilesetImporter
 /processor:TilesetProcessor
 /build:Tilesets/ProjectileStar.tsx
+
+#begin Tilesets/Soul.tsx
+/importer:TilesetImporter
+/processor:TilesetProcessor
+/build:Tilesets/Soul.tsx
 
 #begin Tilesets/Spider.tsx
 /importer:TilesetImporter
