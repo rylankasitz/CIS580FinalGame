@@ -88,10 +88,10 @@ namespace Engine.Systems
                             }
                             else
                             {
-                                KeyValuePair<string, Rectangle> boxCollider = tile.BoxColliders.First<KeyValuePair<string, Rectangle>>();
+                                KeyValuePair<string, List<BoxCol>> boxCollider = tile.BoxColliders.First();
                                 MapObjectCollision mapObject = scene.CreateEntity<MapObjectCollision>();
                                 setObjectPosition(mapObject, position, scale, tile, layernum, "MapTileSet"); // Change to not manual string
-                                setCollision(mapObject, boxCollider.Value, tile, mapScale);
+                                setCollision(mapObject, boxCollider.Value[0]);
                                 mapObjects.Add(mapObject);
                             }
                         }
@@ -116,12 +116,12 @@ namespace Engine.Systems
             sprite.Layer = layernum;
         }
 
-        private static void setCollision(Entity obj, Rectangle collider, Tile tile, float mapScale)
+        private static void setCollision(Entity obj, BoxCol collider)
         {
             BoxCollision col = obj.GetComponent<BoxCollision>();
-            col.Position = new Vector(collider.X / (float)tilemap.TileWidth, collider.Y / (float)tilemap.TileHeight);
-            col.Scale = new Vector(collider.Width / (float)tilemap.TileWidth, collider.Height / (float)tilemap.TileHeight);
-            col.TriggerOnly = tile.Properties.ContainsKey("Trigger") ? (tile.Properties["Trigger"] == "true") : false;
+            col.Position = new Vector(collider.Rectangle.X / (float)tilemap.TileWidth, collider.Rectangle.Y / (float)tilemap.TileHeight);
+            col.Scale = new Vector(collider.Rectangle.Width / (float)tilemap.TileWidth, collider.Rectangle.Height / (float)tilemap.TileHeight);
+            col.TriggerOnly = collider.TriggerOnly;
         }
 
         private static void removeMapObjects()

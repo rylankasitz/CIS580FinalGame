@@ -37,6 +37,7 @@ namespace Engine.Componets
     public class Transform : Component
     {
         public Vector Position { get; set; }
+        public Vector PrePosition { get; set; }
         public Vector Scale { get; set; }
         public float Rotation { get; set; }
         public Transform() { }
@@ -44,28 +45,30 @@ namespace Engine.Componets
         {
             Position = new Vector(X, Y);
             Scale = new Vector(Width, Height);
+            PrePosition = new Vector(0, 0);
         }
     }
 
     public class Physics : Component
     {
         public Vector Velocity { get; set; }
+        public Vector PreVelocity { get; set; }
         public Physics() { }
         public Physics(float VelocityX, float VelocityY)
         {
             Velocity = new Vector(VelocityX, VelocityY);
+            PreVelocity = new Vector(0, 0);
         }
     }
 
     public class BoxCollision : Component
     {
-        public Vector Position { get; set; }
-        public Vector Scale { get; set; }
-        public HandleCollision HandleCollision { get; set; }
-        public HandleCollisionEnter HandleCollisionEnter { get; set; }
-        public bool TriggerOnly { get; set; }
-        public string Layer { get; set; } = "All";
-        public List<Entity> CollidingObjects = new List<Entity>();
+        public List<Box> Boxes { get; set; }
+        public Vector Position { get => Boxes[0].Position; set => Boxes[0].Position = value; }
+        public Vector Scale { get => Boxes[0].Scale; set => Boxes[0].Scale = value; }
+        public bool TriggerOnly { get => Boxes[0].TriggerOnly; set => Boxes[0].TriggerOnly = value; }
+        public string Layer { get { return Boxes[0].Layer; } 
+                              set { for (int i = 0; i < Boxes.Count; i++) Boxes[i].Layer = value;  } }
         public string[] Layers
         {
             get
@@ -77,12 +80,36 @@ namespace Engine.Componets
                 return new string[1] { Layer };
             }
         }
-        public BoxCollision() { }
+        public HandleCollision HandleCollision { get; set; }
+        public HandleCollisionEnter HandleCollisionEnter { get; set; }
+        public BoxCollision() { Boxes = new List<Box>(); Boxes.Add(new Box()); }
         public BoxCollision(int X, int Y, float Width, float Height, bool TriggerOnly = false)
         {
-            Position = new Vector(X, Y);
-            Scale = new Vector(Width, Height);
-            this.TriggerOnly = TriggerOnly;
+            Boxes = new List<Box>();
+            Boxes.Add(new Box(new Vector(X, Y), new Vector(Width, Height), TriggerOnly, "All"));
+        }
+    }
+
+    public class Box
+    {
+        public Vector Position { get; set; }
+        public Vector Scale { get; set; }
+        public bool TriggerOnly { get; set; }
+        public string Layer { get; set; }
+        public string Name { get; set; }
+        public List<Box> CollidingObjects { get; set; }
+        public Box() 
+        {
+            Layer = "All";
+        }
+        public Box(Vector position, Vector scale, bool trigger, string layer, string name = "Unamed")
+        {
+            Position = position;
+            Scale = scale;
+            TriggerOnly = trigger;
+            Layer = layer;
+            Name = name;
+            CollidingObjects = new List<Box>();
         }
     }
 

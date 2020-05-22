@@ -28,11 +28,11 @@ namespace MonoGameWindowsStarter.UI
 
         public override void Update(GameTime gameTime)
         {
-            if (InputManager.LeftMouseDown() && 
+            if ((InputManager.LeftMouseDown() && 
                 InputManager.GetMousePosition().X < Transform.Position.X + Transform.Scale.X &&
                 InputManager.GetMousePosition().X > Transform.Position.X &&
                 InputManager.GetMousePosition().Y < Transform.Position.Y + Transform.Scale.Y &&
-                InputManager.GetMousePosition().Y > Transform.Position.Y)
+                InputManager.GetMousePosition().Y > Transform.Position.Y) || InputManager.GetAxisDown("Start"))
             {
                 OnClick();
             }

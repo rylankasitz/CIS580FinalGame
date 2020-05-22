@@ -5,11 +5,45 @@
   <properties>
    <property name="Animation" value="ProjectileCircle"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="1" y="1" width="14" height="14">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
   <animation>
    <frame tileid="0" duration="200"/>
    <frame tileid="1" duration="200"/>
    <frame tileid="2" duration="200"/>
    <frame tileid="3" duration="200"/>
   </animation>
+ </tile>
+ <tile id="1">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="0" y="0" width="16" height="16">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="2">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="0" y="0" width="16" height="16">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="3">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="0" y="0" width="16" height="16">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
  </tile>
 </tileset>

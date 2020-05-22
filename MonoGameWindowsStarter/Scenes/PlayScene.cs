@@ -19,7 +19,7 @@ namespace MonoGameWindowsStarter.Scenes
             TextUI title = CreateEntity<TextUI>();
             title.Transform.Position = new Vector(WindowManager.Width, WindowManager.Height - 200) / 2;
             title.Transform.Scale = new Vector(2, 2);
-            title.Text.Text = "SOUL CRALW";
+            title.Text.Text = "SOUL CRAWL";
             title.Text.Color = Color.White;
             title.Text.Center = true;
 

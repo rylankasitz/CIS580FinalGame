@@ -48,8 +48,9 @@ namespace MonoGameWindowsStarter.Entities
             {
                 Player player = (Player)entity;
 
-                if (InputManager.KeyDown(Keys.Q))
+                if (InputManager.GetAxisDown("CharacterPickup"))
                 {
+                    // Set new players values
                     player.Character = Character;
                     player.Character.Holder = "Player";
                     player.Sprite.ContentName = player.Character.SpriteSheet;
@@ -60,6 +61,7 @@ namespace MonoGameWindowsStarter.Entities
                     player.Transform.Scale = NewScale;
                     player.Character.ProjectileSpawner.animationBased = false;
 
+                    // Set current health to add souls
                     if ((player.CurrentHealth / (float)player.TotalHealth) < .33f)
                     {
                         player.CurrentHealth += player.CurrentHealth * .5f;

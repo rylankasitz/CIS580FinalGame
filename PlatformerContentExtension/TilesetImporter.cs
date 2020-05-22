@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Content.Pipeline;
 
 using TInput = PlatformerContentExtension.TilesetContent;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace PlatformerContentExtension
 {
@@ -80,7 +81,36 @@ namespace PlatformerContentExtension
                             float width = float.Parse(collision.Attributes["width"].Value);
                             float height = float.Parse(collision.Attributes["height"].Value);
                             string pname = collision.Attributes["type"] != null ? collision.Attributes["type"].Value : "unamed";
-                            tileContent[id].BoxCollisions.Add(pname, new Rectangle((int)x, (int)y, (int)width, (int)height));
+                            bool trigger = false;
+                            string bname = "Unamed";
+
+                            foreach (XmlNode colProps in collision.ChildNodes)
+                            {
+                                if (colProps.Name == "properties") 
+                                { 
+                                    foreach (XmlNode colProp in colProps.ChildNodes)
+                                    {
+
+                                        if (colProp.Name == "property") 
+                                        {
+                                            if (colProp.Attributes["name"].Value == "Trigger" )
+                                                trigger = colProp.Attributes["value"].Value == "true";
+                                            if (colProp.Attributes["name"].Value == "Name")
+                                                bname = colProp.Attributes["value"].Value;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (tileContent[id].BoxCollisions.ContainsKey(pname))
+                            {
+                                tileContent[id].BoxCollisions[pname].Add(new Box(new Rectangle((int)x, (int)y, (int)width, (int)height), trigger, name));
+                            }
+                            else
+                            {
+                                tileContent[id].BoxCollisions.Add(pname, new List<Box>() { new Box(new Rectangle((int)x, (int)y, (int)width, (int)height), trigger, bname) });
+                            }
+                            
                         }
                     }
                     if (child.Name == "animation")

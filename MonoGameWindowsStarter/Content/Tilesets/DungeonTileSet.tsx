@@ -6,23 +6,20 @@
    <property name="Name" value="Wall"/>
   </properties>
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="6" width="8" height="2"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="2">
   <properties>
    <property name="Name" value="Wall"/>
   </properties>
-  <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="6" width="8" height="2"/>
-  </objectgroup>
  </tile>
  <tile id="3">
   <properties>
    <property name="Name" value="Wall"/>
   </properties>
   <objectgroup draworder="index" id="2">
-   <object id="2" x="0" y="0" width="8" height="8"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="4">
@@ -30,7 +27,7 @@
    <property name="Name" value="Wall"/>
   </properties>
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="2"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="5">
@@ -38,32 +35,32 @@
    <property name="Name" value="Wall"/>
   </properties>
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="2"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="10">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="2"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="11">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="2"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="12">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="2"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="13">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="2"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="14">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="2"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="28">
@@ -93,7 +90,7 @@
  </tile>
  <tile id="37">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="2"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="39">
@@ -134,12 +131,12 @@
  </tile>
  <tile id="49">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="2"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="50">
   <objectgroup draworder="index" id="2">
-   <object id="1" x="0" y="0" width="8" height="2"/>
+   <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
  </tile>
  <tile id="53">
@@ -190,6 +187,14 @@
   <properties>
    <property name="Animation" value="IdleBlackGhoul"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="2" y="7" width="4" height="1"/>
+   <object id="2" type="Collision" x="1" y="1" width="7" height="7">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
   <animation>
    <frame tileid="76" duration="1000"/>
   </animation>
@@ -198,6 +203,14 @@
   <properties>
    <property name="Animation" value="WalkBlackGhoul"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="2" y="7" width="4" height="1"/>
+   <object id="2" type="Collision" x="1" y="1" width="7" height="7">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
   <animation>
    <frame tileid="76" duration="250"/>
    <frame tileid="77" duration="250"/>
@@ -207,6 +220,14 @@
   <properties>
    <property name="Animation" value="IdleBlackSlime"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="0" y="7" width="8" height="1"/>
+   <object id="2" type="Collision" x="0" y="1" width="8" height="7">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
   <animation>
    <frame tileid="78" duration="200"/>
   </animation>
@@ -215,6 +236,14 @@
   <properties>
    <property name="Animation" value="WalkBlackSlime"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="0" y="7" width="8" height="1"/>
+   <object id="2" type="Collision" x="0" y="1" width="8" height="7">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
   <animation>
    <frame tileid="78" duration="500"/>
    <frame tileid="79" duration="500"/>
@@ -224,6 +253,14 @@
   <properties>
    <property name="Animation" value="IdleBlackEye"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="1" y="7" width="6" height="1"/>
+   <object id="2" type="Collision" x="1" y="1" width="7" height="7">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
   <animation>
    <frame tileid="80" duration="1000"/>
   </animation>
@@ -232,6 +269,14 @@
   <properties>
    <property name="Animation" value="WalkBlackEye"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="1" y="7" width="6" height="1"/>
+   <object id="2" type="Collision" x="1" y="1" width="7" height="7">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
   <animation>
    <frame tileid="80" duration="200"/>
    <frame tileid="81" duration="200"/>
@@ -273,6 +318,14 @@
   <properties>
    <property name="Animation" value="IdleFireSummoner"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="1" y="7" width="5" height="1"/>
+   <object id="2" type="Collision" x="0" y="0" width="8" height="8">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
   <animation>
    <frame tileid="101" duration="1000"/>
   </animation>
@@ -281,6 +334,14 @@
   <properties>
    <property name="Animation" value="WalkFireSummoner"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="1" y="7" width="5" height="1"/>
+   <object id="2" type="Collision" x="0" y="0" width="8" height="8">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
   <animation>
    <frame tileid="101" duration="100"/>
    <frame tileid="102" duration="100"/>

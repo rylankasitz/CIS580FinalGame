@@ -121,16 +121,16 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                 if (holder == "Player")
                 {
                     Player player = (Player)entity;
-                    this.transform = player.Transform;
-                    this.animation = player.Animation;
-                    this.sprite = player.Sprite;
+                    transform = player.Transform;
+                    animation = player.Animation;
+                    sprite = player.Sprite;
                 }
                 else
                 {
                     Enemy enemy = (Enemy)entity;
-                    this.transform = enemy.Transform;
-                    this.animation = enemy.Animation;
-                    this.sprite = enemy.Sprite;
+                    transform = enemy.Transform;
+                    animation = enemy.Animation;
+                    sprite = enemy.Sprite;
                 }
 
                 projectile.Transform.Scale = this.transform.Scale;

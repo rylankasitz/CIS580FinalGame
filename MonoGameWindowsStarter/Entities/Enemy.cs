@@ -28,14 +28,16 @@ namespace MonoGameWindowsStarter.Entities
         public Animation Animation;
         public BoxCollision BoxCollision;
         public Sprite Sprite;
+        public CharacterPickup CharacterPickup;
+
         public float TotalHealth;
         public float CurrentHealth;
-        public CharacterPickup CharacterPickup;
+
+        public bool Invonerable;
 
         private float hitTime = .15f;
 
         private float elapsedTintTime;
-        private bool attack;
 
         #region ECS Methods
 
@@ -45,8 +47,9 @@ namespace MonoGameWindowsStarter.Entities
             Character = new Charles();
             TotalHealth = Character.MaxHealth * Character.AIHealthMod;
             CurrentHealth = TotalHealth;
-            attack = false;
             elapsedTintTime = hitTime;
+
+            Invonerable = false;
 
             Sprite = GetComponent<Sprite>();
             Animation = GetComponent<Animation>();
@@ -72,8 +75,6 @@ namespace MonoGameWindowsStarter.Entities
 
             // Temporary set collisions and scale
             Transform.Scale = Animation.AnimationScale * MapConstants.Scale;
-            BoxCollision.Scale = new Vector(8, 8) / Animation.AnimationScale;
-            BoxCollision.Position = new Vector(.5f, .5f) - ((new Vector(8, 8) / Animation.AnimationScale) / 2);
 
             animate();
             hitTint();

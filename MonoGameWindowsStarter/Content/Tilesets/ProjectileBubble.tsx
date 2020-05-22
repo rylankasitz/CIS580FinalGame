@@ -6,7 +6,11 @@
    <property name="Animation" value="ProjectileBubble"/>
   </properties>
   <objectgroup draworder="index" id="3">
-   <object id="2" type="Collision" x="2" y="5" width="7" height="6"/>
+   <object id="2" type="Collision" x="2" y="5" width="7" height="6">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
   </objectgroup>
   <animation>
    <frame tileid="0" duration="400"/>
@@ -17,12 +21,29 @@
  </tile>
  <tile id="1">
   <objectgroup draworder="index" id="2">
-   <object id="1" type="Collision" x="2" y="4" width="8" height="8"/>
+   <object id="1" type="Collision" x="2" y="4" width="8" height="8">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
   </objectgroup>
  </tile>
  <tile id="2">
   <objectgroup draworder="index" id="2">
-   <object id="1" type="Collision" x="1" y="2" width="12" height="12"/>
+   <object id="1" type="Collision" x="1" y="2" width="12" height="12">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="3">
+  <objectgroup draworder="index" id="2">
+   <object id="1" type="Collision" x="0" y="0" width="16" height="16">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
   </objectgroup>
  </tile>
 </tileset>

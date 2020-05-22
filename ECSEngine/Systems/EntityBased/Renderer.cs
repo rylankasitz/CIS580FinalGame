@@ -90,11 +90,19 @@ namespace Engine.Systems
                 if (WindowManager.Debug && entity.HasComponent<BoxCollision>())
                 {
                     BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
-                    spriteBatch.Draw(textures[WindowManager.MouseTexture],
-                        new Rectangle((int)((boxCollision.Position.X * transform.Scale.X) + transform.Position.X),
-                                      (int)((boxCollision.Position.Y * transform.Scale.Y) + transform.Position.Y),
-                                      (int)(boxCollision.Scale.X * transform.Scale.X),
-                                      (int)(boxCollision.Scale.Y * transform.Scale.Y)), new Color(Color.White, .5f));
+                    foreach (Box box in boxCollision.Boxes)
+                    {
+                        Color color = new Color(Color.White, .5f);
+
+                        if (box.TriggerOnly)
+                            color = new Color(Color.Blue, .5f);
+
+                        spriteBatch.Draw(textures[WindowManager.MouseTexture],
+                            new Rectangle((int)((box.Position.X * transform.Scale.X) + transform.Position.X),
+                                          (int)((box.Position.Y * transform.Scale.Y) + transform.Position.Y),
+                                          (int)(box.Scale.X * transform.Scale.X),
+                                          (int)(box.Scale.Y * transform.Scale.Y)), color);
+                    }
                 }
             }
 

@@ -34,15 +34,18 @@ namespace MonoGameWindowsStarter.Entities
 
         public Vector SpriteSize = new Vector(8, 8); // Change
 
+        public List<Key> KeysUI;
+
         public float TotalHealth;
         public float CurrentHealth;
 
         public bool Rolling;
-
-        private Vector preVelocity;
+        public bool Involnerable;
 
         public int KeyCount;
-        public List<Key> KeysUI;
+
+        private Vector rollVelocity;
+        private Vector2 lastAimDirection;
 
         private BoxCollision boxCollision;
         private SliderBar healthBar;
@@ -54,7 +57,7 @@ namespace MonoGameWindowsStarter.Entities
         private float elapsedTintTime;
         private float elapsedRollTime;
 
-        private float hitTime = .15f;
+        private float hitTime = .5f;
         private float rollTime = .1f;
         private float rollCooldown = 2f;
         private float rollDistance = 200;
@@ -74,6 +77,9 @@ namespace MonoGameWindowsStarter.Entities
             KeyCount = 0;
             KeysUI = new List<Key>();
             Rolling = false;
+            rollVelocity = new Vector(0, 0);
+            lastAimDirection = new Vector2(1, 0);
+            Involnerable = false;
 
             scene = (MainScene)SceneManager.GetCurrentScene();    
 
@@ -89,7 +95,6 @@ namespace MonoGameWindowsStarter.Entities
             boxCollision.Layer = "Player|Character";
 
             Animation.CurrentAnimation = Character.IdleAnimation;
-
             Sprite.ContentName = Character.SpriteSheet;
 
             healthBar = new SliderBar("HealthBar", "HealthBarOutline",
@@ -106,8 +111,6 @@ namespace MonoGameWindowsStarter.Entities
 
             jumpTrailStart = scene.CreateEntity<Trail>();
             jumpTrailEnd = scene.CreateEntity<Trail>();
-
-            preVelocity = new Vector(0, 0);
         }
 
         public override void Update(GameTime gameTime)
@@ -131,18 +134,22 @@ namespace MonoGameWindowsStarter.Entities
             animate();
             attack(gameTime);
             setMinmap();
+
             healthBar.UpdateFill(CurrentHealth / TotalHealth);
         }
 
         private void handleCollision(Entity entity, string direction)
         {
+            // Set Hit tint
             if (entity.Name == "Projectile" && !Rolling)
             {
                 elapsedTintTime = 0;
                 Sprite.Color = Color.Red;
                 healthBar.UpdateFill(CurrentHealth / TotalHealth);
+                Involnerable = true;
             }
 
+            // Set new room position
             if (entity.Name.Contains("Door") && !entity.Name.Contains("Blocked"))
             {
                 MainScene scene = (MainScene) SceneManager.GetCurrentScene();
@@ -169,6 +176,8 @@ namespace MonoGameWindowsStarter.Entities
 
         #endregion
 
+        #region Public Methods
+
         public void AddKey()
         {
             Key key = SceneManager.GetCurrentScene().CreateEntity<Key>();
@@ -184,71 +193,54 @@ namespace MonoGameWindowsStarter.Entities
             bossPortal.Transform.Position = key.Transform.Position;
         }
 
+        #endregion
+
         #region Private Methods
 
         private void move(GameTime gameTime)
         {         
-            // Temporarly set box collisionaw
-            boxCollision.Scale = SpriteSize / Animation.AnimationScale;
-            boxCollision.Position = new Vector(.5f, .5f) - ((SpriteSize / Animation.AnimationScale) / 2);
+            // Temporarly set box collision
             Transform.Scale = Animation.AnimationScale * MapConstants.Scale;
-
-            Vector2 normalized = Vector2.Zero;
 
             Rolling = elapsedRollTime < rollTime;
 
             if (!Rolling) {
+
                 Physics.Velocity = new Vector(0, 0);
+                Sprite.Enabled = true;
 
                 float speed = Character.MoveSpeed * PlayerStats.SpeedMod;
 
-                Sprite.Enabled = true;
-
-                if (InputManager.KeyPressed(Keys.W))
-                {
-                    Physics.Velocity.Y = -speed;
-                }
-                else if (InputManager.KeyPressed(Keys.S))
-                {
-                    Physics.Velocity.Y = speed;
-                }
-
-                if (InputManager.KeyPressed(Keys.D))
-                {
-                    Physics.Velocity.X = speed;
-                }
-                else if (InputManager.KeyPressed(Keys.A))
-                {
-                    Physics.Velocity.X = -speed;
-                }
-
+                Physics.Velocity = new Vector(InputManager.GetAxis("MoveX"), InputManager.GetAxis("MoveY")) * speed;
 
                 if (Physics.Velocity != Vector2.Zero)
                 {
-                    normalized = new Vector2(Physics.Velocity.X, Physics.Velocity.Y);
+
+                    Vector2 normalized = new Vector2(Physics.Velocity.X, Physics.Velocity.Y);
                     normalized.Normalize();
+                    rollVelocity = new Vector(normalized.X, normalized.Y);
                     Physics.Velocity = new Vector(normalized.X, normalized.Y) * speed;
                 }
 
-                if (InputManager.KeyDown(Keys.Space) && elapsedRollTime >= rollCooldown)
+                if (InputManager.GetAxisDown("Roll") && elapsedRollTime >= rollCooldown)
                 {
                     jumpTrailStart.Transform.Position = (Transform.Position + (Transform.Scale / 2)) - jumpTrailStart.Transform.Scale / 2;
-                    jumpTrailEnd.Transform.Position = jumpTrailStart.Transform.Position + new Vector(normalized.X, normalized.Y) * rollDistance;
+                    jumpTrailEnd.Transform.Position = jumpTrailStart.Transform.Position + rollVelocity * rollDistance;
+
                     jumpTrailStart.Animation.Play(jumpTrailStart.Animation.CurrentAnimation);
                     jumpTrailEnd.Animation.Play(jumpTrailEnd.Animation.CurrentAnimation);
-
-                    preVelocity = new Vector(normalized.X, normalized.Y);
 
                     jumpTrailStart.Sprite.Enabled = true;
                     jumpTrailEnd.Sprite.Enabled = true;
                     Sprite.Enabled = false;
+
                     elapsedRollTime = 0;
                 }
             }
             else if (Rolling)
             {
                 Sprite.Enabled = false;
-                Physics.Velocity = preVelocity * (float) ((rollDistance / rollTime) * gameTime.ElapsedGameTime.TotalSeconds);
+                Physics.Velocity = rollVelocity * (float) ((rollDistance / rollTime) * gameTime.ElapsedGameTime.TotalSeconds);
             }
 
             if (!jumpTrailStart.Animation.Playing)
@@ -282,7 +274,7 @@ namespace MonoGameWindowsStarter.Entities
                 Animation.CurrentAnimation = Character.IdleAnimation;
             }
 
-            if (InputManager.LeftMouseDown())
+            if (InputManager.GetAxisDown("Attack"))
             {
                 Animation.Play(Character.AttackAnimation);
             }
@@ -290,10 +282,19 @@ namespace MonoGameWindowsStarter.Entities
 
         private void attack(GameTime gameTime)
         {
-            if (InputManager.LeftMousePressed())
+            if (InputManager.GetAxisPressed("Attack"))
             {
-                Vector direction = getMouseDirection();
-                Character.Attack(this, Transform.Position, direction);
+                Vector2 direction = new Vector2(InputManager.GetAxis("AimX"), InputManager.GetAxis("AimY"));
+
+                if (direction == Vector2.Zero)
+                {
+                    direction = lastAimDirection;
+                }
+
+                direction.Normalize();
+                Character.Attack(this, Transform.Position, new Vector(direction.X, direction.Y));
+
+                lastAimDirection = direction;
             }       
         }
 
@@ -319,20 +320,10 @@ namespace MonoGameWindowsStarter.Entities
             if (hitTime < elapsedTintTime)
             {
                 Sprite.Color = Color.White;
+                Involnerable = false;
             }
         }
 
-        private Vector getMouseDirection()
-        {
-            Vector position = InputManager.GetMousePosition() - Transform.Scale / 2;
-            Vector2 direction = new Vector2(position.X - Transform.Position.X,
-                                            position.Y - Transform.Position.Y);
-            direction.Normalize();
-
-            return new Vector(direction.X, direction.Y);
-        }
-
         #endregion
-
     }
 }

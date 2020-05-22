@@ -68,7 +68,7 @@
     <Compile Include="Scenes\MainScene.cs" />
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\Helpers\ProjectileSpawner.cs" />
-    <Compile Include="Scenes\PlayerScene.cs" />
+    <Compile Include="Scenes\PlayScene.cs" />
     <Compile Include="Scenes\Rooms\MapGenerator.cs" />
     <Compile Include="Scenes\Rooms\Room.cs" />
     <Compile Include="UI\ButtonUI.cs" />

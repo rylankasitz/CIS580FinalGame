@@ -54,13 +54,19 @@ namespace PlatformerContentExtension
                 output.Write(tile.Source.X);
                 output.Write(tile.Source.Y);
                 output.Write(tile.BoxCollisions.Count);
-                foreach(KeyValuePair<string, Rectangle> pair in tile.BoxCollisions)
+                foreach(KeyValuePair<string, List<Box>> pair in tile.BoxCollisions)
                 {
                     output.Write(pair.Key);
-                    output.Write(pair.Value.X);
-                    output.Write(pair.Value.Y);
-                    output.Write(pair.Value.Width);
-                    output.Write(pair.Value.Height);
+                    output.Write(pair.Value.Count);
+                    foreach (Box box in pair.Value)
+                    {
+                        output.Write(box.Col.X);
+                        output.Write(box.Col.Y);
+                        output.Write(box.Col.Width);
+                        output.Write(box.Col.Height);
+                        output.Write(box.TriggerOnly);
+                        output.Write(box.Name);
+                    }
                 }
                 output.Write(tile.Animation.Name);
                 output.Write(tile.Animation.Frames.Count);

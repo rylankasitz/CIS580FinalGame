@@ -15,7 +15,7 @@ namespace PlatformerContentExtension
     {
         public Rectangle Source { get; set; }
         public bool Solid { get; set; }
-        public Dictionary<string, Rectangle> BoxCollisions { get; set; } = new Dictionary<string, Rectangle>();
+        public Dictionary<string, List<Box>> BoxCollisions { get; set; } = new Dictionary<string, List<Box>>();
         public Animation Animation { get; set; }
         public Dictionary<string, string> Properties { get; set; }
 
@@ -24,6 +24,19 @@ namespace PlatformerContentExtension
             Properties = new Dictionary<string, string>();
             Animation = new Animation();
             Animation.Frames = new List<Frame>();
+        }
+    }
+
+    public class Box
+    {
+        public Rectangle Col { get; set; } = Rectangle.Empty;
+        public bool TriggerOnly { get; set; } = false;
+        public string Name { get; set; }
+        public Box(Rectangle col, bool trigger, string name = "Unamed")
+        {
+            Col = col;
+            TriggerOnly = trigger;
+            Name = name;
         }
     }
 

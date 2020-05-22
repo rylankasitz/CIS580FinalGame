@@ -1,16 +1,11 @@
-﻿using System;
+﻿using Engine.Componets;
+using Engine.ECSCore;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using PlatformLibrary;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Engine.Componets;
-using Engine.ECSCore;
-using PlatformLibrary;
-using System.Reflection;
 
 namespace Engine.Systems
 {
@@ -84,22 +79,9 @@ namespace Engine.Systems
                                 current.FrameNumber = 0;
                         }
 
-                        sprite.SpriteLocation = current.CurrentFrame;
+                        setCurrentCollisions(animation, entity, current);
 
-                        animation.CurrentCollisions = new Dictionary<string, BoxCollision>();
-                        foreach (KeyValuePair<string, BoxCollision> pair in current.Frames[current.FrameNumber].Colliders)
-                        {
-                            if (pair.Key == "Collision")
-                            {
-                                BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
-                                boxCollision.Position = pair.Value.Position;
-                                boxCollision.Scale = pair.Value.Scale;
-                            }
-                            else
-                            {
-                                animation.CurrentCollisions.Add(pair.Key, pair.Value);
-                            }
-                        }
+                        sprite.SpriteLocation = current.CurrentFrame;
 
                         if (current.FrameNumber == current.Frames.Count - 1 && animation.Playing)
                         {
@@ -114,6 +96,31 @@ namespace Engine.Systems
         #endregion
 
         #region Private Methods
+
+        private void setCurrentCollisions(Animation animation, Entity entity, AnimationTracker current)
+        {
+            animation.CurrentCollisions = new Dictionary<string, BoxCollision>();
+            foreach (KeyValuePair<string, BoxCollision> pair in current.Frames[current.FrameNumber].Colliders)
+            {
+                if (pair.Key == "Collision")
+                {
+                    BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
+                    for(int i = 0; i < pair.Value.Boxes.Count; i++)
+                    {
+                        if (boxCollision.Boxes.Count == i)
+                            boxCollision.Boxes.Add(new Box());
+
+                        boxCollision.Boxes[i].Position = pair.Value.Boxes[i].Position;
+                        boxCollision.Boxes[i].Scale = pair.Value.Boxes[i].Scale;
+                        boxCollision.Boxes[i].TriggerOnly = pair.Value.Boxes[i].TriggerOnly;
+                    }
+                }
+                else
+                {
+                    animation.CurrentCollisions.Add(pair.Key, pair.Value);
+                }
+            }
+        }
 
         private AnimationTracker getAnimation(Entity entity)
         {
@@ -156,13 +163,21 @@ namespace Engine.Systems
                 foreach (TilesetFrame frame in tileset[i].Animation.Frames)
                 {
                     Dictionary<string, BoxCollision> colliders = new Dictionary<string, BoxCollision>();
-                    foreach(KeyValuePair<string, Rectangle> collider in tileset[frame.Id].BoxColliders)
+                    foreach(KeyValuePair<string, List<BoxCol>> collider in tileset[frame.Id].BoxColliders)
                     {
                         BoxCollision collision = new BoxCollision();
-                        collision.Position = new Vector(collider.Value.X / (float)tileset[frame.Id].Width, 
-                                                        collider.Value.Y / (float)tileset[frame.Id].Height);
-                        collision.Scale = new Vector(collider.Value.Width / (float)tileset[frame.Id].Width,
-                                                     collider.Value.Height / (float)tileset[frame.Id].Height);
+                        for (int j = 0; j < collider.Value.Count; j++)
+                        {
+                            if (collision.Boxes.Count == j)
+                                collision.Boxes.Add(new Box());
+
+                            collision.Boxes[j].Position = new Vector(collider.Value[j].Rectangle.X / (float)tileset[frame.Id].Width,
+                                                                     collider.Value[j].Rectangle.Y / (float)tileset[frame.Id].Height);
+                            collision.Boxes[j].Scale = new Vector(collider.Value[j].Rectangle.Width / (float)tileset[frame.Id].Width,
+                                                                  collider.Value[j].Rectangle.Height / (float)tileset[frame.Id].Height);
+                            collision.Boxes[j].TriggerOnly = collider.Value[j].TriggerOnly;
+                            
+                        }
                         colliders.Add(collider.Key, collision);
                     }
 

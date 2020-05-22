@@ -12,7 +12,7 @@ namespace PlatformLibrary
         #region Properties
 
         public Rectangle Source { get; set; }
-        public Dictionary<string, Rectangle> BoxColliders { get; set; }
+        public Dictionary<string, List<BoxCol>> BoxColliders { get; set; }
         public Texture2D Texture { get; set; }
         public TilesetAnimation Animation { get; set; }
         public Dictionary<string, string> Properties { get; set; }
@@ -26,7 +26,7 @@ namespace PlatformLibrary
 
         #region Initialization
 
-        public Tile(Rectangle source, Dictionary<string, Rectangle> boxColliders, Dictionary<string, string> properties, Texture2D texture, TilesetAnimation animation, int spacing, int margin)
+        public Tile(Rectangle source, Dictionary<string, List<BoxCol>> boxColliders, Dictionary<string, string> properties, Texture2D texture, TilesetAnimation animation, int spacing, int margin)
         {
             Texture = texture;
             Source = source;
@@ -39,6 +39,13 @@ namespace PlatformLibrary
 
         #endregion
     
+    }
+
+    public class BoxCol
+    {
+        public Rectangle Rectangle { get; set; }
+        public bool TriggerOnly { get; set; }
+        public string Name { get; set; }
     }
     
     public class TilesetAnimation

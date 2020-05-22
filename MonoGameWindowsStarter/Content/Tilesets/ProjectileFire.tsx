@@ -6,7 +6,11 @@
    <property name="Animation" value="ProjectileFire"/>
   </properties>
   <objectgroup draworder="index" id="2">
-   <object id="1" type="Collision" x="3" y="27" width="5" height="4"/>
+   <object id="1" type="Collision" x="3" y="27" width="5" height="4">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
   </objectgroup>
   <animation>
    <frame tileid="0" duration="100"/>
@@ -20,32 +24,56 @@
  </tile>
  <tile id="1">
   <objectgroup draworder="index" id="2">
-   <object id="1" type="Collision" x="0" y="22" width="7" height="9"/>
+   <object id="1" type="Collision" x="0" y="22" width="7" height="9">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
   </objectgroup>
  </tile>
  <tile id="2">
   <objectgroup draworder="index" id="2">
-   <object id="1" type="Collision" x="0" y="21" width="8" height="10"/>
+   <object id="1" type="Collision" x="0" y="21" width="8" height="10">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
   </objectgroup>
  </tile>
  <tile id="3">
   <objectgroup draworder="index" id="2">
-   <object id="1" type="Collision" x="1" y="15" width="7" height="16"/>
+   <object id="1" type="Collision" x="1" y="15" width="7" height="16">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
   </objectgroup>
  </tile>
  <tile id="4">
   <objectgroup draworder="index" id="2">
-   <object id="1" type="Collision" x="0" y="13" width="8" height="18"/>
+   <object id="1" type="Collision" x="0" y="13" width="8" height="18">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
   </objectgroup>
  </tile>
  <tile id="5">
   <objectgroup draworder="index" id="2">
-   <object id="1" type="Collision" x="1" y="7" width="7" height="24"/>
+   <object id="1" type="Collision" x="1" y="7" width="7" height="24">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
   </objectgroup>
  </tile>
  <tile id="6">
   <objectgroup draworder="index" id="2">
-   <object id="1" type="Collision" x="0" y="5" width="8" height="26"/>
+   <object id="1" type="Collision" x="0" y="5" width="8" height="26">
+    <properties>
+     <property name="Trigger" type="bool" value="true"/>
+    </properties>
+   </object>
   </objectgroup>
  </tile>
 </tileset>

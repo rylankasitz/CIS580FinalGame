@@ -74,15 +74,18 @@ namespace MonoGameWindowsStarter.Entities
             if (entity.Name == "Enemy")
             {
                 Enemy enemy = (Enemy)entity;
-                enemy.CurrentHealth -= Damage;
 
-                Debug.WriteLine($"Dealt {Damage} to '{entity.Name}'");
+                if (!enemy.Invonerable)
+                {
+                    enemy.CurrentHealth -= Damage;
+                    Debug.WriteLine($"Dealt {Damage} to '{entity.Name}'");
+                }
             }
             else if (entity.Name == "Player")
             {
                 Player player = (Player)entity;
 
-                if (!player.Rolling)
+                if (!player.Rolling && !player.Involnerable)
                 {
                     player.CurrentHealth -= Damage;
                     Debug.WriteLine($"Dealt {Damage} to '{entity.Name}'");

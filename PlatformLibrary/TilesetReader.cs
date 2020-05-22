@@ -45,16 +45,25 @@ namespace PlatformLibrary
                     tileWidth,
                     tileHeight);
 
-                Dictionary<string, Rectangle> boxCollisions = new Dictionary<string, Rectangle>();
+                Dictionary<string, List<BoxCol>> boxCollisions = new Dictionary<string, List<BoxCol>>();
                 int colliderCount = input.ReadInt32();
                 for (int j = 0; j < colliderCount; j++)
                 {
                     string type = input.ReadString();
-                    Rectangle boxCollision = new Rectangle(
-                        input.ReadInt32(),
-                        input.ReadInt32(),
-                        input.ReadInt32(),
-                        input.ReadInt32());
+                    int count = input.ReadInt32();
+                    List<BoxCol> boxCollision = new List<BoxCol>();
+                    for (int k = 0; k < count; k++)
+                    {
+                        BoxCol boxCol = new BoxCol();
+                        boxCol.Rectangle = new Rectangle(
+                            input.ReadInt32(),
+                            input.ReadInt32(),
+                            input.ReadInt32(),
+                            input.ReadInt32());
+                        boxCol.TriggerOnly = input.ReadBoolean();
+                        boxCol.Name = input.ReadString();
+                        boxCollision.Add(boxCol);
+                    }
                     boxCollisions.Add(type, boxCollision);
                 }
 

@@ -105,6 +105,7 @@ namespace Engine
         {
             InputManager.NewKeyboardState = Keyboard.GetState();
             InputManager.NewMouseState = Mouse.GetState();
+            InputManager.NewGamePadState = GamePad.GetState(PlayerIndex.One);
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -116,12 +117,15 @@ namespace Engine
             animationHandler.UpdateAnimations(gameTime);
             stateHandler.UpdateStateMachine(gameTime);
             particleSystemHandler.UpdateParticleSystems(gameTime);
-            parallaxHandler.UpdateParallax(gameTime);  
+            parallaxHandler.UpdateParallax(gameTime);
 
             InputManager.OldKeyboardState = InputManager.NewKeyboardState;
             InputManager.OldMouseState = InputManager.NewMouseState;
+            InputManager.OldGamePadState = InputManager.NewGamePadState;
 
             gameLayout.Update(gameTime);
+
+            physicsHandler.SetPreTransform();
 
             base.Update(gameTime);
         }

@@ -34,5 +34,18 @@ namespace Engine.Systems
             }
         }
 
+        public void SetPreTransform()
+        {
+            foreach (Entity entity in Entities)
+            {
+                Transform transform = entity.GetComponent<Transform>();
+                Physics physics = entity.GetComponent<Physics>();
+
+                if (physics.Velocity.X != 0 || physics.Velocity.Y != 0)
+                    physics.PreVelocity = new Vector(physics.Velocity.X, physics.Velocity.Y);
+
+                transform.PrePosition = new Vector(transform.Position.X, transform.Position.Y);
+            }
+        }
     }
 }
