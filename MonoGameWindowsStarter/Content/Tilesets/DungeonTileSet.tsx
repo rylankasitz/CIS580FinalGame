@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tileset version="1.2" tiledversion="1.3.2" name="DungeonTileSet" tilewidth="8" tileheight="8" tilecount="128" columns="8">
- <image source="../Sprites/MapTileSet.png" trans="ff00ff" width="64" height="128"/>
+ <image source="../Sprites/DungeonTileSet.png" trans="ff00ff" width="64" height="128"/>
  <tile id="1">
   <properties>
-   <property name="Name" value="Wall"/>
+   <property name="Name" value="Ceiling-N"/>
   </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>
@@ -11,12 +11,12 @@
  </tile>
  <tile id="2">
   <properties>
-   <property name="Name" value="Wall"/>
+   <property name="Name" value="Ceiling-H"/>
   </properties>
  </tile>
  <tile id="3">
   <properties>
-   <property name="Name" value="Wall"/>
+   <property name="Name" value="Ceiling-V"/>
   </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>
@@ -62,6 +62,16 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
+ </tile>
+ <tile id="15">
+  <properties>
+   <property name="Name" value="Floor"/>
+  </properties>
+ </tile>
+ <tile id="21">
+  <properties>
+   <property name="Name" value="Door"/>
+  </properties>
  </tile>
  <tile id="28">
   <objectgroup draworder="index" id="2">

@@ -31,8 +31,6 @@ namespace MonoGameWindowsStarter.Entities
             Transform.Scale = Transform.Scale * MapConstants.Scale;
 
             boxCollision.HandleCollision = handleCollision;
-
-            MapConstants.BossPortalRoom = true;
         }
 
         public override void Update(GameTime gameTime)

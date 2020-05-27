@@ -136,6 +136,12 @@ namespace MonoGameWindowsStarter.Entities
             setMinmap();
 
             healthBar.UpdateFill(CurrentHealth / TotalHealth);
+
+            // Temp
+            Camera.Position.X = Transform.Position.X;
+            Camera.Position.Y = Transform.Position.Y;
+            boxCollision.Enabled = false;
+            PlayerStats.SpeedMod = 10f;
         }
 
         private void handleCollision(Entity entity, string direction)
@@ -153,7 +159,7 @@ namespace MonoGameWindowsStarter.Entities
             if (entity.Name.Contains("Door") && !entity.Name.Contains("Blocked"))
             {
                 MainScene scene = (MainScene) SceneManager.GetCurrentScene();
-                Transform.Position = scene.MapGenerator.LoadNextRoom(entity.Name) - (Transform.Scale/2);
+                //Transform.Position = scene.MapGenerator.LoadNextRoom(entity.Name) - (Transform.Scale/2);
 
                 if (entity.Name == "DoorL")
                 {
@@ -307,11 +313,11 @@ namespace MonoGameWindowsStarter.Entities
         {
             if (InputManager.KeyDown(Keys.LeftShift))
             {         
-                scene.MapGenerator.SetMinimap(true);
+                //scene.MapGenerator.SetMinimap(true);
             }
             else if (InputManager.KeyUp(Keys.LeftShift))
             {
-                scene.MapGenerator.SetMinimap(false);
+                //scene.MapGenerator.SetMinimap(false);
             }
         }
 

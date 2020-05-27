@@ -35,26 +35,26 @@ namespace Engine.Systems
 
         public override void InitializeEntity(Entity entity) 
         {
-            //entity.AddToGrid(grid);
+            entity.AddToGrid(grid);
         }
 
         public override void RemoveFromSystem(Entity entity)
         {
-            ///entity.RemoveFromGrid(grid);
-            //Entities.Remove(entity);
+            entity.RemoveFromGrid(grid);
+            Entities.Remove(entity);
         }
 
         public void CheckCollisions()
         {
-            //grid.Handle(handleCollisions);
+            grid.Handle(handleCollisions);
 
             for(int i = 0; i < Entities.Count; i++)
             {
-                //grid.Move(entity);
-                for(int j = i; j < Entities.Count; j++)
-                {
-                    handleCollisions(Entities[i], Entities[j]);
-                }
+                grid.Move(Entities[i]);
+                //for(int j = i; j < Entities.Count; j++)
+                //{
+                //    handleCollisions(Entities[i], Entities[j]);
+                //}
             }
         }
 

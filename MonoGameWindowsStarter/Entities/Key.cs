@@ -44,8 +44,6 @@ namespace MonoGameWindowsStarter.Entities
 
                 player.AddKey();
 
-                MapConstants.KeyRoom = false;
-
                 if (player.KeyCount >= 3)
                 {
                     player.OnKeysCollected(this);

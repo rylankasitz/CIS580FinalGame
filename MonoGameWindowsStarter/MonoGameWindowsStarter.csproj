@@ -68,11 +68,13 @@
     <Compile Include="Scenes\MainScene.cs" />
     <Compile Include="Characters\Character.cs" />
     <Compile Include="Characters\Helpers\ProjectileSpawner.cs" />
+    <Compile Include="Scenes\MapGeneration\RoomLayout.cs" />
     <Compile Include="Scenes\PlayScene.cs" />
-    <Compile Include="Scenes\Rooms\MapGenerator.cs" />
-    <Compile Include="Scenes\Rooms\Room.cs" />
+    <Compile Include="Scenes\MapGeneration\Hallway.cs" />
+    <Compile Include="Scenes\MapGeneration\MapGenerator.cs" />
+    <Compile Include="Scenes\MapGeneration\Room.cs" />
     <Compile Include="UI\ButtonUI.cs" />
-    <Compile Include="UI\MiniMap.cs" />
+    <Compile Include="Scenes\MapGeneration\MiniMap.cs" />
     <Compile Include="UI\SliderBar.cs" />
     <Compile Include="UI\TextUI.cs" />
   </ItemGroup>

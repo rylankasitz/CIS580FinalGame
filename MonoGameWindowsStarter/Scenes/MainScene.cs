@@ -22,29 +22,20 @@ namespace MonoGameWindowsStarter.Scenes
     public class MainScene : Scene
     {
         public MapGenerator MapGenerator { get; set; }
+        public MiniMap MiniMap { get; set; }
         public Player Player { get; set; }
 
         public override void Initialize()
         {
             MapConstants.Scale = WindowManager.Width / MapConstants.Size;
 
-            // Temporarly add map names
-            MapGenerator = new MapGenerator(new string[] { 
-                "Room_1_+---",
-                "Room_2_--+-",
-                "Room_3_--++",
-                "Room_4_++--",
-                "Room_5_-+-+",
-                "Room_6_+++-",
-                "Room_7_-+++",
-                "Room_8_++++",
-                "Room_9_+--+",
-                "Room_10_---+",
-                "Room_11_+-+-",
-                "Room_12_++-+"
-            }, this);
+            MapGenerator = new MapGenerator();
+            MiniMap = new MiniMap(MapGenerator.Rooms);
+
+            MapGenerator.LoadFloor();
 
             Player = CreateEntity<Player>();
+            Player.Transform.Position = MapGenerator.Rooms[0].GlobalCoords;
         }
 
         public override void Update(GameTime gameTime)

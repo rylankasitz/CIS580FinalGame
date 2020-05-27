@@ -9,7 +9,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Engine.Componets;
 using Engine.ECSCore;
-using TiledSharp;
 using PlatformLibrary;
 
 namespace Engine.Systems
@@ -47,6 +46,40 @@ namespace Engine.Systems
 
             return new List<MapLocationObject>();
             
+        }
+
+        public static MapObjectCollision CreateObjectFromTileSet(string name, string tileset, Vector position, Vector scale, float layer)
+        {
+            Tileset tilesetContent = Content.Load<Tileset>("Tilesets\\" + tileset);
+            foreach (Tile tile in tilesetContent.tiles)
+            {
+                if (tile.Properties.ContainsKey("Name") && tile.Properties["Name"] == name)
+                {
+                    MapObjectCollision mapObject = SceneManager.GetCurrentScene().CreateEntity<MapObjectCollision>();
+                    mapObject.GetComponent<Transform>().Position = position;
+                    mapObject.GetComponent<Transform>().Scale = scale;
+                    mapObject.GetComponent<Sprite>().ContentName = tileset;
+                    mapObject.GetComponent<Sprite>().SpriteLocation = tile.Source;
+                    mapObject.GetComponent<Sprite>().Layer = layer;
+
+                    if (tile.BoxColliders.Count > 0)
+                    {
+                        BoxCol collider = tile.BoxColliders.First().Value[0];
+                        BoxCollision col = mapObject.GetComponent<BoxCollision>();
+                        col.Position = new Vector(collider.Rectangle.X / (float)tile.Width, collider.Rectangle.Y / (float)tile.Height);
+                        col.Scale = new Vector(collider.Rectangle.Width / (float)tile.Width, collider.Rectangle.Height / (float)tile.Height);
+                        col.TriggerOnly = collider.TriggerOnly;
+                    }
+                    else
+                        mapObject.RemoveComponent<BoxCollision>();
+
+                    return mapObject;
+                }
+            }
+
+            Debug.WriteLine($"No object found for '{name}'");
+
+            return null;
         }
 
         #region Private Methods

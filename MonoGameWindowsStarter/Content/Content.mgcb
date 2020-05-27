@@ -34,66 +34,6 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/PixelFont.spritefont
 
-#begin Maps/Room_1_+---.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_1_+---.tmx
-
-#begin Maps/Room_10_---+.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_10_---+.tmx
-
-#begin Maps/Room_11_+-+-.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_11_+-+-.tmx
-
-#begin Maps/Room_12_++-+.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_12_++-+.tmx
-
-#begin Maps/Room_2_--+-.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_2_--+-.tmx
-
-#begin Maps/Room_3_--++.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_3_--++.tmx
-
-#begin Maps/Room_4_++--.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_4_++--.tmx
-
-#begin Maps/Room_5_-+-+.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_5_-+-+.tmx
-
-#begin Maps/Room_6_+++-.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_6_+++-.tmx
-
-#begin Maps/Room_7_-+++.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_7_-+++.tmx
-
-#begin Maps/Room_8_++++.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_8_++++.tmx
-
-#begin Maps/Room_9_+--+.tmx
-/importer:TilemapImporter
-/processor:TilemapProcessor
-/build:Maps/Room_9_+--+.tmx
-
 #begin Sprites/BossPortal.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -166,6 +106,18 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/CoolDownBarOutline.png
 
+#begin Sprites/DungeonTileSet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Sprites/DungeonTileSet.png
+
 #begin Sprites/HealthBar.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -202,66 +154,6 @@
 /processorParam:TextureFormat=Color
 /build:Sprites/Key.png
 
-#begin Sprites/MapTileSet.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/MapTileSet.png
-
-#begin Sprites/MinimapBackground.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/MinimapBackground.png
-
-#begin Sprites/MinimapDoorLeft.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/MinimapDoorLeft.png
-
-#begin Sprites/MinimapDoorUp.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/MinimapDoorUp.png
-
-#begin Sprites/MinimapPlayer.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/MinimapPlayer.png
-
 #begin Sprites/MinimapRoom.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -273,18 +165,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Sprites/MinimapRoom.png
-
-#begin Sprites/MouseIcon.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Sprites/MouseIcon.png
 
 #begin Sprites/ProjectileBubble.png
 /importer:TextureImporter

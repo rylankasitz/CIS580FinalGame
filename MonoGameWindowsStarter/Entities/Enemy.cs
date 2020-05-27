@@ -143,15 +143,7 @@ namespace MonoGameWindowsStarter.Entities
                         SceneManager.GetCurrentScene().RemoveEntity(obj);
                     }
                 }
-
-                if (MapConstants.KeyRoom) 
-                {
-                    Key key = SceneManager.GetCurrentScene().CreateEntity<Key>();
-                    MapObject keySpawn = SceneManager.GetCurrentScene().GetEntity<MapObject>("KeySpawn");
-                    key.Transform.Position = keySpawn.GetComponent<Transform>().Position;
-                }
             }
-
         }
 
         private void hitTint()
