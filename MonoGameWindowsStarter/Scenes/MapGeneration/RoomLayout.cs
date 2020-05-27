@@ -40,11 +40,6 @@ namespace MonoGameWindowsStarter.Scenes.MapGeneration
             this.dimensions = dimensions;
             this.doors = doors;
 
-            if (hhallway || corner)
-            {
-                height++;
-            }
-
             layout = new string[width, height];
             layers = new float[width, height];
 
@@ -163,6 +158,15 @@ namespace MonoGameWindowsStarter.Scenes.MapGeneration
             if (orientation.Contains("T"))
             {
                 addHorizontalWall(area.X, area.X + area.Width, area.Y, backgroundLayer);
+
+                if (orientation.Contains("L"))
+                {
+                    addVerticalWall(area.Y + area.Height - 1, area.Y + area.Height - 1, area.X + area.Width - 1, forgroundLayer);
+                }
+                else if (orientation.Contains("R"))
+                {
+                    addVerticalWall(area.Y + area.Height - 1, area.Y + area.Height - 1, area.X, forgroundLayer);
+                }
             }
 
             if (orientation.Contains("R"))
@@ -177,6 +181,15 @@ namespace MonoGameWindowsStarter.Scenes.MapGeneration
             if (orientation.Contains("B"))
             {
                 addHorizontalWall(area.X, area.X + area.Width, area.Y + area.Height - 2, forgroundLayer);
+
+                if (orientation.Contains("L"))
+                {
+                    addHorizontalWall(area.X + area.Width - 1, area.X + area.Width - 1, area.Y, backgroundLayer);
+                }
+                else if (orientation.Contains("R"))
+                {
+                    addHorizontalWall(area.X, area.X, area.Y, backgroundLayer);
+                }
             }
         }
 

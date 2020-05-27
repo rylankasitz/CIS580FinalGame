@@ -36,6 +36,7 @@ namespace MonoGameWindowsStarter.Scenes
 
             Player = CreateEntity<Player>();
             Player.Transform.Position = MapGenerator.Rooms[0].GlobalCoords;
+            MiniMap.MoveTo(Player.Transform.Position);
         }
 
         public override void Update(GameTime gameTime)

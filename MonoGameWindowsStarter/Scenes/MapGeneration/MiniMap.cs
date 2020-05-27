@@ -18,7 +18,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 {
     public class MiniMap
     {
-        private Vector offset = new Vector(WindowManager.Width * .7f, 0);
+        private Vector offset = new Vector(-WindowManager.Width, -WindowManager.Height);
         private float scale = 1.5f;
 
         private Room[] rooms;
@@ -29,8 +29,17 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             this.rooms = rooms;
 
             miniMapObjs = new List<MiniMapObj>();
+            offset += Camera.Position;
 
             createMinimap();
+        }
+
+        public void MoveTo(Vector position)
+        {
+            foreach(MiniMapObj miniMapObj in miniMapObjs)
+            {
+                miniMapObj.GetComponent<Transform>().Position += position;
+            }
         }
 
         private void createMinimap()

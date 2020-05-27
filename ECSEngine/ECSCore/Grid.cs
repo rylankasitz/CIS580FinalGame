@@ -10,8 +10,8 @@ namespace Engine.ECSCore
     public delegate void HandleGrid(Entity entity1, Entity entity2);
     public class Grid
     {
-        private const int NUM_CELLS = 100;
-        private const int CELL_SIZE = 320;
+        private const int NUM_CELLS = 2000;
+        private const int CELL_SIZE = 80;
 
         private Entity[][] cells;
 

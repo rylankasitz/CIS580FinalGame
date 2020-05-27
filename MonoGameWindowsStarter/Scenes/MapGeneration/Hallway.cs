@@ -50,11 +50,6 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
                 setCorner();
             }
 
-            setDoors(Source, HorizonalConnector);
-            setDoors(Source, VerticalConnector);
-            setDoors(Destination, HorizonalConnector);
-            setDoors(Destination, VerticalConnector);
-
             // Create layouts
             if (VerticalConnector != Rectangle.Empty)
                 vlayout = new RoomLayout(VerticalConnector, new List<Rectangle>(), vhallway: true);
@@ -69,6 +64,41 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             vlayout?.CreateEntities();
             hlayout?.CreateEntities();
             clayout?.CreateEntities();
+        }
+
+        public void SetDoors()
+        {
+            setDoors(Source, HorizonalConnector);
+            setDoors(Source, VerticalConnector);
+            setDoors(Destination, HorizonalConnector);
+            setDoors(Destination, VerticalConnector);
+        }
+
+        public bool Intersects(Room[] rooms)
+        {
+            foreach (Room room in rooms)
+            {
+                if (VerticalConnector.Intersects(room.Dimensions)) return true;
+                if (HorizonalConnector.Intersects(room.Dimensions)) return true;
+                if (Corner.Intersects(room.Dimensions)) return true;
+
+                foreach (HallWay hallWay in room.HallWays)
+                {
+                    if (VerticalConnector.Intersects(hallWay.VerticalConnector)) return true;
+                    if (VerticalConnector.Intersects(hallWay.HorizonalConnector)) return true;
+                    if (VerticalConnector.Intersects(hallWay.Corner)) return true;
+
+                    if (HorizonalConnector.Intersects(hallWay.VerticalConnector)) return true;
+                    if (HorizonalConnector.Intersects(hallWay.HorizonalConnector)) return true;
+                    if (HorizonalConnector.Intersects(hallWay.Corner)) return true;
+
+                    if (Corner.Intersects(hallWay.VerticalConnector)) return true;
+                    if (Corner.Intersects(hallWay.HorizonalConnector)) return true;
+                    if (Corner.Intersects(hallWay.Corner)) return true;
+                }
+            }
+
+            return false;
         }
 
         #endregion
@@ -87,7 +117,9 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             int y = random.Next(overlap.X, overlap.Y);
 
             if (x2 - x1 > 0)
-                HorizonalConnector = new Rectangle(x1, y, x2 - x1, hallWidth);
+                HorizonalConnector = new Rectangle(x1, y, x2 - x1, hallWidth + 1);
+            else if (x2 - x1 > -hallWidth - 1)
+                HorizonalConnector = new Rectangle(x1, y, 0, hallWidth + 1);
         }
 
         private void setVerticalConnectors()
@@ -103,6 +135,8 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 
             if (y2 - y1 > 0)
                 VerticalConnector = new Rectangle(x, y1, hallWidth, y2 - y1);
+            else if (y2 - y1 > -hallWidth)
+                VerticalConnector = new Rectangle(x, y1, hallWidth, 0);
         }
 
         private void combineToCorner()
@@ -115,7 +149,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             int y = Math.Min(VerticalConnector.Y, HorizonalConnector.Y + hallWidth);
             int height = Math.Max(Destination.Top - y, HorizonalConnector.Y - y);
 
-            VerticalConnector = new Rectangle(VerticalConnector.X, y, VerticalConnector.Width, Math.Abs(height));
+            VerticalConnector = new Rectangle(VerticalConnector.X, y, VerticalConnector.Width, Math.Abs(height) + 1);
         }
 
         private void setCorner()
@@ -124,7 +158,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             Rectangle v = new Rectangle(VerticalConnector.X, VerticalConnector.Y - 5, VerticalConnector.Width, VerticalConnector.Height + 10);
             Corner = Rectangle.Intersect(h, v);
 
-            if (HorizonalConnector.X < VerticalConnector.X)
+            if (HorizonalConnector.X <= VerticalConnector.X)
             {
                 cornerOrientation += "R";
             }
@@ -133,7 +167,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
                 cornerOrientation += "L";
             }
 
-            if (HorizonalConnector.Y < VerticalConnector.Y)
+            if (HorizonalConnector.Y <= VerticalConnector.Y)
             {
                 cornerOrientation += "T";
             }

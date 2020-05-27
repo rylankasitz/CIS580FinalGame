@@ -80,17 +80,27 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 
                 Room closestRoom = Rooms[i].FindClosestRoom(otherRooms.ToArray());
 
-                while (closestRoom != null && closestRoom.HasConnection(Rooms[i]))
+                while(closestRoom != null && !connectRooms(Rooms[i], closestRoom))
                 {
                     otherRooms.Remove(closestRoom);
                     closestRoom = Rooms[i].FindClosestRoom(otherRooms.ToArray());
                 }
-
-                if (closestRoom != null)
-                {
-                    Rooms[i].HallWays.Add(new HallWay(Rooms[i], closestRoom));
-                }
             }
+        }
+
+        private bool connectRooms(Room room1, Room room2)
+        {
+            HallWay hallWay = new HallWay(room1, room2);
+
+            if (!hallWay.Intersects(Rooms))
+            {
+                hallWay.SetDoors();
+                room1.HallWays.Add(hallWay);
+
+                return true;
+            }
+
+            return false;
         }
     }
 }
