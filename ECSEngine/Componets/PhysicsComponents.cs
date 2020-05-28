@@ -1,11 +1,22 @@
 ﻿using Microsoft.Xna.Framework;
 using Engine.ECSCore;
 using System.Collections.Generic;
+using Humper.Responses;
+using Humper;
+using System.Runtime.Remoting.Messaging;
 
 namespace Engine.Componets
 {
     public delegate void HandleCollision(Entity collider, string side);
     public delegate void HandleCollisionEnter(Entity collider, string side);
+
+    public enum CollisionLayers
+    {
+        Player = 1 << 0,
+        Enemy = 1 << 1,
+        All = 1 << 2,
+        DisabledLayer = 1 << 3
+    }
 
     public class Vector
     {
@@ -63,53 +74,51 @@ namespace Engine.Componets
 
     public class BoxCollision : Component
     {
-        public List<Box> Boxes { get; set; }
-        public Vector Position { get => Boxes[0].Position; set => Boxes[0].Position = value; }
-        public Vector Scale { get => Boxes[0].Scale; set => Boxes[0].Scale = value; }
-        public bool TriggerOnly { get => Boxes[0].TriggerOnly; set => Boxes[0].TriggerOnly = value; }
-        public string Layer { get { return Boxes[0].Layer; } 
-                              set { for (int i = 0; i < Boxes.Count; i++) Boxes[i].Layer = value;  } }
-        public string[] Layers
-        {
-            get
+        public World World { get; set; }
+        public List<IBox> Boxes { get; set; }
+        public CollisionLayers Layer { set
             {
-                if (Layer.Contains("|"))
+                foreach (IBox box in Boxes)
                 {
-                    return Layer.Split('|');
+                    BoxData data = (BoxData) box.Data;
+                    data.Layer = value;
                 }
-                return new string[1] { Layer };
-            }
+            } 
         }
         public HandleCollision HandleCollision { get; set; }
         public HandleCollisionEnter HandleCollisionEnter { get; set; }
-        public BoxCollision() { Boxes = new List<Box>(); Boxes.Add(new Box()); }
+        public BoxCollision() 
+        { 
+            Boxes = new List<IBox>();  
+        }
         public BoxCollision(int X, int Y, float Width, float Height, bool TriggerOnly = false)
         {
-            Boxes = new List<Box>();
-            Boxes.Add(new Box(new Vector(X, Y), new Vector(Width, Height), TriggerOnly, "All"));
+            Boxes = new List<IBox>();
         }
     }
 
-    public class Box
+    public class BoxData
     {
         public Vector Position { get; set; }
         public Vector Scale { get; set; }
         public bool TriggerOnly { get; set; }
-        public string Layer { get; set; }
+        public CollisionLayers Layer { get; set; }
         public string Name { get; set; }
-        public List<Box> CollidingObjects { get; set; }
-        public Box() 
+        public BoxData() 
         {
-            Layer = "All";
+            Position = new Vector(0, 0);
+            Scale = new Vector(0, 0);
+            TriggerOnly = false;
+            Layer = CollisionLayers.All;
         }
-        public Box(Vector position, Vector scale, bool trigger, string layer, string name = "Unamed")
+
+        public BoxData(Vector position, Vector scale, bool trigger, CollisionLayers layer, string name = "Unamed")
         {
             Position = position;
             Scale = scale;
             TriggerOnly = trigger;
             Layer = layer;
             Name = name;
-            CollidingObjects = new List<Box>();
         }
     }
 

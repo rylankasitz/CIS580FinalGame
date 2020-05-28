@@ -41,7 +41,7 @@ namespace MonoGameWindowsStarter
 
             WindowManager.BackgroundColor = new Color(25, 23, 22);
 
-            //WindowManager.Debug = true;
+            WindowManager.Debug = true;
 
             // Add input axises in code temperary
             InputManager.InputAxises.Add("MoveY", new InputAxis(PositiveKey: Keys.S, NegativeKey: Keys.W, LeftThumbStickY: true));

@@ -36,12 +36,16 @@ namespace MonoGameWindowsStarter.Scenes
 
             Player = CreateEntity<Player>();
             Player.Transform.Position = MapGenerator.Rooms[0].GlobalCoords;
+            Camera.Position.X = Player.Transform.Position.X;
+            Camera.Position.Y = Player.Transform.Position.Y;
+
+            // temp
             MiniMap.MoveTo(Player.Transform.Position);
         }
 
         public override void Update(GameTime gameTime)
         {
-            
+            //MapGenerator.UpdateFloor(Player);
         }
 
         public void LoadRoom(string name, bool flip)

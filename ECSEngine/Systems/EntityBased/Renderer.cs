@@ -11,6 +11,7 @@ using Engine.ECSCore;
 using System.IO;
 using System.Diagnostics;
 using ECSEngine.Systems;
+using Humper;
 
 namespace Engine.Systems
 {
@@ -90,18 +91,11 @@ namespace Engine.Systems
                 if (WindowManager.Debug && entity.HasComponent<BoxCollision>())
                 {
                     BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
-                    foreach (Box box in boxCollision.Boxes)
+                    foreach (IBox box in boxCollision.Boxes)
                     {
                         Color color = new Color(Color.White, .5f);
 
-                        if (box.TriggerOnly)
-                            color = new Color(Color.Blue, .5f);
-
-                        spriteBatch.Draw(textures[WindowManager.MouseTexture],
-                            new Rectangle((int)((box.Position.X * transform.Scale.X) + transform.Position.X),
-                                          (int)((box.Position.Y * transform.Scale.Y) + transform.Position.Y),
-                                          (int)(box.Scale.X * transform.Scale.X),
-                                          (int)(box.Scale.Y * transform.Scale.Y)), color);
+                        spriteBatch.Draw(textures["Pixel"], new Rectangle((int)box.X, (int)box.Y, (int)box.Width, (int)box.Height), color);
                     }
                 }
             }

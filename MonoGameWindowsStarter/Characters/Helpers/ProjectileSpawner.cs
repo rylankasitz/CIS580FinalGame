@@ -45,15 +45,15 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                 projectile.Transform.Position = transform.Position;
                 if (sprite.SpriteEffects == SpriteEffects.FlipHorizontally)
                 {
-                    float diffX = animation.CurrentCollisions["Attack"].Position.X - .5f;
-                    float sub = diffX * 2 + animation.CurrentCollisions["Attack"].Scale.X;
-                    projectile.BoxCollision.Position = animation.CurrentCollisions["Attack"].Position - new Vector(sub, 0);
-                    projectile.BoxCollision.Scale = animation.CurrentCollisions["Attack"].Scale;
+                    //float diffX = animation.CurrentCollisions["Attack"].Position.X - .5f;
+                    //float sub = diffX * 2 + animation.CurrentCollisions["Attack"].Scale.X;
+                    //projectile.BoxCollision.Position = animation.CurrentCollisions["Attack"].Position - new Vector(sub, 0);
+                    //projectile.BoxCollision.Scale = animation.CurrentCollisions["Attack"].Scale;
                 }
                 else
                 {
-                    projectile.BoxCollision.Position = animation.CurrentCollisions["Attack"].Position;
-                    projectile.BoxCollision.Scale = animation.CurrentCollisions["Attack"].Scale;
+                    //projectile.BoxCollision.Position = animation.CurrentCollisions["Attack"].Position;
+                    //projectile.BoxCollision.Scale = animation.CurrentCollisions["Attack"].Scale;
                 }
 
                 if (!animation.Playing)
@@ -67,7 +67,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             }
             else if (projectile != null)
             {
-                projectile.BoxCollision.Scale = new Vector(0, 0);
+                //projectile.BoxCollision.Scale = new Vector(0, 0);
             }
         }
 
@@ -78,7 +78,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
                 projectile = SceneManager.GetCurrentScene().CreateEntity<Projectile>();
                 projectile.Animation.CurrentAnimation = character.ProjectileAnimation;
                 projectile.Sprite.ContentName = contentName;
-                projectile.BoxCollision.Layer = layer;
+                //projectile.BoxCollision.Layer = layer;
                 projectile.Transform.Position = position;
                 projectile.Transform.Scale = character.ProjectileScale;
 
@@ -111,7 +111,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
             {
                 projectile = SceneManager.GetCurrentScene().CreateEntity<Projectile>();
                 projectile.Sprite.ContentName = contentName;
-                projectile.BoxCollision.Layer = layer;
+                //projectile.BoxCollision.Layer = layer;
                 projectile.Range = -1;
                 projectile.Animation.Enabled = false;
 

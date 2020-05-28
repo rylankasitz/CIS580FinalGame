@@ -1,5 +1,6 @@
 ﻿using Engine.Componets;
 using Engine.ECSCore;
+using Humper;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using PlatformLibrary;
@@ -77,9 +78,9 @@ namespace Engine.Systems
 
                             if (current.FrameNumber == current.Frames.Count)
                                 current.FrameNumber = 0;
-                        }
 
-                        setCurrentCollisions(animation, entity, current);
+                            setCurrentCollisions(animation, entity, current);
+                        }
 
                         sprite.SpriteLocation = current.CurrentFrame;
 
@@ -105,15 +106,29 @@ namespace Engine.Systems
                 if (pair.Key == "Collision")
                 {
                     BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
-                    for(int i = 0; i < pair.Value.Boxes.Count; i++)
-                    {
-                        if (boxCollision.Boxes.Count == i)
-                            boxCollision.Boxes.Add(new Box());
+                    Transform transform = entity.GetComponent<Transform>();
 
-                        boxCollision.Boxes[i].Position = pair.Value.Boxes[i].Position;
-                        boxCollision.Boxes[i].Scale = pair.Value.Boxes[i].Scale;
-                        boxCollision.Boxes[i].TriggerOnly = pair.Value.Boxes[i].TriggerOnly;
+                    List<IBox> newBoxes = new List<IBox>();
+
+                    for (int i = 0; i < pair.Value.Boxes.Count; i++)
+                    {
+                        BoxData boxData = (BoxData) pair.Value.Boxes[i].Data;
+                        IBox newIbox = boxCollision.World.Create(transform.Position.X + transform.Scale.X * boxData.Position.X,
+                                                                 transform.Position.Y + transform.Scale.Y * boxData.Position.Y,
+                                                                 transform.Scale.X * boxData.Scale.X,
+                                                                 transform.Scale.Y * boxData.Scale.Y).AddTags(boxData.Layer);
+                        newIbox.Data = boxData;
+
+                        if (boxCollision.Boxes.Count > i) 
+                        {
+                            boxCollision.World.Remove(boxCollision.Boxes[i]);
+                            boxCollision.Boxes.Remove(boxCollision.Boxes[i]);
+                        }
+
+                        newBoxes.Add(newIbox);
                     }
+
+                    boxCollision.Boxes = newBoxes;
                 }
                 else
                 {
@@ -166,17 +181,23 @@ namespace Engine.Systems
                     foreach(KeyValuePair<string, List<BoxCol>> collider in tileset[frame.Id].BoxColliders)
                     {
                         BoxCollision collision = new BoxCollision();
+                        collision.World = SceneManager.GetCurrentScene().World;
                         for (int j = 0; j < collider.Value.Count; j++)
                         {
-                            if (collision.Boxes.Count == j)
-                                collision.Boxes.Add(new Box());
 
-                            collision.Boxes[j].Position = new Vector(collider.Value[j].Rectangle.X / (float)tileset[frame.Id].Width,
-                                                                     collider.Value[j].Rectangle.Y / (float)tileset[frame.Id].Height);
-                            collision.Boxes[j].Scale = new Vector(collider.Value[j].Rectangle.Width / (float)tileset[frame.Id].Width,
-                                                                  collider.Value[j].Rectangle.Height / (float)tileset[frame.Id].Height);
-                            collision.Boxes[j].TriggerOnly = collider.Value[j].TriggerOnly;
-                            
+                            BoxData box = new BoxData();
+                            box.Position = new Vector(collider.Value[j].Rectangle.X / (float)tileset[frame.Id].Width,
+                                                      collider.Value[j].Rectangle.Y / (float)tileset[frame.Id].Height);
+                            box.Scale = new Vector(collider.Value[j].Rectangle.Width / (float)tileset[frame.Id].Width,
+                                                   collider.Value[j].Rectangle.Height / (float)tileset[frame.Id].Height);
+                            box.TriggerOnly = collider.Value[j].TriggerOnly;
+
+                            IBox ibox = collision.World.Create(0, 0, box.Scale.X, box.Scale.Y).AddTags(box.Layer);
+                            ibox.Data = box;
+                            collision.World.Remove(ibox);
+
+                            collision.Boxes.Add(ibox);
+
                         }
                         colliders.Add(collider.Key, collision);
                     }

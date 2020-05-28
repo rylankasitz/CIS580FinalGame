@@ -133,7 +133,7 @@
  </tile>
  <tile id="45">
   <properties>
-   <property name="Name" value="Wall"/>
+   <property name="Name" value=""/>
   </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>
@@ -151,7 +151,7 @@
  </tile>
  <tile id="53">
   <properties>
-   <property name="Name" value="Wall"/>
+   <property name="Name" value=""/>
   </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>

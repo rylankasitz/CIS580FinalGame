@@ -1,5 +1,6 @@
 ﻿using Engine.Componets;
 using Microsoft.Xna.Framework;
+using MonoGameWindowsStarter.Entities;
 using MonoGameWindowsStarter.GlobalValues;
 using MonoGameWindowsStarter.Scenes.MapGeneration;
 using System;
@@ -36,14 +37,21 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             layout = new RoomLayout(Dimensions, Doors);
         }
 
+        #region Public Methods
+
         public void Load()
         {
-            foreach(HallWay hallWay in HallWays)
+            layout.CreateEntities();
+        }
+
+        public void Unload()
+        {
+            foreach (HallWay hallWay in HallWays)
             {
-                hallWay.Load();
+                hallWay.Unload();
             }
 
-            layout.CreateEntities();
+            layout.RemoveEntites();
         }
 
         public Vector2 GetOverlapV(Room room, int hallHeight)
@@ -56,13 +64,27 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             return overlap;
         }
 
-        public bool Instercects(Room room, int minDistance)
+        public bool Intersects(Room room, int minDistance)
         {
             Rectangle r1 = new Rectangle(dimensions.X - minDistance, dimensions.Y - minDistance, 
                                          dimensions.Width + minDistance, dimensions.Height + minDistance);
             Rectangle r2 = new Rectangle(room.dimensions.X - minDistance, room.dimensions.Y - minDistance,
                                          room.dimensions.Width + minDistance, room.dimensions.Height + minDistance);
             return r1.Intersects(r2);
+        }
+
+        public bool Intersects(Player player)
+        {
+            Point pos = new Vector2(player.Transform.Position.X + player.Transform.Scale.X / 2,
+                        player.Transform.Position.Y + player.Transform.Scale.Y / 2).ToPoint();
+            Point scale = new Vector2(MapConstants.TileSize.X, MapConstants.TileSize.Y).ToPoint();
+
+            Rectangle worldDimentions = new Rectangle(dimensions.X * (int) MapConstants.TileSize.X,
+                                                      dimensions.Y * (int) MapConstants.TileSize.Y,
+                                                      dimensions.Width * (int) MapConstants.TileSize.X,
+                                                      dimensions.Height * (int) MapConstants.TileSize.Y);
+
+            return worldDimentions.Contains(pos);
         }
 
         public bool HasConnection(Room room)
@@ -98,11 +120,17 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             return closestRoom;
         }
 
+        #endregion
+
+        #region Private Methods
+
         private float getDistance(Room room)
         {
             Vector2 diff = Center - room.Center;
             return diff.Length();
         }
+
+        #endregion
     }
 
 }

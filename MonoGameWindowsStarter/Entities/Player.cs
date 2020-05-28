@@ -92,7 +92,7 @@ namespace MonoGameWindowsStarter.Entities
             Physics = GetComponent<Physics>();
 
             boxCollision.HandleCollision = handleCollision;
-            boxCollision.Layer = "Player|Character";
+            boxCollision.Layer = CollisionLayers.Player;
 
             Animation.CurrentAnimation = Character.IdleAnimation;
             Sprite.ContentName = Character.SpriteSheet;
@@ -138,10 +138,7 @@ namespace MonoGameWindowsStarter.Entities
             healthBar.UpdateFill(CurrentHealth / TotalHealth);
 
             // Temp
-            Camera.Position.X = Transform.Position.X;
-            Camera.Position.Y = Transform.Position.Y;
-            boxCollision.Enabled = false;
-            PlayerStats.SpeedMod = 10f;
+            PlayerStats.SpeedMod = 3f;
         }
 
         private void handleCollision(Entity entity, string direction)

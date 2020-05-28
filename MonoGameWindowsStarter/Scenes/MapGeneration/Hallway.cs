@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGameWindowsStarter.Entities;
+using MonoGameWindowsStarter.GlobalValues;
 using MonoGameWindowsStarter.Scenes.MapGeneration;
 using System;
 using System.Collections.Generic;
@@ -66,12 +68,31 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             clayout?.CreateEntities();
         }
 
+        public void Unload()
+        {
+            vlayout?.RemoveEntites();
+            hlayout?.RemoveEntites();
+            clayout?.RemoveEntites();
+        }
+
         public void SetDoors()
         {
             setDoors(Source, HorizonalConnector);
             setDoors(Source, VerticalConnector);
             setDoors(Destination, HorizonalConnector);
             setDoors(Destination, VerticalConnector);
+        }
+
+        public bool Intersects(Player player)
+        {
+            Point pos = new Vector2(player.Transform.Position.X + player.Transform.Scale.X / 2,
+                        player.Transform.Position.Y + player.Transform.Scale.Y / 2).ToPoint();
+            Point scale = new Vector2(MapConstants.TileSize.X, MapConstants.TileSize.Y).ToPoint();
+            Rectangle playerRect = new Rectangle(pos, scale);
+
+            return convertToWorld(HorizonalConnector).Contains(pos) ||
+                   convertToWorld(VerticalConnector).Contains(pos) ||
+                   convertToWorld(Corner).Contains(pos);
         }
 
         public bool Intersects(Room[] rooms)
@@ -198,6 +219,14 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
                     room.Doors.Add(new Rectangle(connector.X - room.Dimensions.X + 1, 0, 2, 2));
                 }
             }
+        }
+
+        private Rectangle convertToWorld(Rectangle rectangle)
+        {
+            return new Rectangle(rectangle.X * (int)MapConstants.TileSize.X,
+                                 rectangle.Y * (int)MapConstants.TileSize.Y,
+                                 rectangle.Width * (int)MapConstants.TileSize.X,
+                                 rectangle.Height * (int)MapConstants.TileSize.Y);
         }
 
         #endregion

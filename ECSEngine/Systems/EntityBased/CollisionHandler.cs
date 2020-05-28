@@ -7,14 +7,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Humper.Base;
+using Humper.Responses;
+using Humper;
 
 namespace Engine.Systems
 {
     public class CollisionHandler : ECSCore.System
     {
-        private Vector p1, p2, s1, s2;
-        private Grid grid;
-
         #region ECS Methods
 
         public override bool SetSystemRequirments(Entity entity)
@@ -25,8 +25,6 @@ namespace Engine.Systems
 
         public override void Initialize()
         {
-            grid = new Grid();
-
             foreach (Entity entity in Entities)
             {
                 InitializeEntity(entity);
@@ -35,44 +33,25 @@ namespace Engine.Systems
 
         public override void InitializeEntity(Entity entity) 
         {
-            entity.AddToGrid(grid);
+            BoxCollision collider = entity.GetComponent<BoxCollision>();
+            collider.World = SceneManager.GetCurrentScene().World;
         }
 
         public override void RemoveFromSystem(Entity entity)
         {
-            entity.RemoveFromGrid(grid);
             Entities.Remove(entity);
         }
 
         public void CheckCollisions()
         {
-            grid.Handle(handleCollisions);
-
-            for(int i = 0; i < Entities.Count; i++)
-            {
-                grid.Move(Entities[i]);
-                //for(int j = i; j < Entities.Count; j++)
-                //{
-                //    handleCollisions(Entities[i], Entities[j]);
-                //}
-            }
+            
         }
 
         #endregion
 
         #region Private Methods
 
-        private bool checkCollision(Box collider1, Box collider2, Transform transform1, Transform transform2)
-        {
-            p1 = transform1.Position + (collider1.Position * transform1.Scale);
-            p2 = transform2.Position + (collider2.Position * transform2.Scale);
-            s1 = collider1.Scale * transform1.Scale;
-            s2 = collider2.Scale * transform2.Scale;
-
-            return (p1.X < p2.X + s2.X && p1.X + s1.X > p2.X && p1.Y < p2.Y + s2.Y && p1.Y + s1.Y > p2.Y);
-        }
-
-        private string handlePhysics(Entity entity, Transform transform, Vector p1, Vector s1, Vector p2, Vector s2, bool isTrigger)
+        /*private string handlePhysics(Entity entity, Transform transform, Vector p1, Vector s1, Vector p2, Vector s2, bool isTrigger)
         {
             string side = "";
             if (entity.HasComponent<Physics>())
@@ -179,7 +158,7 @@ namespace Engine.Systems
                     }
                 }
             }
-        }
+        }*/
 
         #endregion
     }

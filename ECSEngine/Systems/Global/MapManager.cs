@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Engine.Componets;
 using Engine.ECSCore;
 using PlatformLibrary;
+using Humper;
 
 namespace Engine.Systems
 {
@@ -48,38 +49,51 @@ namespace Engine.Systems
             
         }
 
-        public static MapObjectCollision CreateObjectFromTileSet(string name, string tileset, Vector position, Vector scale, float layer)
+        public static void CreateObjectFromTileSet(string name, string tileset, Vector position, Vector scale, float layer, out MapObject mapObject, out MapObjectCollision mapObjectCol)
         {
+            mapObject = null;
+            mapObjectCol = null;
             Tileset tilesetContent = Content.Load<Tileset>("Tilesets\\" + tileset);
             foreach (Tile tile in tilesetContent.tiles)
             {
                 if (tile.Properties.ContainsKey("Name") && tile.Properties["Name"] == name)
                 {
-                    MapObjectCollision mapObject = SceneManager.GetCurrentScene().CreateEntity<MapObjectCollision>();
-                    mapObject.GetComponent<Transform>().Position = position;
-                    mapObject.GetComponent<Transform>().Scale = scale;
-                    mapObject.GetComponent<Sprite>().ContentName = tileset;
-                    mapObject.GetComponent<Sprite>().SpriteLocation = tile.Source;
-                    mapObject.GetComponent<Sprite>().Layer = layer;
-
                     if (tile.BoxColliders.Count > 0)
                     {
+                        mapObjectCol = SceneManager.GetCurrentScene().CreateEntity<MapObjectCollision>();
+                        mapObjectCol.GetComponent<Transform>().Position = position;
+                        mapObjectCol.GetComponent<Transform>().Scale = scale;
+                        mapObjectCol.GetComponent<Sprite>().ContentName = tileset;
+                        mapObjectCol.GetComponent<Sprite>().SpriteLocation = tile.Source;
+                        mapObjectCol.GetComponent<Sprite>().Layer = layer;
+
                         BoxCol collider = tile.BoxColliders.First().Value[0];
-                        BoxCollision col = mapObject.GetComponent<BoxCollision>();
-                        col.Position = new Vector(collider.Rectangle.X / (float)tile.Width, collider.Rectangle.Y / (float)tile.Height);
-                        col.Scale = new Vector(collider.Rectangle.Width / (float)tile.Width, collider.Rectangle.Height / (float)tile.Height);
-                        col.TriggerOnly = collider.TriggerOnly;
+                        BoxCollision col = mapObjectCol.GetComponent<BoxCollision>();
+
+                        BoxData box = new BoxData();
+                        box.Position = new Vector(collider.Rectangle.X / (float)tile.Width, collider.Rectangle.Y / (float)tile.Height);
+                        box.Scale = new Vector(collider.Rectangle.Width / (float)tile.Width, collider.Rectangle.Height / (float)tile.Height);
+                        box.TriggerOnly = collider.TriggerOnly;
+
+                        IBox ibox = col.World.Create(position.X + box.Position.X * scale.X, 
+                                                     position.Y + box.Position.Y * scale.Y, 
+                                                     box.Scale.X * scale.X, 
+                                                     box.Scale.Y * scale.Y);
+
+                        ibox.Data = box;
+                        col.Boxes.Add(ibox);
                     }
                     else
-                        mapObject.RemoveComponent<BoxCollision>();
-
-                    return mapObject;
+                    {
+                        mapObject = SceneManager.GetCurrentScene().CreateEntity<MapObject>();
+                        mapObject.GetComponent<Transform>().Position = position;
+                        mapObject.GetComponent<Transform>().Scale = scale;
+                        mapObject.GetComponent<Sprite>().ContentName = tileset;
+                        mapObject.GetComponent<Sprite>().SpriteLocation = tile.Source;
+                        mapObject.GetComponent<Sprite>().Layer = layer;
+                    }
                 }
             }
-
-            Debug.WriteLine($"No object found for '{name}'");
-
-            return null;
         }
 
         #region Private Methods
@@ -152,9 +166,9 @@ namespace Engine.Systems
         private static void setCollision(Entity obj, BoxCol collider)
         {
             BoxCollision col = obj.GetComponent<BoxCollision>();
-            col.Position = new Vector(collider.Rectangle.X / (float)tilemap.TileWidth, collider.Rectangle.Y / (float)tilemap.TileHeight);
-            col.Scale = new Vector(collider.Rectangle.Width / (float)tilemap.TileWidth, collider.Rectangle.Height / (float)tilemap.TileHeight);
-            col.TriggerOnly = collider.TriggerOnly;
+            //col.Position = new Vector(collider.Rectangle.X / (float)tilemap.TileWidth, collider.Rectangle.Y / (float)tilemap.TileHeight);
+            //col.Scale = new Vector(collider.Rectangle.Width / (float)tilemap.TileWidth, collider.Rectangle.Height / (float)tilemap.TileHeight);
+            //col.TriggerOnly = collider.TriggerOnly;
         }
 
         private static void removeMapObjects()

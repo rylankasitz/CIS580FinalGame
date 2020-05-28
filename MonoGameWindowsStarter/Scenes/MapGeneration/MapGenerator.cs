@@ -28,28 +28,69 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
         private float spaceModifier = 1f;
 
         private Random random;
+        private Room currentRoom;
+        private HallWay currentHallway;
+
+        private List<HallWay> hallways;
         
         public MapGenerator()
         {
             Rooms = new Room[roomCount];
             random = new Random();
+            hallways = new List<HallWay>();
 
             createRooms();
             createHallways();
         }
 
+        #region Public Methods
+
         public void LoadFloor()
         {
+            Rooms[0].Load();
+            currentRoom = Rooms[0];
+
             foreach(Room room in Rooms)
             {
                 room.Load();
             }
         }
 
+        public void UpdateFloor(Player player)
+        {
+            foreach(Room room in Rooms)
+            {
+                if (currentRoom != room && room.Intersects(player))
+                {
+                    currentHallway.Unload();
+                    room.Load();
+                    currentRoom = room;
+                    currentHallway = null;
+                    break;
+                }
+            }
+
+            foreach(HallWay hallWay in hallways)
+            {
+                if (currentHallway != hallWay && hallWay.Intersects(player))
+                {
+                    currentRoom.Unload();
+                    hallWay.Load();
+                    currentHallway = hallWay;
+                    currentRoom = null;
+                    break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private void createRooms()
         {
             int i = 0;
-            while(i < roomCount)
+            while (i < roomCount)
             {
                 bool intersects = false;
                 Room room = new Room(random.Next(0, (int)(maxRoomSize * roomCount * spaceModifier)),
@@ -59,7 +100,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
 
                 for (int j = 0; j < i; j++)
                 {
-                    if (room.Instercects(Rooms[j], minRoomDistance)) 
+                    if (room.Intersects(Rooms[j], minRoomDistance))
                         intersects = true;
                 }
 
@@ -96,11 +137,14 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             {
                 hallWay.SetDoors();
                 room1.HallWays.Add(hallWay);
+                hallways.Add(hallWay);
 
                 return true;
             }
 
             return false;
         }
+
+        #endregion
     }
 }

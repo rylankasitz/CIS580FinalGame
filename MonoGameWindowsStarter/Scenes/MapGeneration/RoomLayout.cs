@@ -1,4 +1,5 @@
-﻿using Engine.Componets;
+﻿using Engine;
+using Engine.Componets;
 using Engine.Systems;
 using Microsoft.Xna.Framework;
 using MonoGameWindowsStarter.GlobalValues;
@@ -31,6 +32,8 @@ namespace MonoGameWindowsStarter.Scenes.MapGeneration
 
         private Rectangle dimensions;
         private List<Rectangle> doors;
+        private List<MapObject> objs;
+        private List<MapObjectCollision> objsCol;
 
         public RoomLayout(Rectangle dimensions, List<Rectangle> doors, bool vhallway = false, bool hhallway = false, bool corner = false, string cornerOrientation = "")
         {
@@ -39,18 +42,23 @@ namespace MonoGameWindowsStarter.Scenes.MapGeneration
 
             this.dimensions = dimensions;
             this.doors = doors;
-
-            layout = new string[width, height];
-            layers = new float[width, height];
-
             this.vhallway = vhallway;
             this.hhallway = hhallway;
             this.corner = corner;
             this.cornerOrientation = cornerOrientation;
+
+            layout = new string[width, height];
+            layers = new float[width, height];
+
+            objs = new List<MapObject>();
+            objsCol = new List<MapObjectCollision>();
         }
 
         public void CreateEntities()
         {
+            objs = new List<MapObject>();
+            objsCol = new List<MapObjectCollision>();
+
             if (vhallway)
             {
                 generateVHallway();
@@ -72,11 +80,34 @@ namespace MonoGameWindowsStarter.Scenes.MapGeneration
             {
                 for (int y = 0; y < height; y++)
                 {
+                    MapObject mapObject;
+                    MapObjectCollision mapObjectCollision;
                     MapManager.CreateObjectFromTileSet(layout[x, y], "DungeonTileSet", 
-                        new Vector(dimensions.X + x, dimensions.Y + y) * MapConstants.TileSize, 
-                        MapConstants.TileSize, layers[x, y]);
+                            new Vector(dimensions.X + x, dimensions.Y + y) * MapConstants.TileSize, 
+                            MapConstants.TileSize, layers[x, y], out mapObject, out mapObjectCollision);
+
+                    if (mapObjectCollision != null)
+                        objsCol.Add(mapObjectCollision);
+                    if (mapObject != null)
+                        objs.Add(mapObject);
                 }
             }
+        }
+
+        public void RemoveEntites()
+        {
+            foreach(MapObject mapObject in objs)
+            {
+                SceneManager.GetCurrentScene().RemoveEntity(mapObject);
+            }
+
+            foreach (MapObjectCollision mapObject in objsCol)
+            {
+                SceneManager.GetCurrentScene().RemoveEntity(mapObject);
+            }
+
+            objs = new List<MapObject>();
+            objsCol = new List<MapObjectCollision>();
         }
 
         #region Generation Methods

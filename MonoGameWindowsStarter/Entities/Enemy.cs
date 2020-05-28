@@ -57,7 +57,7 @@ namespace MonoGameWindowsStarter.Entities
             BoxCollision = GetComponent<BoxCollision>();
             Physics = GetComponent<Physics>();
 
-            BoxCollision.Layer = "Enemy|Character";
+            //BoxCollision.Layer = "Enemy|Character";
             BoxCollision.HandleCollision = handleCollision;
 
             Transform.Scale = Transform.Scale * MapConstants.Scale;

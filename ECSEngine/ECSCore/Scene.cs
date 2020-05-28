@@ -1,4 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Engine.Systems;
+using Humper;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,8 @@ namespace Engine.ECSCore
         public List<Entity> Entities { get; set; } = new List<Entity>();
         public GameManager GameManager { get; set; }
         public string Name { get; set; } = "Unamed Scene";
+        public World World { get; set; }
+        public Vector2 WorldDimensions { get; set; } = new Vector2(100000, 100000);
 
         private Matcher matcher;
         private List<System> systems;
@@ -87,6 +91,7 @@ namespace Engine.ECSCore
         {
             this.systems = systems;
             GameManager = game;
+            World = new World(WorldDimensions.X, WorldDimensions.Y);
 
             Initialize();
 
