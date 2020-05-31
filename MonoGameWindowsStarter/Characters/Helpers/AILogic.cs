@@ -46,7 +46,7 @@ namespace MonoGameWindowsStarter.Characters.Helpers
         public AILogic(Enemy character)
         {
             AI = character;
-            MainScene scene = (MainScene)SceneManager.GetCurrentScene();
+            DungeonScene scene = (DungeonScene)SceneManager.GetCurrentScene();
             player = scene.Player;
             random = new Random();
 

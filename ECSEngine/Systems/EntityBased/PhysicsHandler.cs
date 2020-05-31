@@ -17,7 +17,7 @@ namespace Engine.Systems
         public override bool SetSystemRequirments(Entity entity)
         {
             return entity.HasComponent<Physics>() &&
-                   entity.HasComponent<Transform>();
+                   entity.HasComponent<Componets.Transform>();
         }
 
         public override void Initialize() { }
@@ -30,7 +30,7 @@ namespace Engine.Systems
         {
             foreach (Entity entity in Entities)
             {
-                Transform transform = entity.GetComponent<Transform>();
+                Componets.Transform transform = entity.GetComponent<Componets.Transform>();
                 Physics physics = entity.GetComponent<Physics>();
 
                 transform.Position += physics.Velocity;
@@ -49,10 +49,18 @@ namespace Engine.Systems
                                             transform.Position.Y + data.Position.Y * transform.Scale.Y, 
                                             (collision) =>
                         {
-                            if (!data.TriggerOnly && !collision.Other.HasTag(data.Layer))
+                            if (!collision.Other.HasTag(data.Layer)) 
                             {
-                                collidedBox = box;
-                                return CollisionResponses.Slide;
+                                if (!data.TriggerOnly)
+                                {
+                                    collidedBox = box;
+                                    return CollisionResponses.Slide;
+                                }
+                                else
+                                {
+                                    // Trigger Collision
+                                    return CollisionResponses.Cross;
+                                }
                             }
 
                             return CollisionResponses.None;
@@ -65,20 +73,6 @@ namespace Engine.Systems
                         transform.Position = new Vector(collidedBox.X - transform.Scale.X * boxData.Position.X, collidedBox.Y - transform.Scale.Y * boxData.Position.Y);
                     }
                 }
-            }
-        }
-
-        public void SetPreTransform()
-        {
-            foreach (Entity entity in Entities)
-            {
-                Transform transform = entity.GetComponent<Transform>();
-                Physics physics = entity.GetComponent<Physics>();
-
-                if (physics.Velocity.X != 0 || physics.Velocity.Y != 0)
-                    physics.PreVelocity = new Vector(physics.Velocity.X, physics.Velocity.Y);
-
-                transform.PrePosition = new Vector(transform.Position.X, transform.Position.Y);
             }
         }
     }

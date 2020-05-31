@@ -26,11 +26,15 @@ namespace MonoGameWindowsStarter.Entities
     [BoxCollision(X: 0, Y: 0, Width: 1f, Height: 1f)]
     public class Player : Entity
     {
+        #region Component Properties
+
         public Character Character;
         public Transform Transform;
         public Physics Physics;
         public Sprite Sprite;
         public Animation Animation;
+
+        #endregion
 
         public Vector SpriteSize = new Vector(8, 8); // Change
 
@@ -48,11 +52,10 @@ namespace MonoGameWindowsStarter.Entities
         private Vector2 lastAimDirection;
 
         private BoxCollision boxCollision;
-        private SliderBar healthBar;
-        private SliderBar cooldownBar;
+
         private Trail jumpTrailStart;
         private Trail jumpTrailEnd;
-        private MainScene scene;
+        private DungeonScene scene;
 
         private float elapsedTintTime;
         private float elapsedRollTime;
@@ -81,7 +84,7 @@ namespace MonoGameWindowsStarter.Entities
             lastAimDirection = new Vector2(1, 0);
             Involnerable = false;
 
-            scene = (MainScene)SceneManager.GetCurrentScene();    
+            scene = (DungeonScene)SceneManager.GetCurrentScene();    
 
             Character.OnSpawn();
 
@@ -97,18 +100,6 @@ namespace MonoGameWindowsStarter.Entities
             Animation.CurrentAnimation = Character.IdleAnimation;
             Sprite.ContentName = Character.SpriteSheet;
 
-            healthBar = new SliderBar("HealthBar", "HealthBarOutline",
-                                       new Vector(WindowManager.Width * .03f, WindowManager.Height * .03f),
-                                       new Vector(WindowManager.Width * .15f, WindowManager.Height * .035f),
-                                       Rectangle.Empty,
-                                       Rectangle.Empty);
-
-            cooldownBar = new SliderBar("CoolDownBar", "CoolDownBarOutline",
-                                       new Vector(WindowManager.Width * .03f, WindowManager.Height * .07f),
-                                       new Vector(WindowManager.Width * .15f, WindowManager.Height * .015f),
-                                       Rectangle.Empty,
-                                       Rectangle.Empty);
-
             jumpTrailStart = scene.CreateEntity<Trail>();
             jumpTrailEnd = scene.CreateEntity<Trail>();
         }
@@ -120,7 +111,7 @@ namespace MonoGameWindowsStarter.Entities
 
             if (elapsedRollTime < rollCooldown)
             {
-                cooldownBar.UpdateFill(elapsedRollTime / rollCooldown);
+                //cooldownBar.UpdateFill(elapsedRollTime / rollCooldown);
                 elapsedRollTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
 
@@ -133,12 +124,9 @@ namespace MonoGameWindowsStarter.Entities
             move(gameTime);
             animate();
             attack(gameTime);
-            setMinmap();
+            cameraController(gameTime);
 
-            healthBar.UpdateFill(CurrentHealth / TotalHealth);
-
-            // Temp
-            PlayerStats.SpeedMod = 3f;
+            //healthBar.UpdateFill(CurrentHealth / TotalHealth);
         }
 
         private void handleCollision(Entity entity, string direction)
@@ -148,16 +136,13 @@ namespace MonoGameWindowsStarter.Entities
             {
                 elapsedTintTime = 0;
                 Sprite.Color = Color.Red;
-                healthBar.UpdateFill(CurrentHealth / TotalHealth);
+                //healthBar.UpdateFill(CurrentHealth / TotalHealth);
                 Involnerable = true;
             }
 
             // Set new room position
             if (entity.Name.Contains("Door") && !entity.Name.Contains("Blocked"))
             {
-                MainScene scene = (MainScene) SceneManager.GetCurrentScene();
-                //Transform.Position = scene.MapGenerator.LoadNextRoom(entity.Name) - (Transform.Scale/2);
-
                 if (entity.Name == "DoorL")
                 {
                     Transform.Position.X -= SpriteSize.X * MapConstants.Scale * 2;
@@ -306,18 +291,6 @@ namespace MonoGameWindowsStarter.Entities
             SceneManager.LoadScene("Gameover");
         }
 
-        private void setMinmap()
-        {
-            if (InputManager.KeyDown(Keys.LeftShift))
-            {         
-                //scene.MapGenerator.SetMinimap(true);
-            }
-            else if (InputManager.KeyUp(Keys.LeftShift))
-            {
-                //scene.MapGenerator.SetMinimap(false);
-            }
-        }
-
         private void hitTint()
         {
             if (hitTime < elapsedTintTime)
@@ -325,6 +298,12 @@ namespace MonoGameWindowsStarter.Entities
                 Sprite.Color = Color.White;
                 Involnerable = false;
             }
+        }
+
+        private void cameraController(GameTime gameTime)
+        {
+            Vector2 newpos = Vector2.Lerp(WindowManager.CameraPosition, Transform.Position, .2f);
+            WindowManager.CameraPosition = new Vector(newpos.X, newpos.Y);
         }
 
         #endregion

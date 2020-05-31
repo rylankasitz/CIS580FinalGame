@@ -4,6 +4,7 @@ using Engine.ECSCore;
 using Engine.Systems;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Penumbra;
 
 namespace Engine.Componets
 {
@@ -22,8 +23,21 @@ namespace Engine.Componets
             this.ContentName = ContentName;
             this.Layer = Layer;
             this.SpriteEffects = SpriteEffects;
-            SpriteLocation = new Rectangle(SpriteX, SpriteY, SpriteWidth, SpriteHeight);
             this.Fill = Fill;
+
+            SpriteLocation = new Rectangle(SpriteX, SpriteY, SpriteWidth, SpriteHeight);
+        }
+    }
+
+    public class Light : Component
+    {
+        public Vector Position { get; set; }
+        public PointLight PointLight { get; set; }
+        public ShadowType ShadowType { get; set; }
+        public Light() 
+        {
+            PointLight = new PointLight();
+            Position = new Vector(0, 0);
         }
     }
 
@@ -50,43 +64,6 @@ namespace Engine.Componets
             {
                 AnimationTracker[animation].FrameNumber = 0;
             }
-        }
-    }
-
-    public class TextDraw : Component
-    {
-        public string Font { get; set; } = "";
-        public string Text { get; set; } = "";
-        public bool Center { get; set; } = false;
-        public Color Color { get; set; } = Color.Black;
-        public TextDraw() { }
-        public TextDraw(string Text)
-        {
-            this.Text = Text;
-        }
-    }
-
-    public class Parallax : Component
-    {
-        public int Layer { get; set; }
-        public float LayerNum { get; set; }
-        public bool Repeat { get; set; }
-        public float Speed { get; set; }
-        public float ElapsedTime { get; set; }
-        public Vector RepeatCount { get; set; } = new Vector(0, 1);
-        public Matrix Transform
-        {
-            get
-            {
-                return Matrix.CreateTranslation(-ElapsedTime * Speed, 0, 0);
-            }
-        }
-        public Parallax() { }
-        public Parallax(int Layer = 0, bool Repeat = true, float Speed = 100f)
-        {
-            this.Layer = Layer;
-            this.Repeat = Repeat;
-            this.Speed = Speed;
         }
     }
 }

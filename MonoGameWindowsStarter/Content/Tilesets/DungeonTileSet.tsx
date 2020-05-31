@@ -13,6 +13,9 @@
   <properties>
    <property name="Name" value="Ceiling-H"/>
   </properties>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="0" width="8" height="8"/>
+  </objectgroup>
  </tile>
  <tile id="3">
   <properties>
@@ -24,7 +27,7 @@
  </tile>
  <tile id="4">
   <properties>
-   <property name="Name" value="Wall"/>
+   <property name="Name" value="Wall-Basic"/>
   </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>
@@ -44,6 +47,10 @@
   </objectgroup>
  </tile>
  <tile id="11">
+  <properties>
+   <property name="IsLight" type="bool" value="true"/>
+   <property name="Name" value="Wall-Light"/>
+  </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
@@ -54,6 +61,9 @@
   </objectgroup>
  </tile>
  <tile id="13">
+  <properties>
+   <property name="Name" value="Wall"/>
+  </properties>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="0" width="8" height="8"/>
   </objectgroup>
@@ -64,6 +74,16 @@
   </objectgroup>
  </tile>
  <tile id="15">
+  <properties>
+   <property name="Name" value="Floor"/>
+  </properties>
+ </tile>
+ <tile id="16">
+  <properties>
+   <property name="Name" value="Floor"/>
+  </properties>
+ </tile>
+ <tile id="17">
   <properties>
    <property name="Name" value="Floor"/>
   </properties>

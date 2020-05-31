@@ -20,7 +20,7 @@ namespace Engine.Systems
         public override bool SetSystemRequirments(Entity entity)
         {
             return entity.HasComponent<Sprite>() &&
-                   entity.HasComponent<Transform>() &&
+                   entity.HasComponent<Componets.Transform>() &&
                    entity.HasComponent<Animation>();
         }
 
@@ -106,7 +106,7 @@ namespace Engine.Systems
                 if (pair.Key == "Collision")
                 {
                     BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
-                    Transform transform = entity.GetComponent<Transform>();
+                    Componets.Transform transform = entity.GetComponent<Componets.Transform>();
 
                     List<IBox> newBoxes = new List<IBox>();
 

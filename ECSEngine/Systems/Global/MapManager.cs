@@ -11,6 +11,8 @@ using Engine.Componets;
 using Engine.ECSCore;
 using PlatformLibrary;
 using Humper;
+using ECSEngine.Systems;
+using Comora;
 
 namespace Engine.Systems
 {
@@ -21,6 +23,8 @@ namespace Engine.Systems
         private static Tilemap tilemap;
         public static ContentManager Content;
         public static float Scale;
+
+        #region Public Methods
 
         public static void LoadMap (string name, Scene scene, float scale, 
             bool flipVertically = false, bool flipHorizontally = false)
@@ -49,20 +53,33 @@ namespace Engine.Systems
             
         }
 
-        public static void CreateObjectFromTileSet(string name, string tileset, Vector position, Vector scale, float layer, out MapObject mapObject, out MapObjectCollision mapObjectCol)
+        public static bool CreateObjectFromTileSet(string name, string tileset, Vector position, Vector scale, float layer, 
+            out MapObject mapObject, out MapObjectCollision mapObjectCol)
         {
+            Tileset tilesetContent = Content.Load<Tileset>("Tilesets\\" + tileset);
+
             mapObject = null;
             mapObjectCol = null;
-            Tileset tilesetContent = Content.Load<Tileset>("Tilesets\\" + tileset);
+
             foreach (Tile tile in tilesetContent.tiles)
             {
                 if (tile.Properties.ContainsKey("Name") && tile.Properties["Name"] == name)
                 {
+                    // Add light
+                    if (tile.Properties.ContainsKey("IsLight") && tile.Properties["IsLight"] == "true")
+                    {
+                        MapLight maplight = SceneManager.GetCurrentScene().CreateEntity<MapLight>();
+                        Light light = maplight.GetComponent<Light>();
+
+                        light.Position = position + (scale / 2);
+                    }
+
+                    // Add collision object
                     if (tile.BoxColliders.Count > 0)
                     {
                         mapObjectCol = SceneManager.GetCurrentScene().CreateEntity<MapObjectCollision>();
-                        mapObjectCol.GetComponent<Transform>().Position = position;
-                        mapObjectCol.GetComponent<Transform>().Scale = scale;
+                        mapObjectCol.GetComponent<Componets.Transform>().Position = position;
+                        mapObjectCol.GetComponent<Componets.Transform>().Scale = scale;
                         mapObjectCol.GetComponent<Sprite>().ContentName = tileset;
                         mapObjectCol.GetComponent<Sprite>().SpriteLocation = tile.Source;
                         mapObjectCol.GetComponent<Sprite>().Layer = layer;
@@ -82,19 +99,29 @@ namespace Engine.Systems
 
                         ibox.Data = box;
                         col.Boxes.Add(ibox);
+
+                        return true;
                     }
+
+                    // Add object
                     else
                     {
                         mapObject = SceneManager.GetCurrentScene().CreateEntity<MapObject>();
-                        mapObject.GetComponent<Transform>().Position = position;
-                        mapObject.GetComponent<Transform>().Scale = scale;
+                        mapObject.GetComponent<Componets.Transform>().Position = position;
+                        mapObject.GetComponent<Componets.Transform>().Scale = scale;
                         mapObject.GetComponent<Sprite>().ContentName = tileset;
                         mapObject.GetComponent<Sprite>().SpriteLocation = tile.Source;
                         mapObject.GetComponent<Sprite>().Layer = layer;
+
+                        return true;
                     }
                 }
             }
+
+            return false;
         }
+
+        #endregion
 
         #region Private Methods
 
@@ -150,7 +177,7 @@ namespace Engine.Systems
 
         private static void setObjectPosition(Entity obj, Vector position, Vector scale, Tile tile, float layernum, string contentName)
         {
-            Transform transform = obj.GetComponent<Transform>();
+            Componets.Transform transform = obj.GetComponent<Componets.Transform>();
             Sprite sprite = obj.GetComponent<Sprite>();
 
             obj.Name = tile.Properties.ContainsKey("Name") ? tile.Properties["Name"] : "Unnamed";
@@ -198,7 +225,7 @@ namespace Engine.Systems
 
     #region Map Objects
 
-    [Transform(X: 100, Y: 100, Width: 100, Height: 100)]
+    [Componets.Transform(X: 100, Y: 100, Width: 100, Height: 100)]
     [Sprite(ContentName: "spritesheet")]
     public class MapObject : Entity
     {
@@ -213,7 +240,7 @@ namespace Engine.Systems
         }
     }
 
-    [Transform(X: 100, Y: 100, Width: 100, Height: 100)]
+    [Componets.Transform(X: 100, Y: 100, Width: 100, Height: 100)]
     [Sprite(ContentName: "spritesheet")]
     [BoxCollision()]
     public class MapObjectCollision : Entity
@@ -226,6 +253,21 @@ namespace Engine.Systems
         public override void Update(GameTime gameTime)
         {
 
+        }
+    }
+
+    [Componets.Transform(X: 100, Y: 100, Width: 100, Height: 100)]
+    [Light()]
+    public class MapLight : Entity
+    {
+        public override void Initialize()
+        {
+            
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            
         }
     }
 

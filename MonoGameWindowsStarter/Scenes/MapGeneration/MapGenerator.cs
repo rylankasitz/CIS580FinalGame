@@ -49,11 +49,6 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
         {
             Rooms[0].Load();
             currentRoom = Rooms[0];
-
-            foreach(Room room in Rooms)
-            {
-                room.Load();
-            }
         }
 
         public void UpdateFloor(Player player)

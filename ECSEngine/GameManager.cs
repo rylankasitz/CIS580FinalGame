@@ -10,6 +10,12 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using ECSEngine.Systems;
+using Comora;
+using System.Diagnostics;
+using Penumbra;
+using ECSEngine.Systems.EntityBased;
+using GeonBit.UI;
+using GeonBit.UI.Entities;
 
 namespace Engine
 {
@@ -27,13 +33,14 @@ namespace Engine
 
         private GameLayout gameLayout;
 
+        private Camera camera;
+        private PenumbraComponent penumbra;
+
         private Renderer renderer;
         private CollisionHandler collisionHandler;
         private PhysicsHandler physicsHandler;
         private AnimationHandler animationHandler;
-        private StateHandler stateHandler;
-        private ParticleSystemHandler particleSystemHandler;
-        private ParallaxHandler parallaxHandler;
+        private LightHandler lightHandler;
 
         public GameManager(GameLayout game, string contentDirectory)
         {
@@ -41,6 +48,9 @@ namespace Engine
             Content.RootDirectory = contentDirectory;
 
             Template = new Template();
+            penumbra = new PenumbraComponent(this);
+
+            Services.AddService(penumbra);
 
             gameLayout = game;
 
@@ -49,15 +59,14 @@ namespace Engine
             systems.Add(collisionHandler = new CollisionHandler());
             systems.Add(physicsHandler = new PhysicsHandler());
             systems.Add(animationHandler = new AnimationHandler(Content));
-            systems.Add(stateHandler = new StateHandler());
-            systems.Add(particleSystemHandler = new ParticleSystemHandler());
-            systems.Add(parallaxHandler = new ParallaxHandler());
+            systems.Add(lightHandler = new LightHandler(penumbra));
         }
 
         #region Monogame Methods
 
         protected override void Initialize()
         {
+            // Set window size
             WindowWidth = WindowManager.Width;
             WindowHeight = WindowManager.Height;
 
@@ -65,9 +74,19 @@ namespace Engine
             graphics.PreferredBackBufferHeight = WindowHeight;
             graphics.ApplyChanges();
 
-            Camera.Intitialize(GraphicsDevice.Viewport, WindowWidth, WindowHeight);
+            // Initialize Camera
+            camera = new Camera(GraphicsDevice);
+            camera.Position = new Vector2(WindowManager.Width / 2, WindowHeight / 2);
+
+            // Initialize GUI
+            UserInterface.Initialize(Content, BuiltinThemes.lowres);
+
+            // Set constants
+            WindowManager.Camera = camera;
+            WindowManager.Penumbra = penumbra;
             MapManager.Content = Content;
 
+            // Initialize scenes
             gameLayout.AddScenes();
 
             SceneManager.systems = systems;
@@ -92,56 +111,68 @@ namespace Engine
                 textures[filename] = Content.Load<Texture2D>("Sprites\\" + filename);
             }
 
+            penumbra.Initialize();
+            camera.LoadContent();
             AudioManager.LoadContent(Content);
-
-            particleSystemHandler.LoadContent(Content);
             renderer.LoadContent(Content, textures);
-            parallaxHandler.LoadContent(textures);
         }
 
         protected override void UnloadContent() { }
 
         protected override void Update(GameTime gameTime)
         {
+            // Debug Details
+            camera.Debug.IsVisible = WindowManager.ShowCamerDetails;
+            penumbra.Debug = WindowManager.ShowLightDetails;
+
+            // Input States
             InputManager.NewKeyboardState = Keyboard.GetState();
             InputManager.NewMouseState = Mouse.GetState();
             InputManager.NewGamePadState = GamePad.GetState(PlayerIndex.One);
 
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            // Update Libraries
+            camera.Update(gameTime);
+            UserInterface.Active.Update(gameTime);
 
+            // Update Scene
             SceneManager.UpdateScene(gameTime);
 
+            // System Updates
             physicsHandler.HandlePhysics();
             collisionHandler.CheckCollisions();
             animationHandler.UpdateAnimations(gameTime);
-            stateHandler.UpdateStateMachine(gameTime);
-            particleSystemHandler.UpdateParticleSystems(gameTime);
-            parallaxHandler.UpdateParallax(gameTime);
+            lightHandler.UpdateLights();
 
+            // Update Game
+            gameLayout.Update(gameTime);
+
+            // Old Input Stats
             InputManager.OldKeyboardState = InputManager.NewKeyboardState;
             InputManager.OldMouseState = InputManager.NewMouseState;
             InputManager.OldGamePadState = InputManager.NewGamePadState;
-
-            gameLayout.Update(gameTime);
-
-            physicsHandler.SetPreTransform();
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
+            penumbra.BeginDraw();
+
             GraphicsDevice.Clear(WindowManager.BackgroundColor);
 
-            parallaxHandler.Draw(spriteBatch, this);
-
-            spriteBatch.Begin(SpriteSortMode.BackToFront, null, SamplerState.PointClamp, null, null, null, Camera.GetTransformation());
-
-            renderer.Draw(spriteBatch);
-
-            particleSystemHandler.DrawParticleSystems(spriteBatch);
+            // Draw Game
+            spriteBatch.Begin(camera, SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null);
+            renderer.Draw(spriteBatch, penumbra);
             spriteBatch.End();
+
+            // Update Lighting
+            penumbra.Draw(gameTime);
+
+            // Draw UI
+            UserInterface.Active.Draw(spriteBatch);
+
+            // Draw Debug
+            spriteBatch.Draw(WindowManager.Camera.Debug);
 
             base.Draw(gameTime);
         }

@@ -4,6 +4,7 @@ using Engine.Systems;
 using Microsoft.Xna.Framework;
 using MonoGameWindowsStarter.GlobalValues;
 using MonoGameWindowsStarter.Scenes.Rooms;
+using PlatformLibrary;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -32,8 +33,11 @@ namespace MonoGameWindowsStarter.Scenes.MapGeneration
 
         private Rectangle dimensions;
         private List<Rectangle> doors;
+
         private List<MapObject> objs;
         private List<MapObjectCollision> objsCol;
+
+        private Random random;
 
         public RoomLayout(Rectangle dimensions, List<Rectangle> doors, bool vhallway = false, bool hhallway = false, bool corner = false, string cornerOrientation = "")
         {
@@ -52,13 +56,11 @@ namespace MonoGameWindowsStarter.Scenes.MapGeneration
 
             objs = new List<MapObject>();
             objsCol = new List<MapObjectCollision>();
+            random = new Random();
         }
 
         public void CreateEntities()
         {
-            objs = new List<MapObject>();
-            objsCol = new List<MapObjectCollision>();
-
             if (vhallway)
             {
                 generateVHallway();
@@ -82,14 +84,20 @@ namespace MonoGameWindowsStarter.Scenes.MapGeneration
                 {
                     MapObject mapObject;
                     MapObjectCollision mapObjectCollision;
-                    MapManager.CreateObjectFromTileSet(layout[x, y], "DungeonTileSet", 
-                            new Vector(dimensions.X + x, dimensions.Y + y) * MapConstants.TileSize, 
-                            MapConstants.TileSize, layers[x, y], out mapObject, out mapObjectCollision);
+
+                    MapManager.CreateObjectFromTileSet(
+                            layout[x, y],
+                            "DungeonTileSet",
+                            new Vector(dimensions.X + x, dimensions.Y + y) * MapConstants.TileSize,
+                            MapConstants.TileSize,
+                            layers[x, y],
+                            out mapObject, out mapObjectCollision);
+
+                    if (mapObject != null)
+                        objs.Add(mapObject);
 
                     if (mapObjectCollision != null)
                         objsCol.Add(mapObjectCollision);
-                    if (mapObject != null)
-                        objs.Add(mapObject);
                 }
             }
         }
@@ -232,7 +240,7 @@ namespace MonoGameWindowsStarter.Scenes.MapGeneration
                 {
                     layout[i, y] = "Ceiling-H";
                     layers[i, y] = layer;
-                    layout[i, y + 1] = "Wall";
+                    layout[i, y + 1] = TileTypes.Walls[random.Next(0, TileTypes.Walls.Length)];
                     layers[i, y + 1] = layer;
                 }
             }

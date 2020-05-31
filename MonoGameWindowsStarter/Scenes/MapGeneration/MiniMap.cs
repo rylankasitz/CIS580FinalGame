@@ -29,7 +29,7 @@ namespace MonoGameWindowsStarter.Scenes.Rooms
             this.rooms = rooms;
 
             miniMapObjs = new List<MiniMapObj>();
-            offset += Camera.Position;
+            //offset += Camera.Position;
 
             createMinimap();
         }

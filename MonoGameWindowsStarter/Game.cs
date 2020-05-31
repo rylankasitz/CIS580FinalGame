@@ -14,34 +14,24 @@ namespace MonoGameWindowsStarter
 {
     public class Game : GameLayout
     {
-        MainScene mainScene;
-        GameoverScene gameoverScene;
-        PlayScene playScene;
-        EndScreen endScreen;
+        DungeonScene dungeonScene;
+        StartScene playScene;
 
         public override void AddScenes()
         {
-            SceneManager.AddScene(mainScene = new MainScene());
-            SceneManager.AddScene(gameoverScene = new GameoverScene());
-            SceneManager.AddScene(playScene = new PlayScene());
-            SceneManager.AddScene(endScreen = new EndScreen());
+            SceneManager.AddScene(dungeonScene = new DungeonScene());
+            SceneManager.AddScene(playScene = new StartScene());
 
-            mainScene.Name = "Main";
-            gameoverScene.Name = "Gameover";
+            dungeonScene.Name = "Dugneon";
             playScene.Name = "Play";
-            endScreen.Name = "End Screen";
         }
 
         public override void Initialize()
         {
             SceneManager.LoadScene("Play");
 
-            Camera.Position.X = WindowManager.Width / 2;
-            Camera.Position.Y = WindowManager.Height / 2;
-
             WindowManager.BackgroundColor = new Color(25, 23, 22);
-
-            WindowManager.Debug = true;
+            WindowManager.AmbientColor = Color.Gray;
 
             // Add input axises in code temperary
             InputManager.InputAxises.Add("MoveY", new InputAxis(PositiveKey: Keys.S, NegativeKey: Keys.W, LeftThumbStickY: true));
@@ -56,7 +46,12 @@ namespace MonoGameWindowsStarter
 
         public override void Update(GameTime gameTime)
         {
-            
+            // Toggle Debug
+            if (InputManager.KeyDown(Keys.F1))
+            {
+                WindowManager.ShowCamerDetails = !WindowManager.ShowCamerDetails;
+                WindowManager.ShowLightDetails = !WindowManager.ShowLightDetails;
+            }
         }
     }
 }

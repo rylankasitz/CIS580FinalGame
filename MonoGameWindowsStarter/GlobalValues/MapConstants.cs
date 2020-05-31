@@ -13,4 +13,9 @@ namespace MonoGameWindowsStarter.GlobalValues
         public static int Size { get; } = 256;
         public static Vector TileSize { get => new Vector(8, 8) * Scale; }
     }
+
+    public static class TileTypes
+    {
+        public static string[] Walls { get; } = new string[] { "Wall-Basic", "Wall-Light" };
+    }
 }

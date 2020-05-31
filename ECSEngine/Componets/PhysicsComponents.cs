@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Humper.Responses;
 using Humper;
 using System.Runtime.Remoting.Messaging;
+using System;
 
 namespace Engine.Componets
 {
@@ -15,7 +16,6 @@ namespace Engine.Componets
         Player = 1 << 0,
         Enemy = 1 << 1,
         All = 1 << 2,
-        DisabledLayer = 1 << 3
     }
 
     public class Vector
@@ -33,42 +33,34 @@ namespace Engine.Componets
 
         public static Vector operator *(Vector v, float n) => new Vector(v.X * n, v.Y * n);
         public static Vector operator /(Vector v, float n) => new Vector(v.X/n, v.Y/n);
-    }
 
-    public class Particle
-    {
-        public Vector2 Position { get; set; }
-        public Vector2 Velocity { get; set; }
-        public Vector2 Acceleration { get; set; }
-        public float Scale { get; set; }
-        public float Life { get; set; }
-        public Color Color { get; set; }
+        public Vector Floor()
+        {
+            return new Vector((int) Math.Floor(X), (int) Math.Floor(Y));
+        }
     }
 
     public class Transform : Component
     {
         public Vector Position { get; set; }
-        public Vector PrePosition { get; set; }
         public Vector Scale { get; set; }
         public float Rotation { get; set; }
+        public bool IsHull { get; set; }
         public Transform() { }
         public Transform(int X, int Y, int Width, int Height)
         {
             Position = new Vector(X, Y);
             Scale = new Vector(Width, Height);
-            PrePosition = new Vector(0, 0);
         }
     }
 
     public class Physics : Component
     {
         public Vector Velocity { get; set; }
-        public Vector PreVelocity { get; set; }
         public Physics() { }
         public Physics(float VelocityX, float VelocityY)
         {
             Velocity = new Vector(VelocityX, VelocityY);
-            PreVelocity = new Vector(0, 0);
         }
     }
 
@@ -119,56 +111,6 @@ namespace Engine.Componets
             TriggerOnly = trigger;
             Layer = layer;
             Name = name;
-        }
-    }
-
-    public class ParticleSystem : Component
-    {
-        public Particle[] Particles { get; set; }
-        public Vector Emitter { get; set; }
-        public Vector Direction { get; set; }
-        public string Texture { get; set; }
-        public int SpawnPerFrame { get; set; }
-        public int ParticleCount { get; set; }
-        public float Time { get; set; }
-        public float Life { get; set; }
-        public float Scale { get; set; }
-        public float Velocity { get; set; }
-        public float Acceleration { get; set; }
-        public float Range { get; set; }
-        public Color Color { get; set; }
-        public int NextIndex { get; set; } = 0;
-        public bool Running { get; set; } = true;
-        public float ElapsedTime { get; set; }
-
-        public ParticleSystem() { }
-        public ParticleSystem(string Texture, int SpawnPerFrame, int ParticleCount, float Time,
-            float EmmiterX, float EmmiterY, float DirectionX, float DirectionY, float Range,
-            float Life = 3f, float Scale = 1f, float Velocity = 100f, float Acceleration = .1f)
-        {
-            this.Texture = Texture;
-            this.SpawnPerFrame = SpawnPerFrame;
-            this.ParticleCount = ParticleCount;
-            this.Time = Time;
-            Emitter = new Vector(EmmiterX, EmmiterY);
-            Direction = new Vector(DirectionX - .5f, DirectionY - .5f);
-            this.Range = Range/90;
-            this.Life = Life;
-            this.Scale = Scale;
-            this.Velocity = Velocity;
-            this.Acceleration = Acceleration;
-            this.ElapsedTime = Time;
-        }
-
-
-        public void Play()
-        {
-            Running = true;
-            ElapsedTime = 0;
-        }
-        public void Stop()
-        {
-            Running = false;
         }
     }
 }

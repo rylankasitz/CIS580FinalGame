@@ -34,8 +34,13 @@ namespace Engine
         public static void LoadScene(string name)
         {
             if (currentScene != null)
+            {
                 currentScene.RemoveAllEntities();
+                currentScene.RemoveAllUIScreeens();
+            }
+
             findScene(name);
+
             currentScene.LoadScene(systems, gameManager);
         }
 

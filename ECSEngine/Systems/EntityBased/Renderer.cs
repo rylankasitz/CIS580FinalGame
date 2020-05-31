@@ -12,22 +12,20 @@ using System.IO;
 using System.Diagnostics;
 using ECSEngine.Systems;
 using Humper;
+using Comora;
+using Penumbra;
 
 namespace Engine.Systems
 {
     public class Renderer : ECSCore.System 
     {
-        private int pixelUnit = 1920;
-
         private ContentManager contentManager;
-        private SpriteFont font;
 
         private Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
         public override bool SetSystemRequirments(Entity entity)
         {
-            return (entity.HasComponent<Sprite>() || entity.HasComponent<TextDraw>()) &&
-                   entity.HasComponent<Transform>() && !entity.HasComponent<Parallax>();
+            return entity.HasComponent<Sprite>() && entity.HasComponent<Componets.Transform>();
         }
 
         public override void Initialize() 
@@ -48,16 +46,16 @@ namespace Engine.Systems
         public void LoadContent(ContentManager content, Dictionary<string, Texture2D> textures)
         {
             contentManager = content;
-            font = contentManager.Load<SpriteFont>("Fonts/PixelFont");
             this.textures = textures;
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, PenumbraComponent penumbra)
         {     
             foreach (Entity entity in Entities)
             {
-                Transform transform = entity.GetComponent<Transform>();
+                Componets.Transform transform = entity.GetComponent<Componets.Transform>();
 
+                // Sprite Draw
                 if (entity.HasComponent<Sprite>() && entity.GetComponent<Sprite>().Enabled)
                 {
                     Sprite sprite = entity.GetComponent<Sprite>();
@@ -70,40 +68,28 @@ namespace Engine.Systems
 
                     if (textures.ContainsKey(sprite.ContentName))
                         spriteBatch.Draw(textures[sprite.ContentName],
-                            new Rectangle((int)transform.Position.X, (int)transform.Position.Y, (int)(transform.Scale.X * sprite.Fill), (int)transform.Scale.Y),
+                            new Rectangle((int)Math.Floor(transform.Position.X), (int)Math.Floor(transform.Position.Y), (int)Math.Floor(transform.Scale.X * sprite.Fill), (int)Math.Floor(transform.Scale.Y)),
                             spriteLocation, sprite.Color, transform.Rotation, new Vector2(0, 0),
                             sprite.SpriteEffects, sprite.Layer);
                     else
                         Debug.WriteLine($"Content '{sprite.ContentName}' does not exist");
                 }
 
-                if (entity.HasComponent<TextDraw>())
+                // Debug
+                if (WindowManager.ShowCollisionsDetails)
                 {
-                    TextDraw text = entity.GetComponent<TextDraw>();
-
-                    if (!text.Center)
-                        spriteBatch.DrawString(font, text.Text, transform.Position, text.Color, transform.Rotation, new Vector2(0, 0), transform.Scale, SpriteEffects.None, 0f);
-                    else
-                        spriteBatch.DrawString(font, text.Text, transform.Position - ((font.MeasureString(text.Text)/2)*transform.Scale), 
-                            text.Color, transform.Rotation, new Vector2(0, 0), transform.Scale, SpriteEffects.None, 0f); ;
-                }
-
-                if (WindowManager.Debug && entity.HasComponent<BoxCollision>())
-                {
-                    BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
-                    foreach (IBox box in boxCollision.Boxes)
+                    if (entity.HasComponent<BoxCollision>())
                     {
-                        Color color = new Color(Color.White, .5f);
+                        BoxCollision boxCollision = entity.GetComponent<BoxCollision>();
+                        foreach (IBox box in boxCollision.Boxes)
+                        {
+                            Color color = new Color(Color.White, .5f);
 
-                        spriteBatch.Draw(textures["Pixel"], new Rectangle((int)box.X, (int)box.Y, (int)box.Width, (int)box.Height), color);
+                            spriteBatch.Draw(textures["Pixel"], new Rectangle((int)box.X, (int)box.Y, (int)box.Width, (int)box.Height), color);
+                        }
                     }
                 }
             }
-
-            if (WindowManager.MouseTexture != "")
-                spriteBatch.Draw(textures[WindowManager.MouseTexture], 
-                    new Rectangle((int)InputManager.GetMousePosition().X, (int)InputManager.GetMousePosition().Y, 8, 8), 
-                    Color.White);
         }
     }
 }
